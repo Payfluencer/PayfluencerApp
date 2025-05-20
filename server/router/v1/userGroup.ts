@@ -1,38 +1,29 @@
-import { Router } from 'express'
-import { UserRole } from '@prisma/client'
-import { userAuth } from '../../middleware/userAuth'
-import * as UserController from '../../controllers/user.Controller'
+import { Router } from "express";
+import { userAuth } from "../../middleware/userAuth";
+import * as UserController from "../../controllers/user.Controller";
+import { UserRole } from "../../prisma/generated/prisma/client";
 
-const router = Router()
+const router = Router();
 
 // User routes
-router.post('/', UserController.createUser)
-router.get('/logout', UserController.logoutUser)
-router.post('/login',  UserController.loginUser)
+router.post("/", UserController.createUser);
+router.get("/logout", UserController.logoutUser);
+router.post("/login", UserController.loginUser);
 
-router.get('/', userAuth([UserRole.ADMIN]), UserController.getUser)
-router.put('/', userAuth([UserRole.ADMIN]), UserController.updateUser)
-router.delete('/', userAuth([UserRole.ADMIN]), UserController.deleteUser)
-router.get('/all', userAuth([UserRole.ADMIN]), UserController.getAllUsers)
-
-// Password reset routes
-router.post('/reset-password', UserController.resetPassword)
-router.post('/request-reset-password', UserController.requestResetPassword)
+router.get("/", userAuth([UserRole.ADMIN]), UserController.getUser);
+router.put("/", userAuth([UserRole.ADMIN]), UserController.updateUser);
+router.delete("/", userAuth([UserRole.ADMIN]), UserController.deleteUser);
+router.get("/all", userAuth([UserRole.ADMIN]), UserController.getAllUsers);
 
 router.get(
-  '/refresh',
+  "/refresh",
   userAuth([UserRole.ADMIN, UserRole.USER]),
-  UserController.refreshUser,
-)
+  UserController.refreshUser
+);
 router.get(
-  '/search',
+  "/search",
   userAuth([UserRole.ADMIN, UserRole.USER]),
-  UserController.searchUser,
-)
-router.put(
-  '/phone',
-  userAuth([UserRole.ADMIN, UserRole.USER]),
-  UserController.updateUserPhone,
-)
+  UserController.searchUser
+);
 
-export default router
+export default router;

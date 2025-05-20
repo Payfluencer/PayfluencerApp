@@ -232,59 +232,6 @@ export const loginUser = async (
   }
 };
 
-// Update user phone
-// @route PUT /api/v1/user/phone
-export const updateUserPhone = async (
-  req: Request,
-  res: Response<IServerResponse>
-) => {
-  const { phone } = req.body;
-  const userId = res.locals.userId;
-
-  try {
-    if (!phone) {
-      return res.status(HttpStatusCode.BadRequest).json({
-        status: "error",
-        message: "Missing phone",
-        data: {
-          body: {
-            phone: "string",
-          },
-        },
-      });
-    }
-
-    let user = await prisma.user.update({
-      where: { id: userId },
-      data: { phoneNumber: phone },
-    });
-
-    if (!user) {
-      return res.status(HttpStatusCode.BadRequest).json({
-        status: "error",
-        message: "User not found",
-        data: null,
-      });
-    }
-
-    res.status(HttpStatusCode.Ok).json({
-      status: "success",
-      message: "User updated successfully",
-      data: {
-        phone: user.phoneNumber,
-      },
-    });
-  } catch (err) {
-    Logger.error({ message: "Error updating phone" + err });
-
-    res.status(HttpStatusCode.InternalServerError).json({
-      status: "error",
-      message: "Error updating phone",
-      data: null,
-    });
-  }
-};
-
 // Update user details
 // @route PUT /api/v1/user
 export const updateUser = async (
