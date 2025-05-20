@@ -5,6 +5,7 @@ import { HttpStatusCode } from "axios";
 import userGroup from "./userGroup";
 import settingsGroup from "./settingsGroup";
 import googleAuthGroup from "./googleAuthGroup";
+import reportGroup from "./reportGroup";
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.get("/ping", (_, res) => {
 router.use("/user", userGroup);
 router.use("/settings", settingsGroup);
 router.use("/auth/google", googleAuthGroup);
+router.use("/reports", reportGroup);
 
 export default router;
