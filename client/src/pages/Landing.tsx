@@ -1,13 +1,20 @@
+import Companies from "../components/Companies";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
-
+import How from "../components/How";
+import { CTA } from "../components/CTA";
+import FAQ from "../components/FAQ";
+import Footer from "../components/Footer";
 function Landing() {
   return (
     <div style={{ fontFamily: "KarlaRegular" }}>
       <Navbar />
       <Hero />
-
-      <section className="max-w-[1240px] mx-auto my-0 px-2"></section>
+      <Companies />
+      <How />
+      <CTA />
+      <FAQ />
+      <Footer />
     </div>
   );
 }
