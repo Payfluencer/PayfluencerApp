@@ -6,12 +6,7 @@ import { signJwtToken } from "../utils/utils";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 import { UserRole } from "../prisma/generated/prisma/client";
-import {
-  getGoogleAuthURL,
-  getGoogleTokens,
-  verifyGoogleIdToken,
-  getGoogleUserInfo,
-} from "../utils/googleAuth";
+import { verifyGoogleIdToken } from "../utils/googleAuth";
 
 const isProduction = process.env.NODE_ENV === "production";
 

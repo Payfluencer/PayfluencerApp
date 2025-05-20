@@ -1,0 +1,24 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: pnpm dev
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    environment:
+      - NODE_ENV=dev
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: pnpm dev
+
+  postgres:
+    ports:
+      - "5432:5432"
