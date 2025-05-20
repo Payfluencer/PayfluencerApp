@@ -71,6 +71,14 @@ model Bounty {
   nudity            Boolean?
   language          String?
   age_restriction   Int?
+  required_views   Int?
+  required_likes    Int?
+  required_comments Int?
+  required_saves    Int?
+  platform          String
+  show_other_brands Boolean?
+  specific_products String?
+  pay_duration      String?
   created_at        DateTime          @default(now())
   update_at         DateTime          @updatedAt
   
