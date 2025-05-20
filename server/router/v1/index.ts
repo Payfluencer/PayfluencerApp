@@ -1,19 +1,21 @@
-import { Router } from 'express'
-import { HttpStatusCode } from 'axios'
+import { Router } from "express";
+import { HttpStatusCode } from "axios";
 
 // Route groups
-import userGroup from './userGroup'
-import settingsGroup from './settingsGroup'
+import userGroup from "./userGroup";
+import settingsGroup from "./settingsGroup";
+import googleAuthGroup from "./googleAuthGroup";
 
-const router = Router()
+const router = Router();
 
 // Core routes
-router.get('/ping', (_, res) => {
-  res.status(HttpStatusCode.Ok).json({ message: 'pong', alive: true })
-})
+router.get("/ping", (_, res) => {
+  res.status(HttpStatusCode.Ok).json({ message: "pong", alive: true });
+});
 
 // Route groups
-router.use('/user', userGroup)
-router.use('/settings', settingsGroup)
+router.use("/user", userGroup);
+router.use("/settings", settingsGroup);
+router.use("/auth/google", googleAuthGroup);
 
-export default router
+export default router;

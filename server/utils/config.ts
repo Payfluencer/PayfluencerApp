@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import "dotenv/config";
 
 export const Config = {
   SERVER_PORT: process.env.SERVER_PORT || 8001,
@@ -9,4 +9,7 @@ export const Config = {
   RESEND_KEY: process.env.RESEND_KEY as string,
   IMAGE_UPLOAD_PATH: process.env.IMAGE_UPLOAD_PATH as string,
   COOKIE_DOMAIN: process.env.COOKIE_DOMAIN as string,
-}
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
+  GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI as string,
+};

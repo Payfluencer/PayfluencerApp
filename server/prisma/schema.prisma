@@ -38,6 +38,10 @@ model User {
   lastLogin         DateTime?         @default(now())
   phoneNumber       String?
   
+  // Google OAuth fields
+  googleId          String?           @unique
+  googlePicture     String?
+  
   reports           Report[]
   chats             Chat[]
   passwordResets    PasswordReset[]

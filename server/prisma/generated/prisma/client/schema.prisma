@@ -38,6 +38,10 @@ model User {
   lastLogin   DateTime? @default(now())
   phoneNumber String?
 
+  // Google OAuth fields
+  googleId      String? @unique
+  googlePicture String?
+
   reports        Report[]
   chats          Chat[]
   passwordResets PasswordReset[]
@@ -103,23 +107,23 @@ model Chat {
 
 // Password reset tokens
 model PasswordReset {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  user_id   String
-  user      User     @relation(fields: [user_id], references: [id])
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  used      Boolean  @default(false)
+  id         String   @id @default(uuid())
+  token      String   @unique
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  expires_at DateTime
+  created_at DateTime @default(now())
+  used       Boolean  @default(false)
 }
 
 // Site settings managed by admins
 model SiteSetting {
-  id        String   @id @default(uuid())
-  key       String   @unique
-  value     String
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  key        String   @unique
+  value      String
+  updated_at DateTime @updatedAt
 
   // Relationships
-  updatedBy   User   @relation(fields: [updatedById], references: [id])
-  updatedById String
+  updatedBy     User   @relation(fields: [updated_by_id], references: [id])
+  updated_by_id String
 }

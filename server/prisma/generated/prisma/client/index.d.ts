@@ -1581,6 +1581,8 @@ export namespace Prisma {
     isActive: boolean | null
     lastLogin: Date | null
     phoneNumber: string | null
+    googleId: string | null
+    googlePicture: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1597,6 +1599,8 @@ export namespace Prisma {
     isActive: boolean | null
     lastLogin: Date | null
     phoneNumber: string | null
+    googleId: string | null
+    googlePicture: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1613,6 +1617,8 @@ export namespace Prisma {
     isActive: number
     lastLogin: number
     phoneNumber: number
+    googleId: number
+    googlePicture: number
     _all: number
   }
 
@@ -1631,6 +1637,8 @@ export namespace Prisma {
     isActive?: true
     lastLogin?: true
     phoneNumber?: true
+    googleId?: true
+    googlePicture?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1647,6 +1655,8 @@ export namespace Prisma {
     isActive?: true
     lastLogin?: true
     phoneNumber?: true
+    googleId?: true
+    googlePicture?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1663,6 +1673,8 @@ export namespace Prisma {
     isActive?: true
     lastLogin?: true
     phoneNumber?: true
+    googleId?: true
+    googlePicture?: true
     _all?: true
   }
 
@@ -1752,6 +1764,8 @@ export namespace Prisma {
     isActive: boolean
     lastLogin: Date | null
     phoneNumber: string | null
+    googleId: string | null
+    googlePicture: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -1785,6 +1799,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: boolean
     phoneNumber?: boolean
+    googleId?: boolean
+    googlePicture?: boolean
     reports?: boolean | User$reportsArgs<ExtArgs>
     chats?: boolean | User$chatsArgs<ExtArgs>
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
@@ -1806,6 +1822,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: boolean
     phoneNumber?: boolean
+    googleId?: boolean
+    googlePicture?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1822,6 +1840,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: boolean
     phoneNumber?: boolean
+    googleId?: boolean
+    googlePicture?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1838,9 +1858,11 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: boolean
     phoneNumber?: boolean
+    googleId?: boolean
+    googlePicture?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "profile_picture" | "bio" | "evm_wallet_address" | "created_at" | "update_at" | "role" | "isActive" | "lastLogin" | "phoneNumber", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "profile_picture" | "bio" | "evm_wallet_address" | "created_at" | "update_at" | "role" | "isActive" | "lastLogin" | "phoneNumber" | "googleId" | "googlePicture", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     reports?: boolean | User$reportsArgs<ExtArgs>
     chats?: boolean | User$chatsArgs<ExtArgs>
@@ -1873,6 +1895,8 @@ export namespace Prisma {
       isActive: boolean
       lastLogin: Date | null
       phoneNumber: string | null
+      googleId: string | null
+      googlePicture: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2313,6 +2337,8 @@ export namespace Prisma {
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly lastLogin: FieldRef<"User", 'DateTime'>
     readonly phoneNumber: FieldRef<"User", 'String'>
+    readonly googleId: FieldRef<"User", 'String'>
+    readonly googlePicture: FieldRef<"User", 'String'>
   }
     
 
@@ -7292,8 +7318,8 @@ export namespace Prisma {
     id: string | null
     token: string | null
     user_id: string | null
-    expiresAt: Date | null
-    createdAt: Date | null
+    expires_at: Date | null
+    created_at: Date | null
     used: boolean | null
   }
 
@@ -7301,8 +7327,8 @@ export namespace Prisma {
     id: string | null
     token: string | null
     user_id: string | null
-    expiresAt: Date | null
-    createdAt: Date | null
+    expires_at: Date | null
+    created_at: Date | null
     used: boolean | null
   }
 
@@ -7310,8 +7336,8 @@ export namespace Prisma {
     id: number
     token: number
     user_id: number
-    expiresAt: number
-    createdAt: number
+    expires_at: number
+    created_at: number
     used: number
     _all: number
   }
@@ -7321,8 +7347,8 @@ export namespace Prisma {
     id?: true
     token?: true
     user_id?: true
-    expiresAt?: true
-    createdAt?: true
+    expires_at?: true
+    created_at?: true
     used?: true
   }
 
@@ -7330,8 +7356,8 @@ export namespace Prisma {
     id?: true
     token?: true
     user_id?: true
-    expiresAt?: true
-    createdAt?: true
+    expires_at?: true
+    created_at?: true
     used?: true
   }
 
@@ -7339,8 +7365,8 @@ export namespace Prisma {
     id?: true
     token?: true
     user_id?: true
-    expiresAt?: true
-    createdAt?: true
+    expires_at?: true
+    created_at?: true
     used?: true
     _all?: true
   }
@@ -7421,8 +7447,8 @@ export namespace Prisma {
     id: string
     token: string
     user_id: string
-    expiresAt: Date
-    createdAt: Date
+    expires_at: Date
+    created_at: Date
     used: boolean
     _count: PasswordResetCountAggregateOutputType | null
     _min: PasswordResetMinAggregateOutputType | null
@@ -7447,8 +7473,8 @@ export namespace Prisma {
     id?: boolean
     token?: boolean
     user_id?: boolean
-    expiresAt?: boolean
-    createdAt?: boolean
+    expires_at?: boolean
+    created_at?: boolean
     used?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["passwordReset"]>
@@ -7457,8 +7483,8 @@ export namespace Prisma {
     id?: boolean
     token?: boolean
     user_id?: boolean
-    expiresAt?: boolean
-    createdAt?: boolean
+    expires_at?: boolean
+    created_at?: boolean
     used?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["passwordReset"]>
@@ -7467,8 +7493,8 @@ export namespace Prisma {
     id?: boolean
     token?: boolean
     user_id?: boolean
-    expiresAt?: boolean
-    createdAt?: boolean
+    expires_at?: boolean
+    created_at?: boolean
     used?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["passwordReset"]>
@@ -7477,12 +7503,12 @@ export namespace Prisma {
     id?: boolean
     token?: boolean
     user_id?: boolean
-    expiresAt?: boolean
-    createdAt?: boolean
+    expires_at?: boolean
+    created_at?: boolean
     used?: boolean
   }
 
-  export type PasswordResetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "user_id" | "expiresAt" | "createdAt" | "used", ExtArgs["result"]["passwordReset"]>
+  export type PasswordResetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "user_id" | "expires_at" | "created_at" | "used", ExtArgs["result"]["passwordReset"]>
   export type PasswordResetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -7502,8 +7528,8 @@ export namespace Prisma {
       id: string
       token: string
       user_id: string
-      expiresAt: Date
-      createdAt: Date
+      expires_at: Date
+      created_at: Date
       used: boolean
     }, ExtArgs["result"]["passwordReset"]>
     composites: {}
@@ -7932,8 +7958,8 @@ export namespace Prisma {
     readonly id: FieldRef<"PasswordReset", 'String'>
     readonly token: FieldRef<"PasswordReset", 'String'>
     readonly user_id: FieldRef<"PasswordReset", 'String'>
-    readonly expiresAt: FieldRef<"PasswordReset", 'DateTime'>
-    readonly createdAt: FieldRef<"PasswordReset", 'DateTime'>
+    readonly expires_at: FieldRef<"PasswordReset", 'DateTime'>
+    readonly created_at: FieldRef<"PasswordReset", 'DateTime'>
     readonly used: FieldRef<"PasswordReset", 'Boolean'>
   }
     
@@ -8361,24 +8387,24 @@ export namespace Prisma {
     id: string | null
     key: string | null
     value: string | null
-    updatedAt: Date | null
-    updatedById: string | null
+    updated_at: Date | null
+    updated_by_id: string | null
   }
 
   export type SiteSettingMaxAggregateOutputType = {
     id: string | null
     key: string | null
     value: string | null
-    updatedAt: Date | null
-    updatedById: string | null
+    updated_at: Date | null
+    updated_by_id: string | null
   }
 
   export type SiteSettingCountAggregateOutputType = {
     id: number
     key: number
     value: number
-    updatedAt: number
-    updatedById: number
+    updated_at: number
+    updated_by_id: number
     _all: number
   }
 
@@ -8387,24 +8413,24 @@ export namespace Prisma {
     id?: true
     key?: true
     value?: true
-    updatedAt?: true
-    updatedById?: true
+    updated_at?: true
+    updated_by_id?: true
   }
 
   export type SiteSettingMaxAggregateInputType = {
     id?: true
     key?: true
     value?: true
-    updatedAt?: true
-    updatedById?: true
+    updated_at?: true
+    updated_by_id?: true
   }
 
   export type SiteSettingCountAggregateInputType = {
     id?: true
     key?: true
     value?: true
-    updatedAt?: true
-    updatedById?: true
+    updated_at?: true
+    updated_by_id?: true
     _all?: true
   }
 
@@ -8484,8 +8510,8 @@ export namespace Prisma {
     id: string
     key: string
     value: string
-    updatedAt: Date
-    updatedById: string
+    updated_at: Date
+    updated_by_id: string
     _count: SiteSettingCountAggregateOutputType | null
     _min: SiteSettingMinAggregateOutputType | null
     _max: SiteSettingMaxAggregateOutputType | null
@@ -8509,8 +8535,8 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     value?: boolean
-    updatedAt?: boolean
-    updatedById?: boolean
+    updated_at?: boolean
+    updated_by_id?: boolean
     updatedBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["siteSetting"]>
 
@@ -8518,8 +8544,8 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     value?: boolean
-    updatedAt?: boolean
-    updatedById?: boolean
+    updated_at?: boolean
+    updated_by_id?: boolean
     updatedBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["siteSetting"]>
 
@@ -8527,8 +8553,8 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     value?: boolean
-    updatedAt?: boolean
-    updatedById?: boolean
+    updated_at?: boolean
+    updated_by_id?: boolean
     updatedBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["siteSetting"]>
 
@@ -8536,11 +8562,11 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     value?: boolean
-    updatedAt?: boolean
-    updatedById?: boolean
+    updated_at?: boolean
+    updated_by_id?: boolean
   }
 
-  export type SiteSettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "value" | "updatedAt" | "updatedById", ExtArgs["result"]["siteSetting"]>
+  export type SiteSettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "value" | "updated_at" | "updated_by_id", ExtArgs["result"]["siteSetting"]>
   export type SiteSettingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     updatedBy?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -8560,8 +8586,8 @@ export namespace Prisma {
       id: string
       key: string
       value: string
-      updatedAt: Date
-      updatedById: string
+      updated_at: Date
+      updated_by_id: string
     }, ExtArgs["result"]["siteSetting"]>
     composites: {}
   }
@@ -8989,8 +9015,8 @@ export namespace Prisma {
     readonly id: FieldRef<"SiteSetting", 'String'>
     readonly key: FieldRef<"SiteSetting", 'String'>
     readonly value: FieldRef<"SiteSetting", 'String'>
-    readonly updatedAt: FieldRef<"SiteSetting", 'DateTime'>
-    readonly updatedById: FieldRef<"SiteSetting", 'String'>
+    readonly updated_at: FieldRef<"SiteSetting", 'DateTime'>
+    readonly updated_by_id: FieldRef<"SiteSetting", 'String'>
   }
     
 
@@ -9427,7 +9453,9 @@ export namespace Prisma {
     role: 'role',
     isActive: 'isActive',
     lastLogin: 'lastLogin',
-    phoneNumber: 'phoneNumber'
+    phoneNumber: 'phoneNumber',
+    googleId: 'googleId',
+    googlePicture: 'googlePicture'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9490,8 +9518,8 @@ export namespace Prisma {
     id: 'id',
     token: 'token',
     user_id: 'user_id',
-    expiresAt: 'expiresAt',
-    createdAt: 'createdAt',
+    expires_at: 'expires_at',
+    created_at: 'created_at',
     used: 'used'
   };
 
@@ -9502,8 +9530,8 @@ export namespace Prisma {
     id: 'id',
     key: 'key',
     value: 'value',
-    updatedAt: 'updatedAt',
-    updatedById: 'updatedById'
+    updated_at: 'updated_at',
+    updated_by_id: 'updated_by_id'
   };
 
   export type SiteSettingScalarFieldEnum = (typeof SiteSettingScalarFieldEnum)[keyof typeof SiteSettingScalarFieldEnum]
@@ -9592,6 +9620,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
     phoneNumber?: StringNullableFilter<"User"> | string | null
+    googleId?: StringNullableFilter<"User"> | string | null
+    googlePicture?: StringNullableFilter<"User"> | string | null
     reports?: ReportListRelationFilter
     chats?: ChatListRelationFilter
     passwordResets?: PasswordResetListRelationFilter
@@ -9612,6 +9642,8 @@ export namespace Prisma {
     isActive?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
     phoneNumber?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
+    googlePicture?: SortOrderInput | SortOrder
     reports?: ReportOrderByRelationAggregateInput
     chats?: ChatOrderByRelationAggregateInput
     passwordResets?: PasswordResetOrderByRelationAggregateInput
@@ -9621,6 +9653,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     evm_wallet_address?: string
+    googleId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -9635,11 +9668,12 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
     phoneNumber?: StringNullableFilter<"User"> | string | null
+    googlePicture?: StringNullableFilter<"User"> | string | null
     reports?: ReportListRelationFilter
     chats?: ChatListRelationFilter
     passwordResets?: PasswordResetListRelationFilter
     siteSettings?: SiteSettingListRelationFilter
-  }, "id" | "evm_wallet_address">
+  }, "id" | "evm_wallet_address" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -9655,6 +9689,8 @@ export namespace Prisma {
     isActive?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
     phoneNumber?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
+    googlePicture?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -9677,6 +9713,8 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     lastLogin?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     phoneNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
+    googleId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    googlePicture?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type CompanyWhereInput = {
@@ -9965,8 +10003,8 @@ export namespace Prisma {
     id?: StringFilter<"PasswordReset"> | string
     token?: StringFilter<"PasswordReset"> | string
     user_id?: StringFilter<"PasswordReset"> | string
-    expiresAt?: DateTimeFilter<"PasswordReset"> | Date | string
-    createdAt?: DateTimeFilter<"PasswordReset"> | Date | string
+    expires_at?: DateTimeFilter<"PasswordReset"> | Date | string
+    created_at?: DateTimeFilter<"PasswordReset"> | Date | string
     used?: BoolFilter<"PasswordReset"> | boolean
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -9975,8 +10013,8 @@ export namespace Prisma {
     id?: SortOrder
     token?: SortOrder
     user_id?: SortOrder
-    expiresAt?: SortOrder
-    createdAt?: SortOrder
+    expires_at?: SortOrder
+    created_at?: SortOrder
     used?: SortOrder
     user?: UserOrderByWithRelationInput
   }
@@ -9988,8 +10026,8 @@ export namespace Prisma {
     OR?: PasswordResetWhereInput[]
     NOT?: PasswordResetWhereInput | PasswordResetWhereInput[]
     user_id?: StringFilter<"PasswordReset"> | string
-    expiresAt?: DateTimeFilter<"PasswordReset"> | Date | string
-    createdAt?: DateTimeFilter<"PasswordReset"> | Date | string
+    expires_at?: DateTimeFilter<"PasswordReset"> | Date | string
+    created_at?: DateTimeFilter<"PasswordReset"> | Date | string
     used?: BoolFilter<"PasswordReset"> | boolean
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "token">
@@ -9998,8 +10036,8 @@ export namespace Prisma {
     id?: SortOrder
     token?: SortOrder
     user_id?: SortOrder
-    expiresAt?: SortOrder
-    createdAt?: SortOrder
+    expires_at?: SortOrder
+    created_at?: SortOrder
     used?: SortOrder
     _count?: PasswordResetCountOrderByAggregateInput
     _max?: PasswordResetMaxOrderByAggregateInput
@@ -10013,8 +10051,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"PasswordReset"> | string
     token?: StringWithAggregatesFilter<"PasswordReset"> | string
     user_id?: StringWithAggregatesFilter<"PasswordReset"> | string
-    expiresAt?: DateTimeWithAggregatesFilter<"PasswordReset"> | Date | string
-    createdAt?: DateTimeWithAggregatesFilter<"PasswordReset"> | Date | string
+    expires_at?: DateTimeWithAggregatesFilter<"PasswordReset"> | Date | string
+    created_at?: DateTimeWithAggregatesFilter<"PasswordReset"> | Date | string
     used?: BoolWithAggregatesFilter<"PasswordReset"> | boolean
   }
 
@@ -10025,8 +10063,8 @@ export namespace Prisma {
     id?: StringFilter<"SiteSetting"> | string
     key?: StringFilter<"SiteSetting"> | string
     value?: StringFilter<"SiteSetting"> | string
-    updatedAt?: DateTimeFilter<"SiteSetting"> | Date | string
-    updatedById?: StringFilter<"SiteSetting"> | string
+    updated_at?: DateTimeFilter<"SiteSetting"> | Date | string
+    updated_by_id?: StringFilter<"SiteSetting"> | string
     updatedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -10034,8 +10072,8 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     value?: SortOrder
-    updatedAt?: SortOrder
-    updatedById?: SortOrder
+    updated_at?: SortOrder
+    updated_by_id?: SortOrder
     updatedBy?: UserOrderByWithRelationInput
   }
 
@@ -10046,8 +10084,8 @@ export namespace Prisma {
     OR?: SiteSettingWhereInput[]
     NOT?: SiteSettingWhereInput | SiteSettingWhereInput[]
     value?: StringFilter<"SiteSetting"> | string
-    updatedAt?: DateTimeFilter<"SiteSetting"> | Date | string
-    updatedById?: StringFilter<"SiteSetting"> | string
+    updated_at?: DateTimeFilter<"SiteSetting"> | Date | string
+    updated_by_id?: StringFilter<"SiteSetting"> | string
     updatedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "key">
 
@@ -10055,8 +10093,8 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     value?: SortOrder
-    updatedAt?: SortOrder
-    updatedById?: SortOrder
+    updated_at?: SortOrder
+    updated_by_id?: SortOrder
     _count?: SiteSettingCountOrderByAggregateInput
     _max?: SiteSettingMaxOrderByAggregateInput
     _min?: SiteSettingMinOrderByAggregateInput
@@ -10069,8 +10107,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"SiteSetting"> | string
     key?: StringWithAggregatesFilter<"SiteSetting"> | string
     value?: StringWithAggregatesFilter<"SiteSetting"> | string
-    updatedAt?: DateTimeWithAggregatesFilter<"SiteSetting"> | Date | string
-    updatedById?: StringWithAggregatesFilter<"SiteSetting"> | string
+    updated_at?: DateTimeWithAggregatesFilter<"SiteSetting"> | Date | string
+    updated_by_id?: StringWithAggregatesFilter<"SiteSetting"> | string
   }
 
   export type UserCreateInput = {
@@ -10087,6 +10125,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportCreateNestedManyWithoutUserInput
     chats?: ChatCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetCreateNestedManyWithoutUserInput
@@ -10107,6 +10147,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportUncheckedCreateNestedManyWithoutUserInput
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutUserInput
@@ -10127,6 +10169,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUpdateManyWithoutUserNestedInput
     chats?: ChatUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutUserNestedInput
@@ -10147,6 +10191,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUncheckedUpdateManyWithoutUserNestedInput
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutUserNestedInput
@@ -10167,6 +10213,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -10183,6 +10231,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -10199,6 +10249,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CompanyCreateInput = {
@@ -10498,8 +10550,8 @@ export namespace Prisma {
   export type PasswordResetCreateInput = {
     id?: string
     token: string
-    expiresAt: Date | string
-    createdAt?: Date | string
+    expires_at: Date | string
+    created_at?: Date | string
     used?: boolean
     user: UserCreateNestedOneWithoutPasswordResetsInput
   }
@@ -10508,16 +10560,16 @@ export namespace Prisma {
     id?: string
     token: string
     user_id: string
-    expiresAt: Date | string
-    createdAt?: Date | string
+    expires_at: Date | string
+    created_at?: Date | string
     used?: boolean
   }
 
   export type PasswordResetUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     user?: UserUpdateOneRequiredWithoutPasswordResetsNestedInput
   }
@@ -10526,8 +10578,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -10535,16 +10587,16 @@ export namespace Prisma {
     id?: string
     token: string
     user_id: string
-    expiresAt: Date | string
-    createdAt?: Date | string
+    expires_at: Date | string
+    created_at?: Date | string
     used?: boolean
   }
 
   export type PasswordResetUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -10552,8 +10604,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -10561,7 +10613,7 @@ export namespace Prisma {
     id?: string
     key: string
     value: string
-    updatedAt?: Date | string
+    updated_at?: Date | string
     updatedBy: UserCreateNestedOneWithoutSiteSettingsInput
   }
 
@@ -10569,15 +10621,15 @@ export namespace Prisma {
     id?: string
     key: string
     value: string
-    updatedAt?: Date | string
-    updatedById: string
+    updated_at?: Date | string
+    updated_by_id: string
   }
 
   export type SiteSettingUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedBy?: UserUpdateOneRequiredWithoutSiteSettingsNestedInput
   }
 
@@ -10585,31 +10637,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedById?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_by_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type SiteSettingCreateManyInput = {
     id?: string
     key: string
     value: string
-    updatedAt?: Date | string
-    updatedById: string
+    updated_at?: Date | string
+    updated_by_id: string
   }
 
   export type SiteSettingUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SiteSettingUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedById?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_by_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -10733,6 +10785,8 @@ export namespace Prisma {
     isActive?: SortOrder
     lastLogin?: SortOrder
     phoneNumber?: SortOrder
+    googleId?: SortOrder
+    googlePicture?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -10749,6 +10803,8 @@ export namespace Prisma {
     isActive?: SortOrder
     lastLogin?: SortOrder
     phoneNumber?: SortOrder
+    googleId?: SortOrder
+    googlePicture?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -10765,6 +10821,8 @@ export namespace Prisma {
     isActive?: SortOrder
     lastLogin?: SortOrder
     phoneNumber?: SortOrder
+    googleId?: SortOrder
+    googlePicture?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -11076,8 +11134,8 @@ export namespace Prisma {
     id?: SortOrder
     token?: SortOrder
     user_id?: SortOrder
-    expiresAt?: SortOrder
-    createdAt?: SortOrder
+    expires_at?: SortOrder
+    created_at?: SortOrder
     used?: SortOrder
   }
 
@@ -11085,8 +11143,8 @@ export namespace Prisma {
     id?: SortOrder
     token?: SortOrder
     user_id?: SortOrder
-    expiresAt?: SortOrder
-    createdAt?: SortOrder
+    expires_at?: SortOrder
+    created_at?: SortOrder
     used?: SortOrder
   }
 
@@ -11094,8 +11152,8 @@ export namespace Prisma {
     id?: SortOrder
     token?: SortOrder
     user_id?: SortOrder
-    expiresAt?: SortOrder
-    createdAt?: SortOrder
+    expires_at?: SortOrder
+    created_at?: SortOrder
     used?: SortOrder
   }
 
@@ -11103,24 +11161,24 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     value?: SortOrder
-    updatedAt?: SortOrder
-    updatedById?: SortOrder
+    updated_at?: SortOrder
+    updated_by_id?: SortOrder
   }
 
   export type SiteSettingMaxOrderByAggregateInput = {
     id?: SortOrder
     key?: SortOrder
     value?: SortOrder
-    updatedAt?: SortOrder
-    updatedById?: SortOrder
+    updated_at?: SortOrder
+    updated_by_id?: SortOrder
   }
 
   export type SiteSettingMinOrderByAggregateInput = {
     id?: SortOrder
     key?: SortOrder
     value?: SortOrder
-    updatedAt?: SortOrder
-    updatedById?: SortOrder
+    updated_at?: SortOrder
+    updated_by_id?: SortOrder
   }
 
   export type ReportCreateNestedManyWithoutUserInput = {
@@ -11838,16 +11896,16 @@ export namespace Prisma {
   export type PasswordResetCreateWithoutUserInput = {
     id?: string
     token: string
-    expiresAt: Date | string
-    createdAt?: Date | string
+    expires_at: Date | string
+    created_at?: Date | string
     used?: boolean
   }
 
   export type PasswordResetUncheckedCreateWithoutUserInput = {
     id?: string
     token: string
-    expiresAt: Date | string
-    createdAt?: Date | string
+    expires_at: Date | string
+    created_at?: Date | string
     used?: boolean
   }
 
@@ -11864,14 +11922,14 @@ export namespace Prisma {
     id?: string
     key: string
     value: string
-    updatedAt?: Date | string
+    updated_at?: Date | string
   }
 
   export type SiteSettingUncheckedCreateWithoutUpdatedByInput = {
     id?: string
     key: string
     value: string
-    updatedAt?: Date | string
+    updated_at?: Date | string
   }
 
   export type SiteSettingCreateOrConnectWithoutUpdatedByInput = {
@@ -11964,8 +12022,8 @@ export namespace Prisma {
     id?: StringFilter<"PasswordReset"> | string
     token?: StringFilter<"PasswordReset"> | string
     user_id?: StringFilter<"PasswordReset"> | string
-    expiresAt?: DateTimeFilter<"PasswordReset"> | Date | string
-    createdAt?: DateTimeFilter<"PasswordReset"> | Date | string
+    expires_at?: DateTimeFilter<"PasswordReset"> | Date | string
+    created_at?: DateTimeFilter<"PasswordReset"> | Date | string
     used?: BoolFilter<"PasswordReset"> | boolean
   }
 
@@ -11992,8 +12050,8 @@ export namespace Prisma {
     id?: StringFilter<"SiteSetting"> | string
     key?: StringFilter<"SiteSetting"> | string
     value?: StringFilter<"SiteSetting"> | string
-    updatedAt?: DateTimeFilter<"SiteSetting"> | Date | string
-    updatedById?: StringFilter<"SiteSetting"> | string
+    updated_at?: DateTimeFilter<"SiteSetting"> | Date | string
+    updated_by_id?: StringFilter<"SiteSetting"> | string
   }
 
   export type BountyCreateWithoutCompanyInput = {
@@ -12176,6 +12234,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     chats?: ChatCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetCreateNestedManyWithoutUserInput
     siteSettings?: SiteSettingCreateNestedManyWithoutUpdatedByInput
@@ -12195,6 +12255,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutUserInput
     siteSettings?: SiteSettingUncheckedCreateNestedManyWithoutUpdatedByInput
@@ -12276,6 +12338,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     chats?: ChatUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutUserNestedInput
     siteSettings?: SiteSettingUpdateManyWithoutUpdatedByNestedInput
@@ -12295,6 +12359,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutUserNestedInput
     siteSettings?: SiteSettingUncheckedUpdateManyWithoutUpdatedByNestedInput
@@ -12388,6 +12454,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetCreateNestedManyWithoutUserInput
     siteSettings?: SiteSettingCreateNestedManyWithoutUpdatedByInput
@@ -12407,6 +12475,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportUncheckedCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutUserInput
     siteSettings?: SiteSettingUncheckedCreateNestedManyWithoutUpdatedByInput
@@ -12477,6 +12547,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutUserNestedInput
     siteSettings?: SiteSettingUpdateManyWithoutUpdatedByNestedInput
@@ -12496,6 +12568,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUncheckedUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutUserNestedInput
     siteSettings?: SiteSettingUncheckedUpdateManyWithoutUpdatedByNestedInput
@@ -12515,6 +12589,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportCreateNestedManyWithoutUserInput
     chats?: ChatCreateNestedManyWithoutUserInput
     siteSettings?: SiteSettingCreateNestedManyWithoutUpdatedByInput
@@ -12534,6 +12610,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportUncheckedCreateNestedManyWithoutUserInput
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
     siteSettings?: SiteSettingUncheckedCreateNestedManyWithoutUpdatedByInput
@@ -12569,6 +12647,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUpdateManyWithoutUserNestedInput
     chats?: ChatUpdateManyWithoutUserNestedInput
     siteSettings?: SiteSettingUpdateManyWithoutUpdatedByNestedInput
@@ -12588,6 +12668,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUncheckedUpdateManyWithoutUserNestedInput
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
     siteSettings?: SiteSettingUncheckedUpdateManyWithoutUpdatedByNestedInput
@@ -12607,6 +12689,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportCreateNestedManyWithoutUserInput
     chats?: ChatCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetCreateNestedManyWithoutUserInput
@@ -12626,6 +12710,8 @@ export namespace Prisma {
     isActive?: boolean
     lastLogin?: Date | string | null
     phoneNumber?: string | null
+    googleId?: string | null
+    googlePicture?: string | null
     reports?: ReportUncheckedCreateNestedManyWithoutUserInput
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
     passwordResets?: PasswordResetUncheckedCreateNestedManyWithoutUserInput
@@ -12661,6 +12747,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUpdateManyWithoutUserNestedInput
     chats?: ChatUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUpdateManyWithoutUserNestedInput
@@ -12680,6 +12768,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
+    googlePicture?: NullableStringFieldUpdateOperationsInput | string | null
     reports?: ReportUncheckedUpdateManyWithoutUserNestedInput
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
     passwordResets?: PasswordResetUncheckedUpdateManyWithoutUserNestedInput
@@ -12706,8 +12796,8 @@ export namespace Prisma {
   export type PasswordResetCreateManyUserInput = {
     id?: string
     token: string
-    expiresAt: Date | string
-    createdAt?: Date | string
+    expires_at: Date | string
+    created_at?: Date | string
     used?: boolean
   }
 
@@ -12715,7 +12805,7 @@ export namespace Prisma {
     id?: string
     key: string
     value: string
-    updatedAt?: Date | string
+    updated_at?: Date | string
   }
 
   export type ReportUpdateWithoutUserInput = {
@@ -12777,24 +12867,24 @@ export namespace Prisma {
   export type PasswordResetUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PasswordResetUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PasswordResetUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
-    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -12802,21 +12892,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SiteSettingUncheckedUpdateWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SiteSettingUncheckedUpdateManyWithoutUpdatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BountyCreateManyCompanyInput = {
