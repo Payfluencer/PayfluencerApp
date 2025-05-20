@@ -118,6 +118,14 @@ async function seedBounty() {
           nudity: false,
           language: "English",
           age_restriction: 18,
+          required_views:  10000 ,
+          required_likes:  100000,
+          required_comments: 1000,
+          required_saves: 100,
+          platform:  "TikTok",
+          show_other_brands: true,
+          specific_products: "Sample Product",
+          pay_duration: "Weekly",
         },
       });
 
