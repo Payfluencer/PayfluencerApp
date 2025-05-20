@@ -1,25 +1,25 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 // Schema used when creating a new user
 export const UserSignupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   name: z.string().min(3),
-  role: z.nativeEnum(["admin", "user"]),
-})
+  role: z.enum(["admin", "user"]),
+});
 
 // Schema used when updating a user
 export const UserUpdateSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(3),
   email: z.string().email(),
-})
+});
 
 // Schema used when searching for a user
 export const SearchUserSchema = z.object({
   term: z.string().min(3),
-  type: z.enum(['email', 'id']),
-})
+  type: z.enum(["email", "id"]),
+});
 
 // Create partner Schema
 export const CreatePartnerSchema = z.object({
@@ -31,5 +31,4 @@ export const CreatePartnerSchema = z.object({
   managerName: z.string().min(3),
   managerEmail: z.string().email(),
   managerPassword: z.string().min(6),
-})
-
+});

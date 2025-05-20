@@ -1,6 +1,6 @@
 # Payfluence
 
-A modern web application built with a React frontend and Node.js backend, using PostgreSQL for data storage.
+A great description goes here
 
 ## Project Setup
 

@@ -98,7 +98,7 @@ export const updateSetting = async (
       where: { key },
       data: {
         value,
-        updatedById: userId,
+        updatedBy: userId,
       },
     });
 
@@ -164,7 +164,7 @@ export const createSetting = async (
       data: {
         key,
         value,
-        updatedById: userId,
+        updatedBy: userId,
       },
     });
 
