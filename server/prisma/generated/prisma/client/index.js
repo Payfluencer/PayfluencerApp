@@ -84,6 +84,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -168,6 +171,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -224,7 +232,8 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -233,8 +242,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// filepath: /Users/ab/Documents/projects/freelance/payfluence/prisma/schema.prisma\n// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"generated/prisma/client\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Enums - Positioned before the models where they are used\nenum UserRole {\n  ADMIN // Site administrator\n  USER // Normal user\n}\n\n// User model \nmodel User {\n  id                 String   @id @default(uuid())\n  name               String?\n  email              String?\n  password           String?\n  profile_picture    String?\n  bio                String?\n  evm_wallet_address String?  @unique\n  created_at         DateTime @default(now())\n  update_at          DateTime @updatedAt\n\n  role        UserRole? @default(USER)\n  isActive    Boolean   @default(true)\n  lastLogin   DateTime? @default(now())\n  phoneNumber String?\n\n  // Google OAuth fields\n  googleId      String? @unique\n  googlePicture String?\n\n  reports        Report[]\n  chats          Chat[]\n  passwordResets PasswordReset[]\n  siteSettings   SiteSetting[]\n}\n\n// Company model\nmodel Company {\n  id         String   @id @default(uuid())\n  name       String?\n  logo       String?\n  created_at DateTime @default(now())\n  update_at  DateTime @updatedAt\n\n  bounties Bounty[]\n  reports  Report[]\n}\n\n// Bounty model\nmodel Bounty {\n  id              String   @id @default(uuid())\n  company_id      String\n  max_payout      Float?\n  nsfw            Boolean?\n  cursing         Boolean?\n  nudity          Boolean?\n  language        String?\n  age_restriction Int?\n  created_at      DateTime @default(now())\n  update_at       DateTime @updatedAt\n\n  company Company @relation(fields: [company_id], references: [id])\n}\n\n// Report model\nmodel Report {\n  id          String   @id @default(uuid())\n  user_id     String\n  company_id  String\n  title       String?\n  description String?\n  platform    String?\n  status      String?\n  created_at  DateTime @default(now())\n  updated_at  DateTime @updatedAt\n\n  user    User    @relation(fields: [user_id], references: [id])\n  company Company @relation(fields: [company_id], references: [id])\n  chats   Chat[]\n}\n\n// Chat model\nmodel Chat {\n  id         String   @id @default(uuid())\n  report_id  String\n  user_id    String\n  message    String?\n  created_at DateTime @default(now())\n\n  report Report @relation(fields: [report_id], references: [id])\n  user   User   @relation(fields: [user_id], references: [id])\n}\n\n// Password reset tokens\nmodel PasswordReset {\n  id         String   @id @default(uuid())\n  token      String   @unique\n  user_id    String\n  user       User     @relation(fields: [user_id], references: [id])\n  expires_at DateTime\n  created_at DateTime @default(now())\n  used       Boolean  @default(false)\n}\n\n// Site settings managed by admins\nmodel SiteSetting {\n  id         String   @id @default(uuid())\n  key        String   @unique\n  value      String\n  updated_at DateTime @updatedAt\n\n  // Relationships\n  updatedBy     User   @relation(fields: [updated_by_id], references: [id])\n  updated_by_id String\n}\n",
-  "inlineSchemaHash": "73f884d69e3f40eb00a2c5db81cdf952c6b10a7f2bfe314ff20e01b7fd29458d",
+  "inlineSchema": "// filepath: /Users/ab/Documents/projects/freelance/payfluence/prisma/schema.prisma\n// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"generated/prisma/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Enums - Positioned before the models where they are used\nenum UserRole {\n  ADMIN // Site administrator\n  USER // Normal user\n}\n\n// User model \nmodel User {\n  id                 String   @id @default(uuid())\n  name               String?\n  email              String?\n  password           String?\n  profile_picture    String?\n  bio                String?\n  evm_wallet_address String?  @unique\n  created_at         DateTime @default(now())\n  update_at          DateTime @updatedAt\n\n  role        UserRole? @default(USER)\n  isActive    Boolean   @default(true)\n  lastLogin   DateTime? @default(now())\n  phoneNumber String?\n\n  // Google OAuth fields\n  googleId      String? @unique\n  googlePicture String?\n\n  reports        Report[]\n  chats          Chat[]\n  passwordResets PasswordReset[]\n  siteSettings   SiteSetting[]\n}\n\n// Company model\nmodel Company {\n  id         String   @id @default(uuid())\n  name       String?\n  logo       String?\n  created_at DateTime @default(now())\n  update_at  DateTime @updatedAt\n\n  bounties Bounty[]\n  reports  Report[]\n}\n\n// Bounty model\nmodel Bounty {\n  id              String   @id @default(uuid())\n  company_id      String\n  max_payout      Float?\n  nsfw            Boolean?\n  cursing         Boolean?\n  nudity          Boolean?\n  language        String?\n  age_restriction Int?\n  created_at      DateTime @default(now())\n  update_at       DateTime @updatedAt\n\n  company Company @relation(fields: [company_id], references: [id])\n}\n\n// Report model\nmodel Report {\n  id          String   @id @default(uuid())\n  user_id     String\n  company_id  String\n  title       String?\n  description String?\n  platform    String?\n  status      String?\n  created_at  DateTime @default(now())\n  updated_at  DateTime @updatedAt\n\n  user    User    @relation(fields: [user_id], references: [id])\n  company Company @relation(fields: [company_id], references: [id])\n  chats   Chat[]\n}\n\n// Chat model\nmodel Chat {\n  id         String   @id @default(uuid())\n  report_id  String\n  user_id    String\n  message    String?\n  created_at DateTime @default(now())\n\n  report Report @relation(fields: [report_id], references: [id])\n  user   User   @relation(fields: [user_id], references: [id])\n}\n\n// Password reset tokens\nmodel PasswordReset {\n  id         String   @id @default(uuid())\n  token      String   @unique\n  user_id    String\n  user       User     @relation(fields: [user_id], references: [id])\n  expires_at DateTime\n  created_at DateTime @default(now())\n  used       Boolean  @default(false)\n}\n\n// Site settings managed by admins\nmodel SiteSetting {\n  id         String   @id @default(uuid())\n  key        String   @unique\n  value      String\n  updated_at DateTime @updatedAt\n\n  // Relationships\n  updatedBy     User   @relation(fields: [updated_by_id], references: [id])\n  updated_by_id String\n}\n",
+  "inlineSchemaHash": "3abad7e8a2d3c4ce20a1b089c2e7e1ddb2bad1e7215c26cd236847c0e3b49255",
   "copyEngine": true
 }
 

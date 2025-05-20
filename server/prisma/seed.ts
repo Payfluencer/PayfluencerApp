@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { Logger } from "borgen";
 import { UserRole } from "../prisma/generated/prisma/client";
 import { prisma } from "../database/prisma";
@@ -94,7 +94,9 @@ async function seedSiteSettings() {
           data: {
             key: setting.key,
             value: setting.value,
-            updatedById: admin.id, // Using the UUID field
+            updatedBy: {
+              connect: { id: admin.id },
+            },
           },
         });
       }

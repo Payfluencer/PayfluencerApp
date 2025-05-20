@@ -1,4 +1,4 @@
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { Logger } from "borgen";
 import { UserRole } from "../prisma/generated/prisma/client";
 import { prisma } from "../database/prisma";
