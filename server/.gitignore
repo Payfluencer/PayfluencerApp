@@ -1,5 +1,7 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
+.DS_Store
+
 # Logs
 
 logs
@@ -13,6 +15,10 @@ lerna-debug.log*
 # Caches
 
 .cache
+
+# Sqlite database files
+dev.db
+dev.db-journal
 
 # Uploads
 uploads/

@@ -127,7 +127,9 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   isActive: 'isActive',
   lastLogin: 'lastLogin',
-  phoneNumber: 'phoneNumber'
+  phoneNumber: 'phoneNumber',
+  googleId: 'googleId',
+  googlePicture: 'googlePicture'
 };
 
 exports.Prisma.CompanyScalarFieldEnum = {
@@ -175,8 +177,8 @@ exports.Prisma.PasswordResetScalarFieldEnum = {
   id: 'id',
   token: 'token',
   user_id: 'user_id',
-  expiresAt: 'expiresAt',
-  createdAt: 'createdAt',
+  expires_at: 'expires_at',
+  created_at: 'created_at',
   used: 'used'
 };
 
@@ -184,8 +186,8 @@ exports.Prisma.SiteSettingScalarFieldEnum = {
   id: 'id',
   key: 'key',
   value: 'value',
-  updatedAt: 'updatedAt',
-  updatedById: 'updatedById'
+  updated_at: 'updated_at',
+  updated_by_id: 'updated_by_id'
 };
 
 exports.Prisma.SortOrder = {
