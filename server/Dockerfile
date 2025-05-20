@@ -5,25 +5,17 @@ WORKDIR /app
 # Install pnpm
 RUN npm install -g pnpm@9.12.2
 
-# Copy package files first
+# Copy package files first and schema
 COPY package.json pnpm-lock.yaml ./
-
-# Copy prisma schema
 COPY prisma/schema.prisma ./prisma/
 
-# Install deps and generate prisma client with proper binary targets
+# Install deps and generate prisma client
 RUN pnpm install --frozen-lockfile
-RUN pnpm prisma generate
 
-# Now copy the rest of the files except for the generated prisma folder
-# We can't use COPY . . directly as it would overwrite the generated files
-COPY ./app.ts ./tsconfig.json ./
-COPY ./controllers ./controllers
-COPY ./database ./database
-COPY ./middleware ./middleware
-COPY ./router ./router
-COPY ./types ./types
-COPY ./utils ./utils
+COPY . .
+
+# Generate prisma client
+RUN pnpm prisma generate
 
 # Build app
 RUN pnpm run build
@@ -47,4 +39,4 @@ COPY --from=builder /app/prisma/generated ./prisma/generated
 
 EXPOSE 8001
 
-CMD ["node", "./build/app.js"]
+CMD ["sh", "-c", "pnpm run prisma:migrate:prod && node ./build/app.js"]

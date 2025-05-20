@@ -5,15 +5,15 @@ WORKDIR /app
 RUN npm install -g pnpm@9.12.2
 RUN npm i -g tsx
 
-# Copy package.json and prisma schema first
+# Copy only what's needed for install and generation
 COPY package.json pnpm-lock.yaml ./
-COPY prisma/schema.prisma ./prisma/
+COPY prisma ./prisma
 
 RUN pnpm install
-RUN pnpm prisma generate
 
+# Now copy the full app code
 COPY . .
 
 EXPOSE 8001
+CMD ["sh", "-c", "pnpm run prisma:migrate:prod && pnpm run dev"]
 
-CMD ["pnpm", "dev"]
