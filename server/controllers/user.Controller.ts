@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import { Logger } from "borgen";
 import { HttpStatusCode } from "axios";
 import { Config } from "../utils/config";
@@ -8,7 +7,6 @@ import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 import {
   SearchUserSchema,
-  UserSignupSchema,
   UserUpdateSchema,
 } from "../types/zod-schema";
 import { UserRole } from "../prisma/generated/prisma/client";
