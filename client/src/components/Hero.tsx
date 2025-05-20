@@ -22,11 +22,11 @@ function Hero() {
             more—rewarding creators at every step.
           </p>
           <div className="flex items-center mt-12 flex-col md:flex-row gap-4 w-full">
-            <Button className="bg-[#FA5E06] text-white px-4 py-2 rounded-md w-full md:w-1/4 text-xl">
+            <Button className="bg-[#FA5E06] text-white px-4 py-2 rounded-md w-full md:w-1/2 text-xl">
               Get Started
             </Button>
-            <button className="bg-gray-900 text-[#fff] px-4 py-2 rounded-md w-full md:w-1/4 text-xl">
-              Learn More
+            <button className="bg-gray-900 text-[#fff] px-4 py-2 rounded-md w-full md:w-1/2 text-xl">
+              For Companies
             </button>
           </div>
         </div>

@@ -1,5 +1,8 @@
 {
 	"dependencies": {
-		"lottie-react": "^2.4.1"
+		"clsx": "^2.1.1",
+		"lottie-react": "^2.4.1",
+		"motion": "^12.12.1",
+		"tailwind-merge": "^3.3.0"
 	}
 }
