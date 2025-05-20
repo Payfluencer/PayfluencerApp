@@ -6,7 +6,7 @@ interface WorkingProps {
 
 function Working({ working }: { working: WorkingProps }) {
   return (
-    <div className="p-1 rounded-lg bg-gray-100 w-[350px] md:w-[450px] h-[300px]">
+    <div className="p-1 rounded-lg bg-gray-100 w-[350px] md:w-[400px] h-[300px]">
       <div className="bg-[#fff] rounded-lg px-4 w-full h-full">
         <div className="flex items-center gap-2 flex-col">
           <div className="bg-white rounded-full p-2 mb-10 mt-4">

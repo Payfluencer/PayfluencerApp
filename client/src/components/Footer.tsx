@@ -5,7 +5,7 @@ import logo from "../assets/images/image.png";
 function Footer() {
   return (
     <div
-      className="pb-20 border-t-2 border-gray-200"
+      className="border-t-2 border-gray-200"
       style={{ backgroundImage: `url(${bg})` }}
     >
       <footer className="space-y-4 max-w-[1240px] mx-auto my-0 px-2">
@@ -19,7 +19,7 @@ function Footer() {
             <img src={logo} alt="logo" className="w-20 h-20" />
             <h1
               className="text-4xl font-bold text-center my-8"
-              style={{ fontFamily: "KarlaBold" }}
+              style={{ fontFamily: "KarlaSemiBold" }}
             >
               PAYFLUENCE
             </h1>

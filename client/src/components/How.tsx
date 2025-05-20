@@ -11,18 +11,18 @@ const workings = [
     title: "Publish a Bounty",
     description:
       "Publish a bounty for your project and get it done by the community.",
-    icon: <TfiWrite size={64} color="#FA5E06" />,
+    icon: <TfiWrite size={64} color="#202020FF" />,
   },
   {
     title: "Creators Respond",
     description: "Creators respond to your bounty and submit their proposals.",
-    icon: <IoIosChatboxes size={64} color="#FA5E06" />,
+    icon: <IoIosChatboxes size={64} color="#202020FF" />,
   },
   {
     title: "Approve & Reward",
     description:
       "Approve the creator's proposal and reward them via our platform.",
-    icon: <FaAward size={64} color="#FA5E06" />,
+    icon: <FaAward size={64} color="#202020FF" />,
   },
 ];
 
