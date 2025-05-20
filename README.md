@@ -9,6 +9,7 @@ A great description goes here
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 - [Node.js](https://nodejs.org/) (for running scripts outside Docker)
 - [pnpm](https://pnpm.io/installation) (for package management)
+- [tsx](https://tsx.is/) (for running TypeScript files directly)
 
 ## Environment Configuration
 
