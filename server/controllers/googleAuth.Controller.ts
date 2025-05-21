@@ -7,6 +7,7 @@ import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 import { UserRole } from "../prisma/generated/prisma/client";
 import { verifyGoogleIdToken } from "../utils/googleAuth";
+import axios from "axios";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -164,6 +165,57 @@ export const googleAuth = async (
     res.status(HttpStatusCode.InternalServerError).json({
       status: "error",
       message: "Error with Google authentication",
+      data: null,
+    });
+  }
+};
+
+// Google OAuth callback handler
+export const googleAuthCallback = async (req: Request, res: Response) => {
+  const code = req.query.code as string;
+
+  if (!code) {
+    return res.status(HttpStatusCode.BadRequest).json({
+      status: "error",
+      message: "Missing code in callback",
+      data: null,
+    });
+  }
+
+  try {
+    // Exchange code for tokens
+    const tokenRes = await axios.post(
+      "https://oauth2.googleapis.com/token",
+      {
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        grant_type: "authorization_code",
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    const { id_token } = tokenRes.data;
+
+    if (!id_token) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "Failed to get ID token from Google",
+        data: null,
+      });
+    }
+
+    // Call your existing logic with the ID token
+    req.body.idToken = id_token;
+    console.log(id_token);
+    // @ts-ignore
+    return googleAuth(req, res);
+  } catch (err) {
+    Logger.error({ message: "Error exchanging code for token: " + err });
+    return res.status(HttpStatusCode.InternalServerError).json({
+      status: "error",
+      message: "Failed to exchange code for token",
       data: null,
     });
   }
