@@ -13,7 +13,11 @@ router.put("/", userAuth([UserRole.ADMIN]), UserController.updateUser);
 router.delete("/", userAuth([UserRole.ADMIN]), UserController.deleteUser);
 router.get("/all", userAuth([UserRole.ADMIN]), UserController.getAllUsers);
 
-router.get("/refresh", userAuth([UserRole.USER]), UserController.refreshUser);
+router.get(
+  "/refresh",
+  userAuth([UserRole.ADMIN, UserRole.ADMIN]),
+  UserController.refreshUser
+);
 router.get("/search", userAuth([UserRole.ADMIN]), UserController.searchUser);
 
 // Admin specific routes

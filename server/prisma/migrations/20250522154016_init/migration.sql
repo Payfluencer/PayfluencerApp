@@ -25,8 +25,13 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Company" (
     "id" TEXT NOT NULL,
-    "name" TEXT,
-    "logo" TEXT,
+    "name" TEXT NOT NULL,
+    "logo" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "website" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone_number" TEXT NOT NULL,
+    "address" TEXT DEFAULT '',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) NOT NULL,
 
@@ -43,6 +48,14 @@ CREATE TABLE "Bounty" (
     "nudity" BOOLEAN,
     "language" TEXT,
     "age_restriction" INTEGER,
+    "required_views" INTEGER,
+    "required_likes" INTEGER,
+    "required_comments" INTEGER,
+    "required_saves" INTEGER,
+    "platform" TEXT NOT NULL,
+    "show_other_brands" BOOLEAN,
+    "specific_products" TEXT,
+    "pay_duration" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) NOT NULL,
 

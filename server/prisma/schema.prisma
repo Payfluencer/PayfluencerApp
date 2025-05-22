@@ -52,8 +52,13 @@ model User {
 // Company model
 model Company {
   id                String            @id @default(uuid())
-  name              String?
-  logo              String?
+  name              String
+  logo              String
+  description       String
+  website           String            @unique
+  email             String            @unique
+  phone_number      String            @unique
+  address           String?           @default("")
   created_at        DateTime          @default(now())
   update_at         DateTime          @updatedAt
   
