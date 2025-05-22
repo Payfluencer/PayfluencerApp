@@ -247,7 +247,7 @@ export const googleAuth = async (
 };
 
 /**
- * @openapi
+ * @ignore for now
  * /api/v1/auth/google/callback:
  *   get:
  *     summary: Handle Google OAuth callback

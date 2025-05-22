@@ -1140,61 +1140,6 @@
         }
       }
     },
-    "/api/v1/auth/google/callback": {
-      "get": {
-        "summary": "Handle Google OAuth callback",
-        "tags": [
-          "Authentication"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "code",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Authorization code from Google"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User authenticated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User logged in successfully"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "user": {
-                          "$ref": "#/components/schemas/GoogleAuthResponse"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
     "/api/v1/report": {
       "post": {
         "summary": "Create a new report",
