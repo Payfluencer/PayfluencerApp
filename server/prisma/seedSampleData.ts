@@ -32,6 +32,11 @@ async function seedCompany() {
         data: {
           name: "Sample Company",
           logo: "https://example.com/logo.png",
+          description: "This is a sample company for testing purposes",
+          website: "https://example.com",
+          address: "123 Sample St, Sample City, SC 12345",
+          phone_number: "+1-234-567-8900",
+          email: "info@example.com",
         },
       });
 
@@ -111,6 +116,8 @@ async function seedBounty() {
     if (!existingBounty) {
       await prisma.bounty.create({
         data: {
+          title: "Sample Bounty",
+          description: "This is a sample bounty for testing purposes",
           company_id: company.id,
           max_payout: 1000.5,
           nsfw: false,
@@ -118,11 +125,11 @@ async function seedBounty() {
           nudity: false,
           language: "English",
           age_restriction: 18,
-          required_views:  10000 ,
-          required_likes:  100000,
+          required_views: 10000,
+          required_likes: 100000,
           required_comments: 1000,
           required_saves: 100,
-          platform:  "TikTok",
+          platform: "TikTok",
           show_other_brands: true,
           specific_products: "Sample Product",
           pay_duration: "Weekly",

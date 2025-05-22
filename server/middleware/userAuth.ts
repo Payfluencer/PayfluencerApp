@@ -1,7 +1,7 @@
 import { Logger } from "borgen";
 import { HttpStatusCode } from "axios";
 import { prisma } from "../database/prisma";
-import { verifyJwtToken } from "../utils/utils";
+import { verifyJwtToken } from "../lib/utils";
 import type { IServerResponse } from "../types";
 import type { NextFunction, Request, Response } from "express";
 import { UserRole } from "../prisma/generated/prisma/client";

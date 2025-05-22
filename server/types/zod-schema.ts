@@ -21,6 +21,18 @@ export const SearchUserSchema = z.object({
   type: z.enum(["email", "id"]),
 });
 
+// Schema used when searching for a company
+export const SearchCompanySchema = z.object({
+  term: z.string().min(2),
+  type: z.enum(["email", "id", "name"]),
+});
+
+// Schema used for admin login
+export const AdminLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
 // Create partner Schema
 export const CreatePartnerSchema = z.object({
   name: z.string().min(3),
