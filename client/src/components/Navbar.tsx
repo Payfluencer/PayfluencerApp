@@ -18,13 +18,16 @@ function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
         <Link to="/" className="mx-2 p-2">
           For Companies
         </Link>
-        <Link to="/" className="mx-2 p-2">
+        <Link to="/auth" className="mx-2 p-2">
           Sign Up
         </Link>
-        <Link to="/" className="mx-2 p-2">
+        <Link to="/auth" className="mx-2 p-2">
           Sign In
         </Link>
-        <Link to="/" className="mx-2 p-2 bg-[#FA5E06] text-white rounded-md">
+        <Link
+          to="/auth"
+          className="mx-2 p-2 bg-[#FA5E06] text-white rounded-md"
+        >
           Start Creating
         </Link>
       </div>
