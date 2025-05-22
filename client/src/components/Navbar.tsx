@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/images/image.png";
 import { CiMenuFries } from "react-icons/ci";
 
-function Navbar() {
+function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   return (
     <div className="flex justify-between items-center p-4 bg-white/60 backdrop-blur-xl sticky top-0 z-50 shadow-xs">
       <div className="flex items-center">
@@ -29,7 +29,7 @@ function Navbar() {
         </Link>
       </div>
       <div className="flex items-center md:hidden">
-        <CiMenuFries size={34} />
+        <CiMenuFries size={34} onClick={onMenuClick} />
       </div>
     </div>
   );
