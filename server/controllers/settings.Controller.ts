@@ -4,8 +4,74 @@ import { prisma } from "../database/prisma";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 
-// Get all site settings
-// @route GET /api/v1/settings
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     SiteSetting:
+ *       type: object
+ *       required:
+ *         - key
+ *         - value
+ *       properties:
+ *         key:
+ *           type: string
+ *           description: Setting key
+ *         value:
+ *           type: string
+ *           description: Setting value
+ *         updatedBy:
+ *           type: string
+ *           description: ID of user who last updated the setting
+ *         createdAt:
+ *           type: string
+ *           description: Setting creation timestamp
+ *         updatedAt:
+ *           type: string
+ *           description: Setting last update timestamp
+ */
+
+/**
+ * @typedef {object} SettingCreateRequest
+ * @property {string} key.required - Setting key
+ * @property {string} value.required - Setting value
+ */
+
+/**
+ * @typedef {object} SettingUpdateRequest
+ * @property {string} key.required - Setting key
+ * @property {string} value.required - Setting value
+ */
+
+/**
+ * @openapi
+ * /api/v1/settings:
+ *   get:
+ *     summary: Get all site settings
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Settings retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Settings retrieved successfully
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/SiteSetting'
+ *       500:
+ *         description: Internal server error
+ */
 export const getAllSettings = async (
   _req: Request,
   res: Response<IServerResponse>
@@ -29,8 +95,47 @@ export const getAllSettings = async (
   }
 };
 
-// Get setting by key
-// @route GET /api/v1/settings/setting/?key=key
+/**
+ * @openapi
+ * /api/v1/settings/setting:
+ *   get:
+ *     summary: Get setting by key
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: key
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Setting key
+ *     responses:
+ *       200:
+ *         description: Setting retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Setting retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     settings:
+ *                       $ref: '#/components/schemas/SiteSetting'
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Setting not found
+ *       500:
+ *         description: Internal server error
+ */
 export const getSettingByKey = async (
   req: Request,
   res: Response<IServerResponse>
@@ -76,8 +181,51 @@ export const getSettingByKey = async (
   }
 };
 
-// Update setting
-// @route PUT /api/v1/settings
+/**
+ * @openapi
+ * /api/v1/settings:
+ *   put:
+ *     summary: Update a setting
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - key
+ *               - value
+ *             properties:
+ *               key:
+ *                 type: string
+ *                 description: Setting key
+ *               value:
+ *                 type: string
+ *                 description: Setting value
+ *     responses:
+ *       200:
+ *         description: Setting updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Setting updated successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/SiteSetting'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const updateSetting = async (
   req: Request,
   res: Response<IServerResponse>
@@ -118,8 +266,53 @@ export const updateSetting = async (
   }
 };
 
-// Create setting
-// @route POST /api/v1/settings
+/**
+ * @openapi
+ * /api/v1/settings:
+ *   post:
+ *     summary: Create a new setting
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - key
+ *               - value
+ *             properties:
+ *               key:
+ *                 type: string
+ *                 description: Setting key
+ *               value:
+ *                 type: string
+ *                 description: Setting value
+ *     responses:
+ *       201:
+ *         description: Setting created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Setting created successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/SiteSetting'
+ *       400:
+ *         description: Bad request
+ *       403:
+ *         description: Forbidden - Admin access required
+ *       500:
+ *         description: Internal server error
+ */
 export const createSetting = async (
   req: Request,
   res: Response<IServerResponse>
@@ -184,8 +377,42 @@ export const createSetting = async (
   }
 };
 
-// Delete setting
-// @route DELETE /api/v1/settings/?key=key
+/**
+ * @openapi
+ * /api/v1/settings:
+ *   delete:
+ *     summary: Delete a setting
+ *     tags: [Settings]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: key
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Setting key to delete
+ *     responses:
+ *       200:
+ *         description: Setting deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Setting deleted successfully
+ *                 data:
+ *                   type: null
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const deleteSetting = async (
   req: Request,
   res: Response<IServerResponse>

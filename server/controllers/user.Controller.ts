@@ -1,8 +1,8 @@
 import { Logger } from "borgen";
 import { HttpStatusCode } from "axios";
-import { Config } from "../utils/config";
+import { Config } from "../lib/config";
 import { prisma } from "../database/prisma";
-import { signJwtToken } from "../utils/utils";
+import { signJwtToken } from "../lib/utils";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 import {
@@ -13,8 +13,96 @@ import { UserRole } from "../prisma/generated/prisma/client";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-// Update user details
-// @route PUT /api/v1/user
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - id
+ *         - email
+ *         - name
+ *         - role
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The user ID
+ *         email:
+ *           type: string
+ *           description: User's email
+ *         name:
+ *           type: string
+ *           description: User's full name
+ *         role:
+ *           type: string
+ *           description: User's role (ADMIN, USER, etc)
+ *         phoneNumber:
+ *           type: string
+ *           description: User's phone number
+ *         createdAt:
+ *           type: string
+ *           description: User creation date
+ *         isActive:
+ *           type: boolean
+ *           description: User's active status
+ */
+
+/**
+ * @typedef {object} UserUpdateRequest
+ * @property {string} id.required - The user ID
+ * @property {string} name - User's full name
+ * @property {string} email - User's email
+ */
+
+/**
+ * @openapi
+ * /api/v1/user:
+ *   put:
+ *     summary: Update user details
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The user ID
+ *               name:
+ *                 type: string
+ *                 description: User's full name
+ *               email:
+ *                 type: string
+ *                 description: User's email
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User updated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const updateUser = async (
   req: Request,
   res: Response<IServerResponse>
@@ -71,8 +159,43 @@ export const updateUser = async (
   }
 };
 
-// Get user details
-// @route GET /api/v1/user/?id=user_id
+/**
+ * @openapi
+ * /api/v1/user:
+ *   get:
+ *     summary: Get user details by ID
+ *     tags: [User]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User found successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User found
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const getUser = async (req: Request, res: Response<IServerResponse>) => {
   const { id } = req.query;
   try {
@@ -122,8 +245,29 @@ export const getUser = async (req: Request, res: Response<IServerResponse>) => {
   }
 };
 
-// Logout user
-// @route GET /api/v1/user/logout
+/**
+ * @openapi
+ * /api/v1/user/logout:
+ *   get:
+ *     summary: Logout user
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: User logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User logged out successfully
+ *                 data:
+ *                   type: null
+ */
 export const logoutUser = async (
   _: Request,
   res: Response<IServerResponse>
@@ -137,8 +281,53 @@ export const logoutUser = async (
   });
 };
 
-// Get all users
-// @route GET /api/v1/user/all/?page=1&limit=10
+/**
+ * @openapi
+ * /api/v1/user/all:
+ *   get:
+ *     summary: Get all users with pagination
+ *     tags: [User]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *     responses:
+ *       200:
+ *         description: Users found successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Users found
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     users:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/User'
+ *                     totalUsers:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *       500:
+ *         description: Internal server error
+ */
 export const getAllUsers = async (
   req: Request,
   res: Response<IServerResponse>
@@ -185,9 +374,50 @@ export const getAllUsers = async (
   }
 };
 
-// Search for a user by email or id
-// @route GET /api/v1/user/search?type=name&term=user_email
-// @access Admin
+/**
+ * @openapi
+ * /api/v1/user/search:
+ *   get:
+ *     summary: Search for a user by email or ID
+ *     tags: [User]
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [email, id]
+ *         description: Search type
+ *       - in: query
+ *         name: term
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *     responses:
+ *       200:
+ *         description: User found successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User found
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const searchUser = async (
   req: Request,
   res: Response<IServerResponse>
@@ -264,8 +494,45 @@ export const searchUser = async (
   }
 };
 
-// Delete user
-// @route DELETE /api/v1/user
+/**
+ * @openapi
+ * /api/v1/user:
+ *   delete:
+ *     summary: Delete a user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: User ID to delete
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User deleted successfully
+ *                 data:
+ *                   type: null
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const deleteUser = async (
   req: Request,
   res: Response<IServerResponse>
@@ -308,8 +575,36 @@ export const deleteUser = async (
   }
 };
 
-// Refresh user access
-// @route GET /api/v1/user/refresh
+/**
+ * @openapi
+ * /api/v1/user/refresh:
+ *   get:
+ *     summary: Refresh user access token
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Access refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Access refreshed successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const refreshUser = async (
   _: Request,
   res: Response<IServerResponse>

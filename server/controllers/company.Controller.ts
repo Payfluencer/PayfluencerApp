@@ -4,8 +4,92 @@ import { prisma } from "../database/prisma";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 
-// Create a new company
-// @route POST /api/v1/company
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Company:
+ *       type: object
+ *       required:
+ *         - id
+ *         - name
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The company ID
+ *         name:
+ *           type: string
+ *           description: Company name
+ *         logo:
+ *           type: string
+ *           description: Company logo URL
+ *         description:
+ *           type: string
+ *           description: Company description
+ *         website:
+ *           type: string
+ *           description: Company website URL
+ */
+
+/**
+ * @typedef {object} CompanyCreateRequest
+ * @property {string} name.required - Company name
+ * @property {string} logo - Company logo URL
+ */
+
+/**
+ * @typedef {object} CompanyUpdateRequest
+ * @property {string} id.required - Company ID
+ * @property {string} name - Company name
+ * @property {string} description - Company description
+ * @property {string} website - Company website URL
+ */
+
+/**
+ * @openapi
+ * /api/v1/company:
+ *   post:
+ *     summary: Create a new company
+ *     tags: [Company]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Company name
+ *               logo:
+ *                 type: string
+ *                 description: Company logo URL
+ *     responses:
+ *       200:
+ *         description: Company created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Company created successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     company:
+ *                       $ref: '#/components/schemas/Company'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const createCompany = async (
   req: Request,
   res: Response<IServerResponse>
@@ -43,8 +127,43 @@ export const createCompany = async (
   }
 };
 
-// Get a company by ID
-// @route GET /api/v1/company?id=company_id
+/**
+ * @openapi
+ * /api/v1/company:
+ *   get:
+ *     summary: Get company details by ID
+ *     tags: [Company]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Company ID
+ *     responses:
+ *       200:
+ *         description: Company found successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Company found
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     company:
+ *                       $ref: '#/components/schemas/Company'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const getCompany = async (
   req: Request,
   res: Response<IServerResponse>
@@ -86,8 +205,57 @@ export const getCompany = async (
   }
 };
 
-// Update a company
-// @route PUT /api/v1/company
+/**
+ * @openapi
+ * /api/v1/company:
+ *   put:
+ *     summary: Update company details
+ *     tags: [Company]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: Company ID
+ *               name:
+ *                 type: string
+ *                 description: Company name
+ *               description:
+ *                 type: string
+ *                 description: Company description
+ *               website:
+ *                 type: string
+ *                 description: Company website URL
+ *     responses:
+ *       200:
+ *         description: Company updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Company updated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     company:
+ *                       $ref: '#/components/schemas/Company'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const updateCompany = async (
   req: Request,
   res: Response<IServerResponse>
@@ -137,8 +305,45 @@ export const updateCompany = async (
   }
 };
 
-// Delete a company
-// @route DELETE /api/v1/company
+/**
+ * @openapi
+ * /api/v1/company:
+ *   delete:
+ *     summary: Delete a company
+ *     tags: [Company]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: Company ID to delete
+ *     responses:
+ *       200:
+ *         description: Company deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Company deleted successfully
+ *                 data:
+ *                   type: null
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const deleteCompany = async (
   req: Request,
   res: Response<IServerResponse>
@@ -181,8 +386,53 @@ export const deleteCompany = async (
   }
 };
 
-// Get all companies
-// @route GET /api/v1/company/all?page=1&limit=10
+/**
+ * @openapi
+ * /api/v1/company/all:
+ *   get:
+ *     summary: Get all companies with pagination
+ *     tags: [Company]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *     responses:
+ *       200:
+ *         description: Companies found successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Companies found
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     companies:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Company'
+ *                     totalCompanies:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *       500:
+ *         description: Internal server error
+ */
 export const getAllCompanies = async (
   req: Request,
   res: Response<IServerResponse>
