@@ -3,6 +3,7 @@ import animationData from "../assets/lottie/hero.json";
 import bg from "../assets/images/bg.png";
 import { Button } from "@/components/ui/button";
 import { TextGenerateEffect } from "./ui/text-generate-effect";
+
 function Hero() {
   const title = "Crowdsource Your Branded Content in Minutes";
   return (
@@ -22,12 +23,12 @@ function Hero() {
             more—rewarding creators at every step.
           </p>
           <div className="flex items-center mt-12 flex-col md:flex-row gap-4 w-full">
-            <Button className="bg-[#FA5E06] text-white px-4 py-2 rounded-md w-full md:w-1/2 text-xl">
+            <Button className="bg-[#FA5E06] text-white px-4 py-2 rounded-md w-full md:w-1/2 text-xl h-12">
               Get Started
             </Button>
-            <button className="bg-gray-900 text-[#fff] px-4 py-2 rounded-md w-full md:w-1/2 text-xl">
+            <Button className="bg-gray-900 text-[#fff] px-4 py-2 rounded-md w-full md:w-1/2 text-xl h-12">
               For Companies
-            </button>
+            </Button>
           </div>
         </div>
         <div className="flex items-center justify-center md:w-1/2">
