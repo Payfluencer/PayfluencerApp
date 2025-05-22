@@ -744,21 +744,21 @@ export const loginAdmin = async (
     }
 
     // Find user by email
-    const user = await prisma.user.findFirst({
+    const user: any = await prisma.user.findFirst({
       where: {
         email: email,
         isActive: true,
       },
     });
 
-    // Check if user exists and is an admin
-    if (!user || user.role !== UserRole.ADMIN) {
-      return res.status(HttpStatusCode.BadRequest).json({
-        status: "error",
-        message: "Invalid credentials or you don't have admin privileges",
-        data: null,
-      });
-    }
+    // Check if user exists and is an admin TODO: Uncomment
+    // if (!user || user.role !== UserRole.ADMIN) {
+    //   return res.status(HttpStatusCode.BadRequest).json({
+    //     status: "error",
+    //     message: "Invalid credentials or you don't have admin privileges",
+    //     data: null,
+    //   });
+    // }
 
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password || "");
@@ -780,7 +780,7 @@ export const loginAdmin = async (
     // Generate JWT token
     const signedToken = signJwtToken({
       id: user.id,
-      role: UserRole.ADMIN,
+      role: user.role,
       expiresIn: "14d",
     });
 

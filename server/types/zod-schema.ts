@@ -44,3 +44,40 @@ export const CreatePartnerSchema = z.object({
   managerEmail: z.string().email(),
   managerPassword: z.string().min(6),
 });
+
+// Report schemas
+export const CreateReportSchema = z.object({
+  bounty_id: z.string().uuid(),
+  title: z.string().min(5),
+  description: z.string().min(20),
+  platform: z.string().min(2),
+  status: z.enum(["PENDING", "IN_PROGRESS", "RESOLVED", "REJECTED"]).optional(),
+});
+
+export const UpdateReportSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(5).optional(),
+  description: z.string().min(20).optional(),
+  platform: z.string().min(2).optional(),
+});
+
+export const UpdateReportStatusSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(["PENDING", "IN_PROGRESS", "RESOLVED", "REJECTED"]),
+});
+
+export const DeleteReportSchema = z.object({
+  id: z.string().uuid(),
+});
+
+export const GetAllReportsSchema = z.object({
+  page: z.number().int().positive().optional().default(1),
+  limit: z.number().int().positive().optional().default(10),
+  status: z.enum(["PENDING", "IN_PROGRESS", "RESOLVED", "REJECTED"]).optional(),
+});
+
+export const SearchReportsByTitleSchema = z.object({
+  title: z.string().min(2),
+  page: z.number().int().positive().optional().default(1),
+  limit: z.number().int().positive().optional().default(10),
+});

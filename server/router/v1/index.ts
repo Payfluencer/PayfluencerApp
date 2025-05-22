@@ -20,7 +20,7 @@ router.get("/ping", (_, res) => {
 router.use("/user", userGroup);
 router.use("/settings", settingsGroup);
 router.use("/auth/google", googleAuthGroup);
-router.use("/reports", reportGroup);
+router.use("/report", reportGroup);
 router.use("/company", companyGroup);
 router.use("/bounties", bountyGroup);
 

@@ -196,12 +196,12 @@ export const getSettingByKey = async (
  *           schema:
  *             type: object
  *             required:
- *               - key
+ *               - id
  *               - value
  *             properties:
- *               key:
+ *               id:
  *                 type: string
- *                 description: Setting key
+ *                 description: Setting ID
  *               value:
  *                 type: string
  *                 description: Setting value
@@ -230,11 +230,11 @@ export const updateSetting = async (
   req: Request,
   res: Response<IServerResponse>
 ) => {
-  const { key, value } = req.body;
+  const { id, value } = req.body;
   const userId = res.locals.userId; // No need to convert to int anymore, it's a UUID string
 
   try {
-    if (!value || !key) {
+    if (!value || !id) {
       return res.status(HttpStatusCode.BadRequest).json({
         status: "error",
         message: "Please provide a value for the setting",
@@ -243,10 +243,10 @@ export const updateSetting = async (
     }
 
     const updatedSetting = await prisma.siteSetting.update({
-      where: { key },
+      where: { id },
       data: {
         value,
-        updatedBy: userId,
+        updated_by_id: userId,
       },
     });
 
@@ -357,7 +357,7 @@ export const createSetting = async (
       data: {
         key,
         value,
-        updatedBy: userId,
+        updated_by_id: userId,
       },
     });
 
@@ -387,11 +387,11 @@ export const createSetting = async (
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: key
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: Setting key to delete
+ *         description: Setting ID to delete
  *     responses:
  *       200:
  *         description: Setting deleted successfully
@@ -417,19 +417,19 @@ export const deleteSetting = async (
   req: Request,
   res: Response<IServerResponse>
 ) => {
-  const { key } = req.query;
+  const { id } = req.query;
 
   try {
-    if (!key) {
+    if (!id) {
       return res.status(HttpStatusCode.BadRequest).json({
         status: "error",
-        message: "Please provide a key to delete",
+        message: "Please provide an ID to delete",
         data: null,
       });
     }
 
     await prisma.siteSetting.delete({
-      where: { key: key as string },
+      where: { id: id as string },
     });
 
     res.status(HttpStatusCode.Ok).json({
