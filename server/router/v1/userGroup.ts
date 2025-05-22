@@ -16,4 +16,7 @@ router.get("/all", userAuth([UserRole.ADMIN]), UserController.getAllUsers);
 router.get("/refresh", userAuth([UserRole.USER]), UserController.refreshUser);
 router.get("/search", userAuth([UserRole.ADMIN]), UserController.searchUser);
 
+// Admin specific routes
+router.post("/admin/login", UserController.loginAdmin);
+
 export default router;

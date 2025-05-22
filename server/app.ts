@@ -11,9 +11,9 @@ import cookieParser from 'cookie-parser'
 import { prisma } from './database/prisma'
 import { helmetConfig } from './lib/helmet'
 import { rateLimit } from 'express-rate-limit'
-import generateOpenAPISpec, { apiDocsServer } from './docs/openapi'
 import expressBasicAuth from 'express-basic-auth'
 import { apiReference } from '@scalar/express-api-reference'
+import generateOpenAPISpec, { apiDocsServer } from './docs/openapi'
 
 const app = express()
 

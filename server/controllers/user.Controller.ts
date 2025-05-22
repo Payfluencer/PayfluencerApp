@@ -6,10 +6,12 @@ import { signJwtToken } from "../lib/utils";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 import {
+  AdminLoginSchema,
   SearchUserSchema,
   UserUpdateSchema,
 } from "../types/zod-schema";
 import { UserRole } from "../prisma/generated/prisma/client";
+import bcrypt from "bcryptjs";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -669,6 +671,159 @@ export const refreshUser = async (
     res.status(HttpStatusCode.InternalServerError).json({
       status: "error",
       message: "Error refreshing access",
+      data: null,
+    });
+  }
+};
+
+/**
+ * @openapi
+ * /api/v1/user/admin/login:
+ *   post:
+ *     summary: Login as an administrator
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Administrator email
+ *               password:
+ *                 type: string
+ *                 description: Administrator password
+ *     responses:
+ *       200:
+ *         description: Admin logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Admin logged in successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request - Invalid credentials or not an admin
+ *       500:
+ *         description: Internal server error
+ */
+export const loginAdmin = async (
+  req: Request,
+  res: Response<IServerResponse>
+) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate input data
+    const validationResults = AdminLoginSchema.safeParse({
+      email,
+      password,
+    });
+
+    if (!validationResults.success) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "Please enter valid email and password",
+        data: validationResults.error,
+      });
+    }
+
+    // Find user by email
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+        isActive: true,
+      },
+    });
+
+    // Check if user exists and is an admin
+    if (!user || user.role !== UserRole.ADMIN) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "Invalid credentials or you don't have admin privileges",
+        data: null,
+      });
+    }
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, user.password || "");
+
+    if (!isPasswordValid) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "Invalid credentials",
+        data: null,
+      });
+    }
+
+    // Update last login timestamp
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { lastLogin: new Date() },
+    });
+
+    // Generate JWT token
+    const signedToken = signJwtToken({
+      id: user.id,
+      role: UserRole.ADMIN,
+      expiresIn: "14d",
+    });
+
+    if (signedToken.status === "error") {
+      return res.status(HttpStatusCode.InternalServerError).json({
+        status: "error",
+        message: "Error generating authentication token",
+        data: null,
+      });
+    }
+
+    // Set auth cookie
+    res.cookie("_insr010usr", signedToken.data.signed, {
+      maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
+      path: "/",
+      domain: Config.COOKIE_DOMAIN,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      httpOnly: isProduction,
+    });
+
+    // Return user data
+    res.status(HttpStatusCode.Ok).json({
+      status: "success",
+      message: "Admin logged in successfully",
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          phoneNumber: user.phoneNumber,
+          createdAt: user.created_at,
+          isActive: user.isActive,
+        },
+      },
+    });
+  } catch (err) {
+    Logger.error({ message: "Error during admin login: " + err });
+
+    res.status(HttpStatusCode.InternalServerError).json({
+      status: "error",
+      message: "Error during admin login",
       data: null,
     });
   }
