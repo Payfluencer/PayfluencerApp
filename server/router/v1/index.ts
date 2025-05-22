@@ -7,6 +7,7 @@ import settingsGroup from "./settingsGroup";
 import googleAuthGroup from "./googleAuthGroup";
 import reportGroup from "./reportGroup";
 import companyGroup from "./companyGroup";
+import bountyGroup from "./bountyGroup";
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.use("/user", userGroup);
 router.use("/settings", settingsGroup);
 router.use("/auth/google", googleAuthGroup);
 router.use("/reports", reportGroup);
-router.use("/company", companyGroup); 
+router.use("/company", companyGroup);
+router.use("/bounties", bountyGroup);
 
 export default router;

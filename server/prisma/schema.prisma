@@ -69,6 +69,8 @@ model Company {
 // Bounty model
 model Bounty {
   id                String            @id @default(uuid())
+  title             String
+  description       String
   company_id        String
   max_payout        Float?
   nsfw              Boolean?
@@ -81,6 +83,8 @@ model Bounty {
   required_comments Int?
   required_saves    Int?
   platform          String
+  status            String?
+  is_active         Boolean           @default(true)
   show_other_brands Boolean?
   specific_products String?
   pay_duration      String?

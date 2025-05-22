@@ -116,6 +116,8 @@ async function seedBounty() {
     if (!existingBounty) {
       await prisma.bounty.create({
         data: {
+          title: "Sample Bounty",
+          description: "This is a sample bounty for testing purposes",
           company_id: company.id,
           max_payout: 1000.5,
           nsfw: false,
