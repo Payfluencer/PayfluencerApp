@@ -1,4 +1,4 @@
-import { Home, Inbox, Settings, Receipt, Coins } from "lucide-react";
+import { Home, Inbox, Settings, Receipt, Coins, Users } from "lucide-react";
 import logo from "../assets/images/image.png";
 
 import {
@@ -25,7 +25,7 @@ const items = [
     title: "Inbox",
     url: "#",
     icon: Inbox,
-    path: "/inbox",
+    path: "/admin/inbox",
   },
   {
     title: "Bounties",
@@ -34,10 +34,16 @@ const items = [
     path: "/bounties",
   },
   {
-    title: "My Submissions",
+    title: "Submissions",
     url: "#",
     icon: Receipt,
     path: "/submissions",
+  },
+  {
+    title: "Companies",
+    url: "#",
+    icon: Users,
+    path: "/companies",
   },
   {
     title: "Settings",
@@ -47,7 +53,7 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
+export function AdminSidebar() {
   const path = useLocation();
   const pathname = path.pathname;
   return (
@@ -68,7 +74,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="gap-4">
               {items.map((item) => (
-                <SidebarMenuItem key={item.title} className="my-2">
+                <SidebarMenuItem key={item.title} className="">
                   <SidebarMenuButton
                     asChild
                     className={`py-4 h-10 my-2 duration-300 ease-in-out transition-all hover:bg-[#fa5e06] hover:text-white ${

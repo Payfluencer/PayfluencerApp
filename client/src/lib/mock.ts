@@ -6,6 +6,7 @@ import google from "../assets/images/google.png";
 import insta from "../assets/images/insta.png";
 import meta from "../assets/images/meta.png";
 import ms from "../assets/images/ms.png";
+import binance from "../assets/images/bina.png";
 
 export const topEarners = [
   {
@@ -53,17 +54,59 @@ export const topBounties = [
   },
 ];
 
+export const topCompanies = [
+  {
+    name: "YouTube",
+    bounties: 47,
+    profile: yt,
+  },
+  {
+    name: "Google",
+    bounties: 36,
+    profile: google,
+  },
+  {
+    name: "Instagram",
+    bounties: 24,
+    profile: insta,
+  },
+  {
+    name: "Meta",
+    bounties: 11,
+    profile: meta,
+  },
+  {
+    name: "Microsoft",
+    bounties: 7,
+    profile: ms,
+  },
+  {
+    name: "Binance",
+    bounties: 4,
+    profile: binance,
+  },
+];
+
 export const mySubmissions = [
   {
     name: "YouTube",
     amount: 184,
     paid: true,
     date: "2025-05-23",
+    profile: yt,
   },
   {
     name: "Google",
     amount: 184,
     paid: false,
     date: "2025-05-23",
+    profile: google,
+  },
+  {
+    name: "Meta",
+    amount: 184,
+    paid: true,
+    date: "2025-05-23",
+    profile: meta,
   },
 ];

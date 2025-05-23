@@ -1,12 +1,12 @@
-export interface TopEarners {
+export interface TopCompaniesSummary {
   name: string;
-  amount: number;
+  bounties: number;
   profile: string;
 }
 
-function TopEarners({ name, amount, profile }: TopEarners) {
+function TopCompaniesSummary({ name, bounties, profile }: TopCompaniesSummary) {
   return (
-    <div className="flex items-center justify-between bg-white rounded-3xl p-2 w-full">
+    <div className="flex items-center justify-between bg-white rounded-xl p-2">
       <div className="flex items-center gap-2">
         <img
           src={profile}
@@ -20,10 +20,10 @@ function TopEarners({ name, amount, profile }: TopEarners) {
         </p>
       </div>
       <p style={{ fontFamily: "KarlaSemiBold" }} className="text-lg">
-        ${amount.toLocaleString()}
+        {bounties} Bounties
       </p>
     </div>
   );
 }
 
-export default TopEarners;
+export default TopCompaniesSummary;
