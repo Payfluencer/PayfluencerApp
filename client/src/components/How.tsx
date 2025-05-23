@@ -57,13 +57,18 @@ function How() {
             />
           ))}
         </div>
-        <div className="w-full md:w-1/2 bg-gray-200 shadow-lg rounded-lg p-4">
-          <img
+        <motion.div
+          className="w-full md:w-1/2 bg-gray-200 shadow-lg rounded-lg p-4"
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          <motion.img
             src={activeImages[active - 1]}
             alt="active"
             className="object-cover border-[1px] border-[#fff] rounded-lg"
           />
-        </div>
+        </motion.div>
       </div>
       <div className="flex justify-center items-center mt-8">
         <Button className="bg-[#000] text-white py-2 rounded-md text-xl px-12 h-12">
