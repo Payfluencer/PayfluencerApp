@@ -1,13 +1,12 @@
 import Lottie from "lottie-react";
 import animationData from "../assets/lottie/ms.json";
-import { FaGoogle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaGoogle, FaSpinner } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import logo from "../assets/images/image.png";
+import { useAuth } from "../../hooks/useAuth";
 
 function UserAuthentication() {
   return (
@@ -36,6 +37,8 @@ function UserAuthentication() {
 }
 
 function AdminAuthentication() {
+  const navigate = useNavigate();
+  const { loginAdmin, isAdminLoading, adminError } = useAuth("admin");
   const formSchema = z.object({
     username: z
       .string()
@@ -58,8 +61,17 @@ function AdminAuthentication() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const adminDetails = loginAdmin({
+        email: values.username,
+        password: values.password,
+      });
+      console.log(adminDetails);
+      navigate("/home", { state: { adminDetails } });
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   }
   return (
     <div className="w-[400px] h-[400px] rounded-md flex flex-col items-center justify-center gap-4 bg-white p-4 mx-2 md:mx-0">
@@ -115,12 +127,28 @@ function AdminAuthentication() {
           />
           <Button
             type="submit"
-            className="w-full bg-[#fa5e06] text-white mt-4 hover:bg-[#fa5e06]/80"
+            className={`w-full bg-[#fa5e06] text-white mt-4 hover:bg-[#fa5e06]/80 ${
+              isAdminLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Login
+            {isAdminLoading ? (
+              <span className="animate-spin">
+                <FaSpinner />
+              </span>
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
       </Form>
+      {adminError && (
+        <p
+          className="text-red-500 text-sm"
+          style={{ fontFamily: "KarlaRegular" }}
+        >
+          {adminError.message}
+        </p>
+      )}
     </div>
   );
 }
@@ -129,6 +157,15 @@ function Auth() {
   const [isAdmin, setIsAdmin] = useState(false);
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#f6f7f9]">
+      <div className="flex items-center mb-8">
+        <img src={logo} alt="logo" className="w-10 h-10" />
+        <h1
+          className="text-2xl font-bold uppercase"
+          style={{ fontFamily: "KarlaSemiBold" }}
+        >
+          Payfluence
+        </h1>
+      </div>
       {isAdmin ? <AdminAuthentication /> : <UserAuthentication />}
       <Button
         onClick={() => setIsAdmin(!isAdmin)}
