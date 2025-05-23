@@ -1,17 +1,21 @@
-FROM node:20-slim AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Install pnpm
 RUN npm install -g pnpm@9.12.2
 
-# Copy only needed files
+# Copy package files first and schema
 COPY package.json pnpm-lock.yaml ./
+COPY prisma/schema.prisma ./prisma/
 
-# Install deps
+# Install deps and generate prisma client
 RUN pnpm install --frozen-lockfile
 
 COPY . .
+
+# Generate prisma client
+RUN pnpm prisma generate
 
 # Build app
 RUN pnpm run build
@@ -20,7 +24,7 @@ RUN pnpm run build
 RUN pnpm prune --prod
 
 # ---- Production Stage ----
-FROM node:20-slim AS runner
+FROM node:20-alpine AS runner
 
 WORKDIR /app
 
@@ -31,7 +35,8 @@ ENV PORT=8001
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
 
 EXPOSE 8001
 
-CMD ["node", "./build/app.js"]
+CMD ["sh", "-c", "npm run prisma:migrate:prod && node ./build/app.js"]

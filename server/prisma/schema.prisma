@@ -6,8 +6,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "generated/prisma/client"
+  provider      = "prisma-client-js"
+  output        = "generated/prisma/client"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -17,52 +18,71 @@ datasource db {
 
 // Enums - Positioned before the models where they are used
 enum UserRole {
-  ADMIN           // Site administrator
-  USER            // Normal user
+  ADMIN // Site administrator
+  USER // Normal user
+  COMPANY_MANAGER // Company manager with limited access
+}
+
+enum ReportStatus {
+  PENDING // Report is pending review
+  IN_PROGRESS // Report is being reviewed
+  RESOLVED // Report has been resolved
+  REJECTED // Report has been rejected
 }
 
 // User model 
 model User {
-  id                String            @id @default(uuid())
-  name              String?
-  email             String?
-  password          String?
-  profile_picture   String?
-  bio               String?
-  evm_wallet_address String?          @unique
-  created_at        DateTime          @default(now())
-  update_at         DateTime          @updatedAt
-  
-  role              UserRole?         @default(USER)
-  isActive          Boolean           @default(true)
-  lastLogin         DateTime?         @default(now())
-  phoneNumber       String?
-  
+  id                 String   @id @default(uuid())
+  name               String?
+  email              String?
+  password           String?
+  profile_picture    String?
+  bio                String?
+  evm_wallet_address String?  @unique
+  created_at         DateTime @default(now())
+  update_at          DateTime @updatedAt
+
+  role        UserRole? @default(USER)
+  isActive    Boolean   @default(true)
+  lastLogin   DateTime? @default(now())
+  phoneNumber String?
+
   // Google OAuth fields
-  googleId          String?           @unique
-  googlePicture     String?
-  
-  reports           Report[]
-  chats             Chat[]
-  passwordResets    PasswordReset[]
-  siteSettings      SiteSetting[]
+  googleId      String? @unique
+  googlePicture String?
+
+  reports        Report[]
+  chats          Chat[]
+  sentMessages   Message[]       @relation("MessageSender")
+  passwordResets PasswordReset[]
+  siteSettings   SiteSetting[]
+  managedCompany Company?        @relation("CompanyManager")
 }
 
 // Company model
 model Company {
-  id                String            @id @default(uuid())
-  name              String?
-  logo              String?
-  created_at        DateTime          @default(now())
-  update_at         DateTime          @updatedAt
-  
-  bounties          Bounty[]
-  reports           Report[]
+  id           String   @id @default(uuid())
+  name         String
+  logo         String
+  description  String
+  website      String   @unique
+  email        String   @unique
+  phone_number String   @unique
+  address      String?  @default("")
+  created_at   DateTime @default(now())
+  update_at    DateTime @updatedAt
+  manager_id   String?  @unique
+
+  manager  User?    @relation("CompanyManager", fields: [manager_id], references: [id])
+  bounties Bounty[]
+  chats    Chat[]
 }
 
 // Bounty model
 model Bounty {
-  id                String            @id @default(uuid())
+  id                String   @id @default(uuid())
+  title             String
+  description       String
   company_id        String
   max_payout        Float?
   nsfw              Boolean?
@@ -70,60 +90,87 @@ model Bounty {
   nudity            Boolean?
   language          String?
   age_restriction   Int?
-  created_at        DateTime          @default(now())
-  update_at         DateTime          @updatedAt
-  
-  company           Company           @relation(fields: [company_id], references: [id])
+  required_views    Int?
+  required_likes    Int?
+  required_comments Int?
+  required_saves    Int?
+  platform          String
+  status            String?
+  is_active         Boolean  @default(true)
+  show_other_brands Boolean?
+  specific_products String?
+  pay_duration      String?
+  created_at        DateTime @default(now())
+  update_at         DateTime @updatedAt
+
+  company Company  @relation(fields: [company_id], references: [id])
+  reports Report[]
 }
 
 // Report model
 model Report {
-  id                String            @id @default(uuid())
-  user_id           String
-  company_id        String
-  title             String?
-  description       String?
-  platform          String?
-  status            String?
-  created_at        DateTime          @default(now())
-  updated_at        DateTime          @updatedAt
-  
-  user              User              @relation(fields: [user_id], references: [id])
-  company           Company           @relation(fields: [company_id], references: [id])
-  chats             Chat[]
+  id          String        @id @default(uuid())
+  user_id     String
+  bounty_id   String
+  title       String
+  description String
+  platform    String
+  status      ReportStatus? @default(PENDING)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+
+  user   User   @relation(fields: [user_id], references: [id])
+  bounty Bounty @relation(fields: [bounty_id], references: [id])
+  chats  Chat[]
 }
 
 // Chat model
 model Chat {
-  id                String            @id @default(uuid())
-  report_id         String
-  user_id           String
-  message           String?
-  created_at        DateTime          @default(now())
+  id         String    @id @default(uuid())
+  report_id  String?
+  user_id    String
+  created_at DateTime  @default(now())
+  is_admin   Boolean   @default(false)
+  is_company Boolean   @default(false)
+  company_id String?
+  messages   Message[]
 
-  report            Report            @relation(fields: [report_id], references: [id])
-  user              User              @relation(fields: [user_id], references: [id])
+  report  Report?  @relation(fields: [report_id], references: [id])
+  user    User     @relation(fields: [user_id], references: [id])
+  company Company? @relation(fields: [company_id], references: [id])
+}
+
+// Message model - messages sent within a chat
+model Message {
+  id         String   @id @default(uuid())
+  chat_id    String
+  sender_id  String
+  content    String
+  created_at DateTime @default(now())
+
+  chat   Chat @relation(fields: [chat_id], references: [id])
+  sender User @relation("MessageSender", fields: [sender_id], references: [id])
 }
 
 // Password reset tokens
 model PasswordReset {
-  id                String            @id @default(uuid())
-  token             String            @unique
-  user_id           String
-  user              User              @relation(fields: [user_id], references: [id])
-  expires_at        DateTime
-  created_at        DateTime          @default(now())
-  used              Boolean           @default(false)
+  id         String   @id @default(uuid())
+  token      String   @unique
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  expires_at DateTime
+  created_at DateTime @default(now())
+  used       Boolean  @default(false)
 }
 
 // Site settings managed by admins
 model SiteSetting {
-  id                String            @id @default(uuid())
-  key               String            @unique
-  value             String
-  updated_at        DateTime          @updatedAt
+  id         String   @id @default(uuid())
+  key        String   @unique
+  value      String
+  updated_at DateTime @updatedAt
 
   // Relationships
-  updatedBy         User              @relation(fields: [updated_by_id], references: [id])
-  updated_by_id     String
+  updatedBy     User   @relation(fields: [updated_by_id], references: [id])
+  updated_by_id String
 }

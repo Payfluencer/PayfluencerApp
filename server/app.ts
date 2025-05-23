@@ -1,16 +1,24 @@
 import "dotenv/config";
+import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import express from "express";
+import http from "http";
 import router from "./router/router";
 import compression from "compression";
 import { Borgen, Logger } from "borgen";
-import { Config } from "./utils/config";
+import { Config } from "./lib/config";
 import cookieParser from "cookie-parser";
 import { prisma } from "./database/prisma";
+import { helmetConfig } from "./lib/helmet";
 import { rateLimit } from "express-rate-limit";
+import expressBasicAuth from "express-basic-auth";
+import { apiReference } from "@scalar/express-api-reference";
+import generateOpenAPISpec, { apiDocsServer } from "./docs/openapi";
+import { setupSocketServer } from "./sockets";
 
 const app = express();
+const server = http.createServer(app);
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
@@ -28,7 +36,7 @@ app.use(
   })
 );
 
-app.use(helmet());
+app.use(helmet(helmetConfig));
 app.use(Borgen({}));
 app.use(compression());
 app.use(express.json());
@@ -36,10 +44,34 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(limiter);
 
+// API Reference
+app.use(
+  "/openapi",
+  express.static(path.join(__dirname, "./docs/openapi.json"))
+);
+app.use(
+  "/api/v1/docs",
+  expressBasicAuth({
+    users: { [Config.API_DOCS_USER]: Config.API_DOCS_PASSWORD },
+    challenge: true,
+    realm: "payfluencer_api_docs",
+  }),
+  apiReference({
+    url: `${apiDocsServer}/openapi`,
+  })
+);
+
+// Routes Setup
 app.use("/", router);
 
 const startServer = async () => {
-  app.listen(Config.SERVER_PORT, () => {
+  // Generate OpenAPI spec
+  generateOpenAPISpec();
+
+  // Initialize Socket.IO
+  setupSocketServer(server, "/chat/ws");
+
+  server.listen(Config.SERVER_PORT, () => {
     Logger.info({
       message: `Server is listening on port ${Config.SERVER_PORT}`,
       messageColor: "greenBright",

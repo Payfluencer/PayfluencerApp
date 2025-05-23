@@ -1,17 +1,94 @@
 import { Logger } from "borgen";
 import { HttpStatusCode } from "axios";
-import { Config } from "../utils/config";
+import { Config } from "../lib/config";
 import { prisma } from "../database/prisma";
-import { signJwtToken } from "../utils/utils";
+import { signJwtToken } from "../lib/utils";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 import { UserRole } from "../prisma/generated/prisma/client";
-import { verifyGoogleIdToken } from "../utils/googleAuth";
+import { verifyGoogleIdToken } from "../lib/googleAuth";
+import axios from "axios";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-// Google login/signup with ID token from client
-// @route POST /api/v1/auth/google
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     GoogleAuthResponse:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: User ID
+ *         email:
+ *           type: string
+ *           description: User's email
+ *         name:
+ *           type: string
+ *           description: User's name
+ *         role:
+ *           type: string
+ *           description: User's role
+ *         phoneNumber:
+ *           type: string
+ *           description: User's phone number
+ *         createdAt:
+ *           type: string
+ *           description: Account creation date
+ *         isActive:
+ *           type: boolean
+ *           description: Account status
+ *         profilePicture:
+ *           type: string
+ *           description: URL to user's profile picture
+ *         isNewUser:
+ *           type: boolean
+ *           description: Whether this is a new user
+ */
+
+/**
+ * @openapi
+ * /api/v1/auth/google:
+ *   post:
+ *     summary: Authenticate user with Google ID token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - idToken
+ *             properties:
+ *               idToken:
+ *                 type: string
+ *                 description: Google ID token from client
+ *     responses:
+ *       200:
+ *         description: User authenticated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User logged in successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/GoogleAuthResponse'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 export const googleAuth = async (
   req: Request,
   res: Response<IServerResponse>
@@ -164,6 +241,93 @@ export const googleAuth = async (
     res.status(HttpStatusCode.InternalServerError).json({
       status: "error",
       message: "Error with Google authentication",
+      data: null,
+    });
+  }
+};
+
+/**
+ * @ignore for now
+ * /api/v1/auth/google/callback:
+ *   get:
+ *     summary: Handle Google OAuth callback
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Authorization code from Google
+ *     responses:
+ *       200:
+ *         description: User authenticated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: User logged in successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/GoogleAuthResponse'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
+export const googleAuthCallback = async (req: Request, res: Response) => {
+  const code = req.query.code as string;
+
+  if (!code) {
+    return res.status(HttpStatusCode.BadRequest).json({
+      status: "error",
+      message: "Missing code in callback",
+      data: null,
+    });
+  }
+
+  try {
+    // Exchange code for tokens
+    const tokenRes = await axios.post(
+      "https://oauth2.googleapis.com/token",
+      {
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        grant_type: "authorization_code",
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    const { id_token } = tokenRes.data;
+
+    if (!id_token) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "Failed to get ID token from Google",
+        data: null,
+      });
+    }
+
+    // Call your existing logic with the ID token
+    req.body.idToken = id_token;
+    console.log(id_token);
+    // @ts-ignore
+    return googleAuth(req, res);
+  } catch (err) {
+    Logger.error({ message: "Error exchanging code for token: " + err });
+    return res.status(HttpStatusCode.InternalServerError).json({
+      status: "error",
+      message: "Failed to exchange code for token",
       data: null,
     });
   }

@@ -1,0 +1,3583 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Payfluence API",
+    "version": "v1.0.0",
+    "description": "\nPayfluencer is a creator monetization platform that connects brands with content creators through performance-based bounties. This API enables both creators and companies to interact with the platform programmatically and manage workflows including bounty listing, content submission, review, and communication.\n\nCore Capabilities:\n- Creator authentication and profile management\n- Company bounty creation with detailed targeting criteria\n- Submission of creator content for review and reward tracking\n- Real-time chat between creators, clients, and platform admins\n- Status tracking for content submissions (Draft, Submitted, Accepted, Paid)\n\nAuthentication:\nAll endpoints require authentication using Supabase JWT tokens. Only Gmail-based authentication is currently supported.\n\nContent Guidelines:\nBounty listings may include content restrictions such as language, age rating, platform, and visibility requirements.\n\nFor support or questions, contact the Payfluencer team at support@payfluencer.xyz.\n",
+    "license": {
+      "name": "Copyright 2025 Payfluence"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8001"
+    }
+  ],
+  "paths": {
+    "/api/v1/bounties": {
+      "get": {
+        "summary": "Get all public bounties with pagination",
+        "tags": [
+          "Bounty"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounties found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bounties found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "bounties": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Bounty"
+                          }
+                        },
+                        "totalBounties": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new bounty",
+        "tags": [
+          "Bounty"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "description",
+                  "company_id",
+                  "platform",
+                  "max_payout",
+                  "nsfw",
+                  "cursing",
+                  "nudity",
+                  "language",
+                  "age_restriction",
+                  "required_views",
+                  "required_likes",
+                  "required_comments",
+                  "required_saves",
+                  "show_other_brands",
+                  "specific_products",
+                  "pay_duration"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Bounty title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Detailed bounty description"
+                  },
+                  "company_id": {
+                    "type": "string",
+                    "description": "ID of the company offering the bounty"
+                  },
+                  "max_payout": {
+                    "type": "number",
+                    "description": "Maximum payment amount for the bounty"
+                  },
+                  "nsfw": {
+                    "type": "boolean",
+                    "description": "Whether the bounty allows NSFW content"
+                  },
+                  "cursing": {
+                    "type": "boolean",
+                    "description": "Whether the bounty allows cursing"
+                  },
+                  "nudity": {
+                    "type": "boolean",
+                    "description": "Whether the bounty allows nudity"
+                  },
+                  "language": {
+                    "type": "string",
+                    "description": "Required language for the bounty content"
+                  },
+                  "age_restriction": {
+                    "type": "integer",
+                    "description": "Age restriction for the bounty"
+                  },
+                  "required_views": {
+                    "type": "integer",
+                    "description": "Required number of views for the content"
+                  },
+                  "required_likes": {
+                    "type": "integer",
+                    "description": "Required number of likes for the content"
+                  },
+                  "required_comments": {
+                    "type": "integer",
+                    "description": "Required number of comments for the content"
+                  },
+                  "required_saves": {
+                    "type": "integer",
+                    "description": "Required number of saves for the content"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "Platform where the content should be posted"
+                  },
+                  "show_other_brands": {
+                    "type": "boolean",
+                    "description": "Whether other brands can be shown in the content"
+                  },
+                  "specific_products": {
+                    "type": "string",
+                    "description": "Specific products that should be featured"
+                  },
+                  "pay_duration": {
+                    "type": "string",
+                    "description": "Payment duration terms"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bounty created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bounty created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "bounty": {
+                          "$ref": "#/components/schemas/Bounty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/bounties/{id}": {
+      "get": {
+        "summary": "Get details for a specific bounty",
+        "tags": [
+          "Bounty"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bounty ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounty found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bounty found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "bounty": {
+                          "$ref": "#/components/schemas/Bounty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Bounty not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing bounty",
+        "tags": [
+          "Bounty"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bounty ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Bounty title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Detailed bounty description"
+                  },
+                  "max_payout": {
+                    "type": "number",
+                    "description": "Maximum payment amount for the bounty"
+                  },
+                  "nsfw": {
+                    "type": "boolean",
+                    "description": "Whether the bounty allows NSFW content"
+                  },
+                  "cursing": {
+                    "type": "boolean",
+                    "description": "Whether the bounty allows cursing"
+                  },
+                  "nudity": {
+                    "type": "boolean",
+                    "description": "Whether the bounty allows nudity"
+                  },
+                  "language": {
+                    "type": "string",
+                    "description": "Required language for the bounty content"
+                  },
+                  "age_restriction": {
+                    "type": "integer",
+                    "description": "Age restriction for the bounty"
+                  },
+                  "required_views": {
+                    "type": "integer",
+                    "description": "Required number of views for the content"
+                  },
+                  "required_likes": {
+                    "type": "integer",
+                    "description": "Required number of likes for the content"
+                  },
+                  "required_comments": {
+                    "type": "integer",
+                    "description": "Required number of comments for the content"
+                  },
+                  "required_saves": {
+                    "type": "integer",
+                    "description": "Required number of saves for the content"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "Platform where the content should be posted"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "Current status of the bounty"
+                  },
+                  "is_active": {
+                    "type": "boolean",
+                    "description": "Whether the bounty is currently active"
+                  },
+                  "show_other_brands": {
+                    "type": "boolean",
+                    "description": "Whether other brands can be shown in the content"
+                  },
+                  "specific_products": {
+                    "type": "string",
+                    "description": "Specific products that should be featured"
+                  },
+                  "pay_duration": {
+                    "type": "string",
+                    "description": "Payment duration terms"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bounty updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bounty updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "bounty": {
+                          "$ref": "#/components/schemas/Bounty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Bounty not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a bounty",
+        "tags": [
+          "Bounty"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bounty ID to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounty deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bounty deleted successfully"
+                    },
+                    "data": {
+                      "type": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "403": {
+            "description": "Forbidden - Not authorized to delete this bounty"
+          },
+          "404": {
+            "description": "Bounty not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/bounties/search": {
+      "get": {
+        "summary": "Search for bounties by title",
+        "tags": [
+          "Bounty"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "term",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term for bounty title"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "Maximum number of results to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounties found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bounties found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "bounties": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Bounty"
+                          }
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/bounties/company/{companyId}": {
+      "get": {
+        "summary": "Get all bounties for a specific company",
+        "tags": [
+          "Bounty"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "companyId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Company ID"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounties found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bounties found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "bounties": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Bounty"
+                          }
+                        },
+                        "totalBounties": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Company not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/ChatImplementationGuide": {
+      "get": {
+        "summary": "Chat Implementation Guide (Documentation Only)",
+        "tags": [
+          "Chat"
+        ],
+        "description": "This documentation-only endpoint provides guidance on implementing a real-time chat system using **Socket.IO** and React with TypeScript.\n\n### 📚 Sections Included:\n\n- [React Client Implementation](#)\n- [Socket.IO Events Reference](#)\n\n> This is not an actual API endpoint. It exists to help frontend developers understand how to connect and communicate with the WebSocket-based backend.\n  This example demonstrates how to implement a WebSocket-based real-time chat system using **Socket.IO** with a **React + TypeScript + Vite** client.\n\n### 💬 Chat System Overview\n\nThe system supports two main chat scenarios:\n\n1. **User-to-Admin Chat** - Direct communication between a user and admin\n2. **Report-based Chat** - Communication regarding a specific report\n\nAuthentication is handled via cookies containing JWT tokens.\n\n  ### 📦 Setup\n\n  Install the Socket.IO client:\n\n  ```bash\n  npm install socket.io-client\n  ```\n\n  ### 🧩 React Hook for Chat Socket\n\n  Here's a complete implementation of a reusable `useChatSocket` hook:\n\n  ```tsx\n  import { useEffect, useState } from \"react\";\n  import { io, Socket } from \"socket.io-client\";\n\n  interface Message {\n    content: string;\n    senderId: string;\n    timestamp: string;\n  }\n\n  export function useChatSocket(reportId?: string) {\n    const [messages, setMessages] = useState<Message[]>([]);\n    const [isOnline, setIsOnline] = useState(false);\n    const [socket, setSocket] = useState<Socket | null>(null);\n\n    useEffect(() => {\n      // Socket.IO with cookie-based authentication\n      const newSocket = io(\"http://localhost:8001\", {\n        path: \"/chat/ws\",\n        withCredentials: true // Important for cookie-based auth\n      });\n\n      newSocket.on(\"connect\", () => {\n        // Join either a report chat or admin chat\n        newSocket.emit(\"chat:join\", { reportId });\n      });\n\n      newSocket.on(\"chat:history\", (res) => {\n        if (res.status === \"success\") {\n          setMessages(res.data.messages);\n          setIsOnline(res.data.online);\n        }\n      });\n\n      newSocket.on(\"chat:message\", (res) => {\n        if (res.status === \"success\") {\n          setMessages(prev => [...prev, res.data.message]);\n          setIsOnline(res.data.online);\n        }\n      });\n\n      newSocket.on(\"chat:online.status\", (res) => {\n        if (res.status === \"success\") {\n          setIsOnline(res.data.online);\n        }\n      });\n\n      setSocket(newSocket);\n\n      return () => {\n        newSocket.disconnect();\n      };\n    }, [reportId]);\n\n    const sendMessage = (chatId: string, content: string) => {\n      if (socket && content.trim()) {\n        socket.emit(\"chat:message\", {\n          chatId,\n          content: content.trim()\n        });\n      }\n    };\n\n    return { messages, isOnline, sendMessage, socket };\n  }\n  ```\n  ### 📤 Client to Server Events\n\n  - `chat:join` — Join a chat room\n    `{ reportId?: string, chatId?: string }`\n    - If reportId is provided: joins a report chat\n    - If neither is provided: joins an admin chat\n    - chatId is only used by admins to join specific chats\n\n  - `chat:history` — Request previous messages\n    `{ chatId: string }`\n\n  - `chat:message` — Send a new message\n    `{ chatId: string, content: string }`\n\n  - `chat:typing` — Typing indicator\n    `{ chatId: string, isTyping: boolean }`\n\n  - `chat:leave` — Leave a chat room\n    `{ roomId: string }`\n\n  ### 📥 Server to Client Events\n\n  - `chat:join` — Confirmation after joining\n  - `chat:history` — Sends message history\n  - `chat:message` — New message received\n  - `chat:typing` — Typing status update\n  - `chat:online.status` — Online users status\n  - `error` — Error message\n"
+      }
+    },
+    "/api/v1/chat/report/{reportId}": {
+      "get": {
+        "summary": "Get all chats for a specific report (for companies)",
+        "tags": [
+          "Chat"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of records per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chats retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Chats retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chats": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Chat"
+                          }
+                        },
+                        "totalChats": {
+                          "type": "integer",
+                          "example": 42,
+                          "description": "Total number of chats matching the criteria"
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1,
+                          "description": "Current page number"
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10,
+                          "description": "Number of records per page"
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 5,
+                          "description": "Total number of pages available"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Not authorized to access these chats"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/v1/chat/company": {
+      "get": {
+        "summary": "Get all chats for the company of the manager",
+        "tags": [
+          "Chat"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of records per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chats retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Company chats retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chats": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Chat"
+                          }
+                        },
+                        "totalChats": {
+                          "type": "integer",
+                          "example": 42,
+                          "description": "Total number of chats matching the criteria"
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1,
+                          "description": "Current page number"
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10,
+                          "description": "Number of records per page"
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 5,
+                          "description": "Total number of pages available"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Not a company manager"
+          },
+          "404": {
+            "description": "Company not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/v1/chat/user": {
+      "get": {
+        "summary": "Get all chats for the logged-in user",
+        "tags": [
+          "Chat"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of records per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chats retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User chats retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chats": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Chat"
+                            }
+                          }
+                        },
+                        "totalChats": {
+                          "type": "integer",
+                          "example": 42,
+                          "description": "Total number of chats matching the criteria"
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1,
+                          "description": "Current page number"
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10,
+                          "description": "Number of records per page"
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 5,
+                          "description": "Total number of pages available"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/v1/chat/all": {
+      "get": {
+        "summary": "Get all chats (admin only)",
+        "tags": [
+          "Chat"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of records per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All chats retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "All chats retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chats": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Chat"
+                          }
+                        },
+                        "totalChats": {
+                          "type": "integer",
+                          "example": 42,
+                          "description": "Total number of chats matching the criteria"
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1,
+                          "description": "Current page number"
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "example": 10,
+                          "description": "Number of records per page"
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 5,
+                          "description": "Total number of pages available"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Not an admin"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/v1/chat/{chatId}": {
+      "get": {
+        "summary": "Get a specific chat by ID (admin only)",
+        "tags": [
+          "Chat"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Chat retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chat": {
+                          "$ref": "#/components/schemas/Chat"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Not an admin"
+          },
+          "404": {
+            "description": "Chat not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/v1/company": {
+      "post": {
+        "summary": "Create a new company",
+        "tags": [
+          "Company"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "logo",
+                  "description",
+                  "website",
+                  "phone_number",
+                  "email",
+                  "manager"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Company name"
+                  },
+                  "logo": {
+                    "type": "string",
+                    "description": "Company logo URL"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Company description"
+                  },
+                  "website": {
+                    "type": "string",
+                    "description": "Company website URL"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "Company phone number"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Company email"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Company address"
+                  },
+                  "manager": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "email",
+                      "password"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Company manager name"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Company manager email"
+                      },
+                      "password": {
+                        "type": "string",
+                        "description": "Company manager password"
+                      },
+                      "phone_number": {
+                        "type": "string",
+                        "description": "Company manager phone number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Company created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Company created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "company": {
+                          "$ref": "#/components/schemas/Company"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get company details by ID",
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Company ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Company found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Company found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "company": {
+                          "$ref": "#/components/schemas/Company"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update company details",
+        "tags": [
+          "Company"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Company ID"
+                  },
+                  "logo": {
+                    "type": "string",
+                    "description": "Company logo URL"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Company name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Company description"
+                  },
+                  "website": {
+                    "type": "string",
+                    "description": "Company website URL"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "Company phone number"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Company email"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Company address"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Company updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Company updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "company": {
+                          "$ref": "#/components/schemas/Company"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a company",
+        "tags": [
+          "Company"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Company ID to delete"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Company deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Company deleted successfully"
+                    },
+                    "data": {
+                      "type": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/company/all": {
+      "get": {
+        "summary": "Get all companies with pagination",
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Companies found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Companies found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "companies": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Company"
+                          }
+                        },
+                        "totalCompanies": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/company/search": {
+      "get": {
+        "summary": "Search for a company by email, ID, or name",
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "email",
+                "id",
+                "name"
+              ]
+            },
+            "description": "Search type"
+          },
+          {
+            "in": "query",
+            "name": "term",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "description": "Maximum number of results to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Companies found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Companies found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "companies": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Company"
+                          }
+                        },
+                        "total": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/company/login": {
+      "post": {
+        "summary": "Login as a company manager",
+        "tags": [
+          "Company"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Company manager email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Company manager password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Company manager logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Company manager logged in successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        },
+                        "company": {
+                          "$ref": "#/components/schemas/Company"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid credentials or not a company manager"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google": {
+      "post": {
+        "summary": "Authenticate user with Google ID token",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "idToken"
+                ],
+                "properties": {
+                  "idToken": {
+                    "type": "string",
+                    "description": "Google ID token from client"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User authenticated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User logged in successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/GoogleAuthResponse"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/report": {
+      "post": {
+        "summary": "Create a new report",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "bounty_id",
+                  "title",
+                  "description",
+                  "platform"
+                ],
+                "properties": {
+                  "bounty_id": {
+                    "type": "string",
+                    "description": "Bounty ID"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Report title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Report description"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "Platform name"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Report created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Report created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "report": {
+                          "$ref": "#/components/schemas/Report"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get report by ID",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Report ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Report found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Report found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "report": {
+                          "$ref": "#/components/schemas/Report"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a report (user can update their own, except status)",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Report ID"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Report title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Report description"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "Platform name"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Report updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Report updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "report": {
+                          "$ref": "#/components/schemas/Report"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a report (user can delete their own)",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Report ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Report deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Report deleted successfully"
+                    },
+                    "data": {
+                      "type": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/report/status": {
+      "put": {
+        "summary": "Update report status (company only)",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Report ID"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PENDING",
+                      "IN_PROGRESS",
+                      "RESOLVED",
+                      "REJECTED"
+                    ],
+                    "description": "New status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Report status updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Report status updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "report": {
+                          "$ref": "#/components/schemas/Report"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/report/bounty/{bountyId}": {
+      "get": {
+        "summary": "Get reports by bounty ID",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bountyId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Bounty ID"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reports found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reports found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "reports": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Report"
+                          }
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "No reports found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/report/user/{userId}": {
+      "get": {
+        "summary": "Get reports by user ID",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reports found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reports found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "reports": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Report"
+                          }
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "No reports found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/report/all": {
+      "get": {
+        "summary": "Get all reports with optional status filtering (Admin only)",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "IN_PROGRESS",
+                "RESOLVED",
+                "REJECTED"
+              ]
+            },
+            "description": "Filter reports by status (optional)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reports found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reports found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "reports": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Report"
+                          }
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/report/search": {
+      "get": {
+        "summary": "Search reports by title",
+        "tags": [
+          "Report"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2
+            },
+            "description": "Title search term"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reports found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reports found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "reports": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Report"
+                          }
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "totalPages": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "No reports found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/settings": {
+      "get": {
+        "summary": "Get all site settings",
+        "tags": [
+          "Settings"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Settings retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Settings retrieved successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SiteSetting"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a setting",
+        "tags": [
+          "Settings"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "value"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Setting ID"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Setting value"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Setting updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Setting updated successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/SiteSetting"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new setting",
+        "tags": [
+          "Settings"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "key",
+                  "value"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "description": "Setting key"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Setting value"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Setting created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Setting created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/SiteSetting"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "403": {
+            "description": "Forbidden - Admin access required"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a setting",
+        "tags": [
+          "Settings"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Setting ID to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Setting deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Setting deleted successfully"
+                    },
+                    "data": {
+                      "type": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/settings/setting": {
+      "get": {
+        "summary": "Get setting by key",
+        "tags": [
+          "Settings"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Setting key"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Setting retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Setting retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "settings": {
+                          "$ref": "#/components/schemas/SiteSetting"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Setting not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/user": {
+      "put": {
+        "summary": "Update user details",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "The user ID"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "User's full name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User's email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get user details by ID",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "User ID to delete"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User deleted successfully"
+                    },
+                    "data": {
+                      "type": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/user/logout": {
+      "get": {
+        "summary": "Logout user",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User logged out successfully"
+                    },
+                    "data": {
+                      "type": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/all": {
+      "get": {
+        "summary": "Get all users with pagination",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Users found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/User"
+                          }
+                        },
+                        "totalUsers": {
+                          "type": "integer"
+                        },
+                        "page": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/user/search": {
+      "get": {
+        "summary": "Search for a user by email or ID",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "email",
+                "id"
+              ]
+            },
+            "description": "Search type"
+          },
+          {
+            "in": "query",
+            "name": "term",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search term"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User found"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/user/refresh": {
+      "get": {
+        "summary": "Refresh user access token",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Access refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access refreshed successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/user/admin/login": {
+      "post": {
+        "summary": "Login as an administrator",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Administrator email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Administrator password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Admin logged in successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid credentials or not an admin"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Bounty": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "description",
+          "company_id",
+          "platform"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The bounty ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Bounty title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed bounty description"
+          },
+          "company_id": {
+            "type": "string",
+            "description": "ID of the company offering the bounty"
+          },
+          "max_payout": {
+            "type": "number",
+            "description": "Maximum payment amount for the bounty"
+          },
+          "nsfw": {
+            "type": "boolean",
+            "description": "Whether the bounty allows NSFW content"
+          },
+          "cursing": {
+            "type": "boolean",
+            "description": "Whether the bounty allows cursing"
+          },
+          "nudity": {
+            "type": "boolean",
+            "description": "Whether the bounty allows nudity"
+          },
+          "language": {
+            "type": "string",
+            "description": "Required language for the bounty content"
+          },
+          "age_restriction": {
+            "type": "integer",
+            "description": "Age restriction for the bounty"
+          },
+          "required_views": {
+            "type": "integer",
+            "description": "Required number of views for the content"
+          },
+          "required_likes": {
+            "type": "integer",
+            "description": "Required number of likes for the content"
+          },
+          "required_comments": {
+            "type": "integer",
+            "description": "Required number of comments for the content"
+          },
+          "required_saves": {
+            "type": "integer",
+            "description": "Required number of saves for the content"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Platform where the content should be posted"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the bounty"
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Whether the bounty is currently active"
+          },
+          "show_other_brands": {
+            "type": "boolean",
+            "description": "Whether other brands can be shown in the content"
+          },
+          "specific_products": {
+            "type": "string",
+            "description": "Specific products that should be featured"
+          },
+          "pay_duration": {
+            "type": "string",
+            "description": "Payment duration terms"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Bounty creation date"
+          },
+          "update_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Bounty update date"
+          }
+        }
+      },
+      "Chat": {
+        "type": "object",
+        "required": [
+          "id",
+          "user_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The chat ID"
+          },
+          "report_id": {
+            "type": "string",
+            "description": "Optional ID of the associated report"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "User ID who sent the message"
+          },
+          "company_id": {
+            "type": "string",
+            "description": "Optional company ID for company chats"
+          },
+          "is_admin": {
+            "type": "boolean",
+            "description": "Indicates if admin is involved in chat"
+          },
+          "is_company": {
+            "type": "boolean",
+            "description": "Indicates if company is involved in chat"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the message was sent"
+          }
+        }
+      },
+      "Company": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "logo",
+          "description",
+          "website",
+          "phone_number",
+          "email"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The company ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Company name"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Company phone number"
+          },
+          "email": {
+            "type": "string",
+            "description": "Company email"
+          },
+          "logo": {
+            "type": "string",
+            "description": "Company logo URL"
+          },
+          "description": {
+            "type": "string",
+            "description": "Company description"
+          },
+          "website": {
+            "type": "string",
+            "description": "Company website URL"
+          },
+          "address": {
+            "type": "string",
+            "description": "Company address"
+          },
+          "manager": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Manager user ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Manager name"
+              },
+              "email": {
+                "type": "string",
+                "description": "Manager email"
+              }
+            }
+          }
+        }
+      },
+      "GoogleAuthResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "role": {
+            "type": "string",
+            "description": "User's role"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "User's phone number"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Account creation date"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Account status"
+          },
+          "profilePicture": {
+            "type": "string",
+            "description": "URL to user's profile picture"
+          },
+          "isNewUser": {
+            "type": "boolean",
+            "description": "Whether this is a new user"
+          }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "bounty_id",
+          "title",
+          "description",
+          "platform"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Report ID"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "User ID who created the report"
+          },
+          "bounty_id": {
+            "type": "string",
+            "description": "Bounty ID the report is for"
+          },
+          "title": {
+            "type": "string",
+            "description": "Report title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Report description"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Platform name"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "IN_PROGRESS",
+              "RESOLVED",
+              "REJECTED"
+            ],
+            "description": "Report status"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Report creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Report last update timestamp"
+          }
+        }
+      },
+      "SiteSetting": {
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Setting key"
+          },
+          "value": {
+            "type": "string",
+            "description": "Setting value"
+          },
+          "updatedBy": {
+            "type": "string",
+            "description": "ID of user who last updated the setting"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Setting creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Setting last update timestamp"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "name",
+          "role"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The user ID"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's full name"
+          },
+          "role": {
+            "type": "string",
+            "description": "User's role (ADMIN, USER, etc)"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "User's phone number"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "User creation date"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "User's active status"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

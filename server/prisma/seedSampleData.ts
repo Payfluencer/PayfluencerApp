@@ -6,11 +6,12 @@ import { prisma } from "../database/prisma";
 async function seedSampleData() {
   Logger.info({ message: "Seeding sample data..." });
   try {
-    await seedCompany();
+    // Creating company manager first since company needs their ID
+    const manager = await seedCompanyManager();
+    if (manager) {
+      await seedCompany(manager.id);
+    }
     await seedUser();
-    await seedBounty();
-    await seedReport();
-    await seedChat();
     return true;
   } catch (err) {
     Logger.error({ message: "Sample data seeding failed: " + err });
@@ -19,7 +20,7 @@ async function seedSampleData() {
 }
 
 // Seed a sample company
-async function seedCompany() {
+async function seedCompany(managerUserId?: string) {
   Logger.info({ message: "Creating sample company..." });
 
   try {
@@ -32,6 +33,12 @@ async function seedCompany() {
         data: {
           name: "Sample Company",
           logo: "https://example.com/logo.png",
+          description: "This is a sample company for testing purposes",
+          website: "https://example.com",
+          address: "123 Sample St, Sample City, SC 12345",
+          phone_number: "+1-234-567-8900",
+          email: "info@example.com",
+          manager_id: managerUserId, // Link to company manager if provided
         },
       });
 
@@ -90,152 +97,51 @@ async function seedUser() {
   }
 }
 
-// Seed a sample bounty
-async function seedBounty() {
-  Logger.info({ message: "Creating sample bounty..." });
+// Seed a sample company manager
+async function seedCompanyManager() {
+  Logger.info({ message: "Creating sample company manager..." });
 
   try {
-    const company = await prisma.company.findFirst({
-      where: { name: "Sample Company" },
-    });
-
-    if (!company) {
-      Logger.error({ message: "Company not found, cannot create bounty" });
-      return;
-    }
-
-    const existingBounty = await prisma.bounty.findFirst({
-      where: { company_id: company.id },
-    });
-
-    if (!existingBounty) {
-      await prisma.bounty.create({
-        data: {
-          company_id: company.id,
-          max_payout: 1000.5,
-          nsfw: false,
-          cursing: true,
-          nudity: false,
-          language: "English",
-          age_restriction: 18,
-        },
-      });
-
-      Logger.info({
-        message: "Sample bounty created successfully",
-        messageColor: "greenBright",
-      });
-    } else {
-      Logger.info({
-        message: "Sample bounty already exists",
-        messageColor: "magentaBright",
-      });
-    }
-  } catch (err) {
-    Logger.error({ message: "Error creating sample bounty: " + err });
-  }
-}
-
-// Seed a sample report
-async function seedReport() {
-  Logger.info({ message: "Creating sample report..." });
-
-  try {
-    const user = await prisma.user.findFirst({
-      where: { email: "user@example.com" },
-    });
-
-    const company = await prisma.company.findFirst({
-      where: { name: "Sample Company" },
-    });
-
-    if (!user || !company) {
-      Logger.error({
-        message: "User or Company not found, cannot create report",
-      });
-      return;
-    }
-
-    const existingReport = await prisma.report.findFirst({
+    const existingManager = await prisma.user.findFirst({
       where: {
-        user_id: user.id,
-        company_id: company.id,
+        email: "manager@example.com",
+        role: UserRole.COMPANY_MANAGER,
       },
     });
 
-    if (!existingReport) {
-      await prisma.report.create({
+    if (!existingManager) {
+      const hashedPassword = await bcrypt.hash("manager123", 10);
+
+      const manager = await prisma.user.create({
         data: {
-          user_id: user.id,
-          company_id: company.id,
-          title: "Sample Report",
-          description: "This is a sample report for testing purposes",
-          platform: "Website",
-          status: "Open",
+          name: "Company Manager",
+          email: "manager@example.com",
+          password: hashedPassword,
+          role: UserRole.COMPANY_MANAGER,
+          profile_picture: "https://example.com/manager.jpg",
+          bio: "Sample company manager for testing",
+          phoneNumber: "+1-234-567-8901",
+          isActive: true,
         },
       });
 
       Logger.info({
-        message: "Sample report created successfully",
+        message: "Sample company manager created successfully",
         messageColor: "greenBright",
       });
+
+      return manager;
     } else {
       Logger.info({
-        message: "Sample report already exists",
+        message: "Sample company manager already exists",
         messageColor: "magentaBright",
       });
+
+      return existingManager;
     }
   } catch (err) {
-    Logger.error({ message: "Error creating sample report: " + err });
-  }
-}
-
-// Seed a sample chat message
-async function seedChat() {
-  Logger.info({ message: "Creating sample chat message..." });
-
-  try {
-    const user = await prisma.user.findFirst({
-      where: { email: "user@example.com" },
-    });
-
-    const report = await prisma.report.findFirst();
-
-    if (!user || !report) {
-      Logger.error({
-        message: "User or Report not found, cannot create chat message",
-      });
-      return;
-    }
-
-    const existingChat = await prisma.chat.findFirst({
-      where: {
-        user_id: user.id,
-        report_id: report.id,
-      },
-    });
-
-    if (!existingChat) {
-      await prisma.chat.create({
-        data: {
-          user_id: user.id,
-          report_id: report.id,
-          message: "This is a sample chat message for testing purposes",
-        },
-      });
-
-      Logger.info({
-        message: "Sample chat created successfully",
-        messageColor: "greenBright",
-      });
-    } else {
-      Logger.info({
-        message: "Sample chat already exists",
-        messageColor: "magentaBright",
-      });
-    }
-  } catch (err) {
-    Logger.error({ message: "Error creating sample chat: " + err });
+    Logger.error({ message: "Error creating sample company manager: " + err });
+    return null;
   }
 }
 
