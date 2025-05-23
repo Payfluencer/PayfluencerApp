@@ -5,13 +5,6 @@ import { UserRole } from "../../prisma/generated/prisma/client";
 
 const router = Router();
 
-// Create a new chat message
-router.post(
-  "/",
-  userAuth([UserRole.USER, UserRole.COMPANY_MANAGER, UserRole.ADMIN]),
-  ChatController.createChat
-);
-
 // Get user's chats (for regular users)
 router.get("/user", userAuth([UserRole.USER]), ChatController.getUserChats);
 
