@@ -632,66 +632,13 @@
         }
       }
     },
-    "/api/v1/chat": {
-      "post": {
-        "summary": "Create a new chat message",
+    "/ChatImplementationGuide": {
+      "get": {
+        "summary": "Chat Implementation Guide (Documentation Only)",
         "tags": [
           "Chat"
         ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateChatRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Chat message created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Chat message created successfully"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "chat": {
-                          "$ref": "#/components/schemas/Chat"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
+        "description": "This documentation-only endpoint provides guidance on implementing a real-time chat system using **Socket.IO** and React with TypeScript.\n\n### 📚 Sections Included:\n\n- [React Client Implementation](#)\n- [Socket.IO Events Reference](#)\n\n> This is not an actual API endpoint. It exists to help frontend developers understand how to connect and communicate with the WebSocket-based backend.\n  This example demonstrates how to implement a WebSocket-based real-time chat system using **Socket.IO** with a **React + TypeScript + Vite** client.\n\n### 💬 Chat System Overview\n\nThe system supports two main chat scenarios:\n\n1. **User-to-Admin Chat** - Direct communication between a user and admin\n2. **Report-based Chat** - Communication regarding a specific report\n\nAuthentication is handled via cookies containing JWT tokens.\n\n  ### 📦 Setup\n\n  Install the Socket.IO client:\n\n  ```bash\n  npm install socket.io-client\n  ```\n\n  ### 🧩 React Hook for Chat Socket\n\n  Here's a complete implementation of a reusable `useChatSocket` hook:\n\n  ```tsx\n  import { useEffect, useState } from \"react\";\n  import { io, Socket } from \"socket.io-client\";\n\n  interface Message {\n    content: string;\n    senderId: string;\n    timestamp: string;\n  }\n\n  export function useChatSocket(reportId?: string) {\n    const [messages, setMessages] = useState<Message[]>([]);\n    const [isOnline, setIsOnline] = useState(false);\n    const [socket, setSocket] = useState<Socket | null>(null);\n\n    useEffect(() => {\n      // Socket.IO with cookie-based authentication\n      const newSocket = io(\"http://localhost:8001\", {\n        path: \"/chat/ws\",\n        withCredentials: true // Important for cookie-based auth\n      });\n\n      newSocket.on(\"connect\", () => {\n        // Join either a report chat or admin chat\n        newSocket.emit(\"chat:join\", { reportId });\n      });\n\n      newSocket.on(\"chat:history\", (res) => {\n        if (res.status === \"success\") {\n          setMessages(res.data.messages);\n          setIsOnline(res.data.online);\n        }\n      });\n\n      newSocket.on(\"chat:message\", (res) => {\n        if (res.status === \"success\") {\n          setMessages(prev => [...prev, res.data.message]);\n          setIsOnline(res.data.online);\n        }\n      });\n\n      newSocket.on(\"chat:online.status\", (res) => {\n        if (res.status === \"success\") {\n          setIsOnline(res.data.online);\n        }\n      });\n\n      setSocket(newSocket);\n\n      return () => {\n        newSocket.disconnect();\n      };\n    }, [reportId]);\n\n    const sendMessage = (chatId: string, content: string) => {\n      if (socket && content.trim()) {\n        socket.emit(\"chat:message\", {\n          chatId,\n          content: content.trim()\n        });\n      }\n    };\n\n    return { messages, isOnline, sendMessage, socket };\n  }\n  ```\n  ### 📤 Client to Server Events\n\n  - `chat:join` — Join a chat room\n    `{ reportId?: string, chatId?: string }`\n    - If reportId is provided: joins a report chat\n    - If neither is provided: joins an admin chat\n    - chatId is only used by admins to join specific chats\n\n  - `chat:history` — Request previous messages\n    `{ chatId: string }`\n\n  - `chat:message` — Send a new message\n    `{ chatId: string, content: string }`\n\n  - `chat:typing` — Typing indicator\n    `{ chatId: string, isTyping: boolean }`\n\n  - `chat:leave` — Leave a chat room\n    `{ roomId: string }`\n\n  ### 📥 Server to Client Events\n\n  - `chat:join` — Confirmation after joining\n  - `chat:history` — Sends message history\n  - `chat:message` — New message received\n  - `chat:typing` — Typing status update\n  - `chat:online.status` — Online users status\n  - `error` — Error message\n"
       }
     },
     "/api/v1/chat/report/{reportId}": {
@@ -3370,8 +3317,7 @@
         "type": "object",
         "required": [
           "id",
-          "user_id",
-          "message"
+          "user_id"
         ],
         "properties": {
           "id": {
@@ -3398,42 +3344,10 @@
             "type": "boolean",
             "description": "Indicates if company is involved in chat"
           },
-          "message": {
-            "type": "string",
-            "description": "The chat message content"
-          },
           "created_at": {
             "type": "string",
             "format": "date-time",
             "description": "When the message was sent"
-          }
-        }
-      },
-      "CreateChatRequest": {
-        "type": "object",
-        "required": [
-          "message"
-        ],
-        "properties": {
-          "report_id": {
-            "type": "string",
-            "description": "Optional ID of the associated report"
-          },
-          "message": {
-            "type": "string",
-            "description": "The chat message content"
-          },
-          "company_id": {
-            "type": "string",
-            "description": "Optional company ID for company chats"
-          },
-          "is_admin": {
-            "type": "boolean",
-            "description": "Indicates if admin is involved in chat"
-          },
-          "is_company": {
-            "type": "boolean",
-            "description": "Indicates if company is involved in chat"
           }
         }
       },

@@ -3,20 +3,8 @@ import { HttpStatusCode } from "axios";
 import { prisma } from "../database/prisma";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
-import { CreateChatSchema, PaginationSchema } from "../types/zod-schema";
+import { PaginationSchema } from "../types/zod-schema";
 import { UserRole } from "../prisma/generated/prisma/client";
-
-// Extend the Express Request type to include the user property
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        role: UserRole;
-      };
-    }
-  }
-}
 
 /**
  * @openapi
@@ -27,7 +15,6 @@ declare global {
  *       required:
  *         - id
  *         - user_id
- *         - message
  *       properties:
  *         id:
  *           type: string
@@ -47,133 +34,146 @@ declare global {
  *         is_company:
  *           type: boolean
  *           description: Indicates if company is involved in chat
- *         message:
- *           type: string
- *           description: The chat message content
  *         created_at:
  *           type: string
  *           format: date-time
  *           description: When the message was sent
- *     CreateChatRequest:
- *       type: object
- *       required:
- *         - message
- *       properties:
- *         report_id:
- *           type: string
- *           description: Optional ID of the associated report
- *         message:
- *           type: string
- *           description: The chat message content
- *         company_id:
- *           type: string
- *           description: Optional company ID for company chats
- *         is_admin:
- *           type: boolean
- *           description: Indicates if admin is involved in chat
- *         is_company:
- *           type: boolean
- *           description: Indicates if company is involved in chat
  */
 
 /**
  * @openapi
- * /api/v1/chat:
- *   post:
- *     summary: Create a new chat message
+ * /ChatImplementationGuide:
+ *   get:
+ *     summary: Chat Implementation Guide (Documentation Only)
  *     tags: [Chat]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateChatRequest'
- *     responses:
- *       200:
- *         description: Chat message created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 message:
- *                   type: string
- *                   example: Chat message created successfully
- *                 data:
- *                   type: object
- *                   properties:
- *                     chat:
- *                       $ref: '#/components/schemas/Chat'
- *       400:
- *         description: Invalid request data
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
- */
-export const createChat = async (
-  req: Request,
-  res: Response<IServerResponse>
-) => {
-  try {
-    const parsedBody = CreateChatSchema.safeParse(req.body);
-
-    if (!parsedBody.success) {
-      Logger.error({
-        message:
-          "Invalid chat data provided: " +
-          JSON.stringify(parsedBody.error.errors),
-      });
-      return res.status(HttpStatusCode.BadRequest).json({
-        status: "error",
-        message: "Invalid chat data provided",
-        data: null,
-      });
-    }
-
-    const { report_id, message, company_id, is_admin, is_company } =
-      parsedBody.data;
-    const userId = req.user?.id;
-
-    if (!userId) {
-      return res.status(HttpStatusCode.Unauthorized).json({
-        status: "error",
-        message: "User not authenticated",
-        data: null,
-      });
-    }
-
-    // Create new chat message
-    const newChat = await prisma.chat.create({
-      data: {
-        report_id,
-        user_id: userId,
-        company_id,
-        is_admin: is_admin || false,
-        is_company: is_company || false,
-        message,
-      },
-    });
-
-    return res.status(HttpStatusCode.Ok).json({
-      status: "success",
-      message: "Chat message created successfully",
-      data: { chat: newChat },
-    });
-  } catch (error) {
-    Logger.error({ message: "Error creating chat message: " + error });
-    return res.status(HttpStatusCode.InternalServerError).json({
-      status: "error",
-      message: "Error creating chat message",
-      data: null,
-    });
-  }
-};
+ *     description: |
+ *       This documentation-only endpoint provides guidance on implementing a real-time chat system using **Socket.IO** and React with TypeScript.
+ *
+ *       ### 📚 Sections Included:
+ *
+ *       - [React Client Implementation](#)
+ *       - [Socket.IO Events Reference](#)
+ *
+ *       > This is not an actual API endpoint. It exists to help frontend developers understand how to connect and communicate with the WebSocket-based backend.
+ *         This example demonstrates how to implement a WebSocket-based real-time chat system using **Socket.IO** with a **React + TypeScript + Vite** client.
+ *
+ *       ### 💬 Chat System Overview
+ *
+ *       The system supports two main chat scenarios:
+ *
+ *       1. **User-to-Admin Chat** - Direct communication between a user and admin
+ *       2. **Report-based Chat** - Communication regarding a specific report
+ *
+ *       Authentication is handled via cookies containing JWT tokens.
+ *
+ *         ### 📦 Setup
+ *
+ *         Install the Socket.IO client:
+ *
+ *         ```bash
+ *         npm install socket.io-client
+ *         ```
+ *
+ *         ### 🧩 React Hook for Chat Socket
+ *
+ *         Here's a complete implementation of a reusable `useChatSocket` hook:
+ *
+ *         ```tsx
+ *         import { useEffect, useState } from "react";
+ *         import { io, Socket } from "socket.io-client";
+ *
+ *         interface Message {
+ *           content: string;
+ *           senderId: string;
+ *           timestamp: string;
+ *         }
+ *
+ *         export function useChatSocket(reportId?: string) {
+ *           const [messages, setMessages] = useState<Message[]>([]);
+ *           const [isOnline, setIsOnline] = useState(false);
+ *           const [socket, setSocket] = useState<Socket | null>(null);
+ *
+ *           useEffect(() => {
+ *             // Socket.IO with cookie-based authentication
+ *             const newSocket = io("http://localhost:8001", {
+ *               path: "/chat/ws",
+ *               withCredentials: true // Important for cookie-based auth
+ *             });
+ *
+ *             newSocket.on("connect", () => {
+ *               // Join either a report chat or admin chat
+ *               newSocket.emit("chat:join", { reportId });
+ *             });
+ *
+ *             newSocket.on("chat:history", (res) => {
+ *               if (res.status === "success") {
+ *                 setMessages(res.data.messages);
+ *                 setIsOnline(res.data.online);
+ *               }
+ *             });
+ *
+ *             newSocket.on("chat:message", (res) => {
+ *               if (res.status === "success") {
+ *                 setMessages(prev => [...prev, res.data.message]);
+ *                 setIsOnline(res.data.online);
+ *               }
+ *             });
+ *
+ *             newSocket.on("chat:online.status", (res) => {
+ *               if (res.status === "success") {
+ *                 setIsOnline(res.data.online);
+ *               }
+ *             });
+ *
+ *             setSocket(newSocket);
+ *
+ *             return () => {
+ *               newSocket.disconnect();
+ *             };
+ *           }, [reportId]);
+ *
+ *           const sendMessage = (chatId: string, content: string) => {
+ *             if (socket && content.trim()) {
+ *               socket.emit("chat:message", {
+ *                 chatId,
+ *                 content: content.trim()
+ *               });
+ *             }
+ *           };
+ *
+ *           return { messages, isOnline, sendMessage, socket };
+ *         }
+ *         ```
+ *         ### 📤 Client to Server Events
+ *
+ *         - `chat:join` — Join a chat room
+ *           `{ reportId?: string, chatId?: string }`
+ *           - If reportId is provided: joins a report chat
+ *           - If neither is provided: joins an admin chat
+ *           - chatId is only used by admins to join specific chats
+ *
+ *         - `chat:history` — Request previous messages
+ *           `{ chatId: string }`
+ *
+ *         - `chat:message` — Send a new message
+ *           `{ chatId: string, content: string }`
+ *
+ *         - `chat:typing` — Typing indicator
+ *           `{ chatId: string, isTyping: boolean }`
+ *
+ *         - `chat:leave` — Leave a chat room
+ *           `{ roomId: string }`
+ *
+ *         ### 📥 Server to Client Events
+ *
+ *         - `chat:join` — Confirmation after joining
+ *         - `chat:history` — Sends message history
+ *         - `chat:message` — New message received
+ *         - `chat:typing` — Typing status update
+ *         - `chat:online.status` — Online users status
+ *         - `error` — Error message
+ *
+ * */
 
 /**
  * @openapi
@@ -253,8 +253,8 @@ export const getChatsByReportId = async (
 ) => {
   try {
     const { reportId } = req.params;
-    const userId = req.user?.id;
-    const userRole = req.user?.role;
+    const userId = res.locals.userId;
+    const userRole = res.locals.userRole;
 
     if (!userId) {
       return res.status(HttpStatusCode.Unauthorized).json({
@@ -339,6 +339,20 @@ export const getChatsByReportId = async (
               id: true,
               name: true,
               logo: true,
+            },
+          },
+          messages: {
+            take: 1, // Just get the latest message for preview
+            orderBy: {
+              created_at: "desc",
+            },
+            include: {
+              sender: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -445,8 +459,8 @@ export const getCompanyChats = async (
   res: Response<IServerResponse>
 ) => {
   try {
-    const userId = req.user?.id;
-    const userRole = req.user?.role;
+    const userId = res.locals.userId;
+    const userRole = res.locals.userRole;
 
     if (!userId || userRole !== UserRole.COMPANY_MANAGER) {
       return res.status(HttpStatusCode.Unauthorized).json({
@@ -517,6 +531,20 @@ export const getCompanyChats = async (
                 select: {
                   id: true,
                   title: true,
+                },
+              },
+            },
+          },
+          messages: {
+            take: 1, // Just get the latest message for preview
+            orderBy: {
+              created_at: "desc",
+            },
+            include: {
+              sender: {
+                select: {
+                  id: true,
+                  name: true,
                 },
               },
             },
@@ -625,7 +653,7 @@ export const getUserChats = async (
   res: Response<IServerResponse>
 ) => {
   try {
-    const userId = req.user?.id;
+    const userId = res.locals.userId;
 
     if (!userId) {
       return res.status(HttpStatusCode.Unauthorized).json({
@@ -691,6 +719,20 @@ export const getUserChats = async (
               id: true,
               name: true,
               logo: true,
+            },
+          },
+          messages: {
+            take: 1, // Just get the latest message for preview
+            orderBy: {
+              created_at: "desc",
+            },
+            include: {
+              sender: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -809,8 +851,8 @@ export const getAllChats = async (
   res: Response<IServerResponse>
 ) => {
   try {
-    const userId = req.user?.id;
-    const userRole = req.user?.role;
+    const userId = res.locals.userId;
+    const userRole = res.locals.userRole;
 
     if (!userId || userRole !== UserRole.ADMIN) {
       return res.status(HttpStatusCode.Unauthorized).json({
@@ -880,6 +922,20 @@ export const getAllChats = async (
               id: true,
               name: true,
               logo: true,
+            },
+          },
+          messages: {
+            take: 3, // Get the latest few messages for preview
+            orderBy: {
+              created_at: "desc",
+            },
+            include: {
+              sender: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -956,8 +1012,8 @@ export const getChatById = async (
 ) => {
   try {
     const { chatId } = req.params;
-    const userId = req.user?.id;
-    const userRole = req.user?.role;
+    const userId = res.locals.userId;
+    const userRole = res.locals.userRole;
 
     if (!userId || userRole !== UserRole.ADMIN) {
       return res.status(HttpStatusCode.Unauthorized).json({
@@ -1005,6 +1061,20 @@ export const getChatById = async (
             logo: true,
           },
         },
+        messages: {
+          orderBy: {
+            created_at: "asc",
+          },
+          include: {
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                profile_picture: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -1030,44 +1100,3 @@ export const getChatById = async (
     });
   }
 };
-
-/**
- * WebSocket integration can be implemented for real-time chat functionality.
- * This implementation will depend on the WebSocket library used and the specifics of
- * how real-time communication is set up in the application.
- *
- * Recommended implementation approaches:
- * 1. Use Socket.io for WebSocket support
- * 2. Create socket event handlers for:
- *    - Joining chat rooms based on report ID or direct chat parameters
- *    - Sending messages
- *    - Typing indicators
- *    - Read receipts
- * 3. Implement authentication for WebSocket connections
- * 4. Store messages in the database using the existing Chat model
- *
- * Example implementation:
- *
- * export const setupWebSocketHandlers = (io) => {
- *   io.on('connection', (socket) => {
- *     // Authenticate socket connection
- *     // ...
- *
- *     socket.on('join-room', (roomId) => {
- *       socket.join(roomId);
- *     });
- *
- *     socket.on('send-message', async (data) => {
- *       // Save to database using prisma
- *       const newMessage = await prisma.chat.create({
- *         data: {
- *           // ...message data
- *         }
- *       });
- *
- *       // Broadcast to room
- *       io.to(data.roomId).emit('new-message', newMessage);
- *     });
- *   });
- * };
- */

@@ -106,10 +106,15 @@ export const SearchReportsByTitleSchema = z.object({
 // Chat schemas
 export const CreateChatSchema = z.object({
   report_id: z.string().uuid().optional(),
-  message: z.string().min(1),
   company_id: z.string().uuid().optional(),
   is_admin: z.boolean().optional().default(false),
   is_company: z.boolean().optional().default(false),
+});
+
+// Message schema
+export const CreateMessageSchema = z.object({
+  chat_id: z.string().uuid(),
+  content: z.string().min(1),
 });
 
 // General pagination schema

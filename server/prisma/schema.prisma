@@ -53,6 +53,7 @@ model User {
 
   reports        Report[]
   chats          Chat[]
+  sentMessages   Message[]       @relation("MessageSender")
   passwordResets PasswordReset[]
   siteSettings   SiteSetting[]
   managedCompany Company?        @relation("CompanyManager")
@@ -125,18 +126,30 @@ model Report {
 
 // Chat model
 model Chat {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   report_id  String?
   user_id    String
-  message    String?
-  created_at DateTime @default(now())
-  is_admin   Boolean  @default(false)
-  is_company Boolean  @default(false)
+  created_at DateTime  @default(now())
+  is_admin   Boolean   @default(false)
+  is_company Boolean   @default(false)
   company_id String?
+  messages   Message[]
 
   report  Report?  @relation(fields: [report_id], references: [id])
   user    User     @relation(fields: [user_id], references: [id])
   company Company? @relation(fields: [company_id], references: [id])
+}
+
+// Message model - messages sent within a chat
+model Message {
+  id         String   @id @default(uuid())
+  chat_id    String
+  sender_id  String
+  content    String
+  created_at DateTime @default(now())
+
+  chat   Chat @relation(fields: [chat_id], references: [id])
+  sender User @relation("MessageSender", fields: [sender_id], references: [id])
 }
 
 // Password reset tokens
