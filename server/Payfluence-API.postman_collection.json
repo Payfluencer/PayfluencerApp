@@ -1,0 +1,260 @@
+{
+  "info": {
+    "name": "Payfluence API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8001/api/v1" }
+  ],
+  "item": [
+    {
+      "name": "Ping",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/ping"
+      }
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/user?id={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["user"],
+              "query": [{ "key": "id", "value": "{{userId}}" }]
+            },
+            "header": [{ "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }]
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{userId}}\",\n  \"name\": \"Updated Name\",\n  \"email\": \"updated@example.com\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/user",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{userId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/all?page=1&limit=10",
+            "header": [{ "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }]
+          }
+        },
+        {
+          "name": "Search User",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/user/search?type=email&term={{userEmail}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "search"],
+              "query": [
+                { "key": "type", "value": "email" },
+                { "key": "term", "value": "{{userEmail}}" }
+              ]
+            },
+            "header": [{ "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }]
+          }
+        },
+        {
+          "name": "Refresh User",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/refresh",
+            "header": [{ "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }]
+          }
+        },
+        {
+          "name": "Logout User",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/logout",
+            "header": [{ "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Create Report",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/reports",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"company_id\": \"{{companyId}}\",\n  \"title\": \"Sample Report\",\n  \"description\": \"Test report\",\n  \"platform\": \"Website\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Report",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reports?id={{reportId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports"],
+              "query": [{ "key": "id", "value": "{{reportId}}" }]
+            },
+            "header": [{ "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }]
+          }
+        },
+        {
+          "name": "Update Report",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/reports",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{reportId}}\",\n  \"user_id\": \"{{userId}}\",\n  \"title\": \"Updated Title\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Report Status",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/reports/status",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{reportId}}\",\n  \"company_id\": \"{{companyId}}\",\n  \"status\": \"Closed\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Report",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/reports",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{reportId}}\",\n  \"user_id\": \"{{userId}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "item": [
+        {
+          "name": "Get All Settings",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/settings"
+          }
+        },
+        {
+          "name": "Get Setting By Key",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/settings/setting?key={{settingKey}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["settings", "setting"],
+              "query": [{ "key": "key", "value": "{{settingKey}}" }]
+            }
+          }
+        },
+        {
+          "name": "Create Setting",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/settings",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"test_setting\",\n  \"value\": \"true\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Setting",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/settings",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"test_setting\",\n  \"value\": \"false\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Setting",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/settings?key=test_setting",
+            "header": [{ "key": "Cookie", "value": "_insr010usr={{jwtToken}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Google Auth",
+      "item": [
+        {
+          "name": "Google Auth (Login/Signup)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/google",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"{{googleIdToken}}\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

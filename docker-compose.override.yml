@@ -1,12 +1,12 @@
 services:
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    command: pnpm dev
+  # client:
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile.dev
+  #   volumes:
+  #     - ./client:/app
+  #     - /app/node_modules
+  #   command: pnpm dev
 
   server:
     build:
@@ -17,6 +17,7 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+      - /app/node_modules/.prisma
     command: pnpm dev
 
   postgres:
