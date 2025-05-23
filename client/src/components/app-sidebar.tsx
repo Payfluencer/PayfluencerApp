@@ -18,26 +18,31 @@ const items = [
     title: "Home",
     url: "#",
     icon: Home,
+    path: "/home",
   },
   {
     title: "Inbox",
     url: "#",
     icon: Inbox,
+    path: "/inbox",
   },
   {
     title: "Bounties",
     url: "#",
     icon: Coins,
+    path: "/bounties",
   },
   {
     title: "My Submissions",
     url: "#",
     icon: Receipt,
+    path: "/submissions",
   },
   {
     title: "Settings",
     url: "#",
     icon: Settings,
+    path: "/settings",
   },
 ];
 
@@ -62,7 +67,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title} className="my-2">
                   <SidebarMenuButton asChild className="py-2">
-                    <a href={item.url}>
+                    <a href={item.path}>
                       <item.icon style={{ width: "20px", height: "20px" }} />
                       <span
                         style={{ fontFamily: "KarlaRegular" }}

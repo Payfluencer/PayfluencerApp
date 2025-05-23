@@ -12,8 +12,8 @@ const chartData = [
   { name: "YouTube", payout: 275, fill: "#fa5252" },
   { name: "Google", payout: 200, fill: "#f03e96" },
   { name: "Instagram", payout: 287, fill: "#7950f2" },
-  { name: "Meta", payout: 173, fill: "#4c6ef5" },
-  { name: "Others", payout: 190, fill: "#34d5eb" },
+  { name: "Meta", payout: 173, fill: "#ec698c" },
+  { name: "Others", payout: 190, fill: "#97adb0" },
 ];
 
 const chartConfig = {
@@ -34,11 +34,11 @@ const chartConfig = {
   },
   meta: {
     label: "Meta",
-    color: "#4c6ef5",
+    color: "#ec698c",
   },
   other: {
     label: "Others",
-    color: "#34d5eb",
+    color: "#97adb0",
   },
 } satisfies ChartConfig;
 
