@@ -6,7 +6,11 @@ import { prisma } from "../database/prisma";
 async function seedSampleData() {
   Logger.info({ message: "Seeding sample data..." });
   try {
-    await seedCompany();
+    // Creating company manager first since company needs their ID
+    const manager = await seedCompanyManager();
+    if (manager) {
+      await seedCompany(manager.id);
+    }
     await seedUser();
     return true;
   } catch (err) {
@@ -16,7 +20,7 @@ async function seedSampleData() {
 }
 
 // Seed a sample company
-async function seedCompany() {
+async function seedCompany(managerUserId?: string) {
   Logger.info({ message: "Creating sample company..." });
 
   try {
@@ -34,6 +38,7 @@ async function seedCompany() {
           address: "123 Sample St, Sample City, SC 12345",
           phone_number: "+1-234-567-8900",
           email: "info@example.com",
+          manager_id: managerUserId, // Link to company manager if provided
         },
       });
 
@@ -89,6 +94,54 @@ async function seedUser() {
     }
   } catch (err) {
     Logger.error({ message: "Error creating sample user: " + err });
+  }
+}
+
+// Seed a sample company manager
+async function seedCompanyManager() {
+  Logger.info({ message: "Creating sample company manager..." });
+
+  try {
+    const existingManager = await prisma.user.findFirst({
+      where: {
+        email: "manager@example.com",
+        role: UserRole.COMPANY_MANAGER,
+      },
+    });
+
+    if (!existingManager) {
+      const hashedPassword = await bcrypt.hash("manager123", 10);
+
+      const manager = await prisma.user.create({
+        data: {
+          name: "Company Manager",
+          email: "manager@example.com",
+          password: hashedPassword,
+          role: UserRole.COMPANY_MANAGER,
+          profile_picture: "https://example.com/manager.jpg",
+          bio: "Sample company manager for testing",
+          phoneNumber: "+1-234-567-8901",
+          isActive: true,
+        },
+      });
+
+      Logger.info({
+        message: "Sample company manager created successfully",
+        messageColor: "greenBright",
+      });
+
+      return manager;
+    } else {
+      Logger.info({
+        message: "Sample company manager already exists",
+        messageColor: "magentaBright",
+      });
+
+      return existingManager;
+    }
+  } catch (err) {
+    Logger.error({ message: "Error creating sample company manager: " + err });
+    return null;
   }
 }
 

@@ -15,7 +15,7 @@ router.get("/all", userAuth([UserRole.ADMIN]), UserController.getAllUsers);
 
 router.get(
   "/refresh",
-  userAuth([UserRole.ADMIN, UserRole.ADMIN]),
+  userAuth([UserRole.ADMIN, UserRole.ADMIN, UserRole.COMPANY_MANAGER]),
   UserController.refreshUser
 );
 router.get("/search", userAuth([UserRole.ADMIN]), UserController.searchUser);

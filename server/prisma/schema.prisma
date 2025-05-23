@@ -20,6 +20,7 @@ datasource db {
 enum UserRole {
   ADMIN // Site administrator
   USER // Normal user
+  COMPANY_MANAGER // Company manager with limited access
 }
 
 enum ReportStatus {
@@ -54,6 +55,7 @@ model User {
   chats          Chat[]
   passwordResets PasswordReset[]
   siteSettings   SiteSetting[]
+  managedCompany Company?        @relation("CompanyManager")
 }
 
 // Company model
@@ -68,8 +70,11 @@ model Company {
   address      String?  @default("")
   created_at   DateTime @default(now())
   update_at    DateTime @updatedAt
+  manager_id   String?  @unique
 
+  manager  User?    @relation("CompanyManager", fields: [manager_id], references: [id])
   bounties Bounty[]
+  chats    Chat[]
 }
 
 // Bounty model
@@ -121,13 +126,17 @@ model Report {
 // Chat model
 model Chat {
   id         String   @id @default(uuid())
-  report_id  String
+  report_id  String?
   user_id    String
   message    String?
   created_at DateTime @default(now())
+  is_admin   Boolean  @default(false)
+  is_company Boolean  @default(false)
+  company_id String?
 
-  report Report @relation(fields: [report_id], references: [id])
-  user   User   @relation(fields: [user_id], references: [id])
+  report  Report?  @relation(fields: [report_id], references: [id])
+  user    User     @relation(fields: [user_id], references: [id])
+  company Company? @relation(fields: [company_id], references: [id])
 }
 
 // Password reset tokens
