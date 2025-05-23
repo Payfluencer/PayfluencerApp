@@ -1,0 +1,80 @@
+{
+  "User": {
+    "id": "String",
+    "name": "String?",
+    "email": "String?",
+    "password": "String?",
+    "profile_picture": "String?",
+    "bio": "String?",
+    "evm_wallet_address": "String?",
+    "created_at": "DateTime",
+    "update_at": "DateTime",
+    "role": "UserRole?",
+    "isActive": "Boolean",
+    "lastLogin": "DateTime?",
+    "phoneNumber": "String?",
+    "googleId": "String?",
+    "googlePicture": "String?"
+  },
+  "Company": {
+    "id": "String",
+    "name": "String?",
+    "logo": "String?",
+    "created_at": "DateTime",
+    "update_at": "DateTime"
+  },
+  "Bounty": {
+    "id": "String",
+    "company_id": "String",
+    "max_payout": "Float?",
+    "nsfw": "Boolean?",
+    "cursing": "Boolean?",
+    "nudity": "Boolean?",
+    "language": "String?",
+    "age_restriction": "Int?",
+    "required_views": "Int?",
+    "required_likes": "Int?",
+    "required_comments": "Int?",
+    "required_saves": "Int?",
+    "platform": "String",
+    "show_other_brands": "Boolean?",
+    "specific_products": "String?",
+    "pay_duration": "String?",
+    "created_at": "DateTime",
+    "update_at": "DateTime"
+  },
+  "Report": {
+    "id": "String",
+    "user_id": "String",
+    "company_id": "String",
+    "title": "String?",
+    "description": "String?",
+    "platform": "String?",
+    "status": "String?",
+    "created_at": "DateTime",
+    "updated_at": "DateTime"
+  },
+  "Chat": {
+    "id": "String",
+    "report_id": "String",
+    "user_id": "String",
+    "message": "String?",
+    "created_at": "DateTime"
+  },
+  "PasswordReset": {
+    "id": "String",
+    "token": "String",
+    "user_id": "String",
+    "expires_at": "DateTime",
+    "created_at": "DateTime",
+    "used": "Boolean"
+  },
+  "SiteSetting": {
+    "id": "String",
+    "key": "String",
+    "value": "String",
+    "updated_at": "DateTime",
+    "updated_by_id": "String"
+  },
+  "UserRole": ["ADMIN", "USER"]
+}

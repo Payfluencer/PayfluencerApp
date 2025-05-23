@@ -1,0 +1,112 @@
+import user1 from "../assets/images/user1.jpeg";
+import user2 from "../assets/images/user2.jpg";
+import user3 from "../assets/images/user3.avif";
+import yt from "../assets/images/yt.png";
+import google from "../assets/images/google.png";
+import insta from "../assets/images/insta.png";
+import meta from "../assets/images/meta.png";
+import ms from "../assets/images/ms.png";
+import binance from "../assets/images/bina.png";
+
+export const topEarners = [
+  {
+    name: "John Doe",
+    amount: 12897,
+    profile: user1,
+  },
+  {
+    name: "Jane Doe",
+    amount: 86939,
+    profile: user2,
+  },
+  {
+    name: "Sylus Abel",
+    amount: 56987,
+    profile: user3,
+  },
+];
+
+export const topBounties = [
+  {
+    name: "YouTube",
+    amount: 248904,
+    profile: yt,
+  },
+  {
+    name: "Google",
+    amount: 216987,
+    profile: google,
+  },
+  {
+    name: "Instagram",
+    amount: 199745,
+    profile: insta,
+  },
+  {
+    name: "Meta",
+    amount: 184236,
+    profile: meta,
+  },
+  {
+    name: "Microsoft",
+    amount: 166710,
+    profile: ms,
+  },
+];
+
+export const topCompanies = [
+  {
+    name: "YouTube",
+    bounties: 47,
+    profile: yt,
+  },
+  {
+    name: "Google",
+    bounties: 36,
+    profile: google,
+  },
+  {
+    name: "Instagram",
+    bounties: 24,
+    profile: insta,
+  },
+  {
+    name: "Meta",
+    bounties: 11,
+    profile: meta,
+  },
+  {
+    name: "Microsoft",
+    bounties: 7,
+    profile: ms,
+  },
+  {
+    name: "Binance",
+    bounties: 4,
+    profile: binance,
+  },
+];
+
+export const mySubmissions = [
+  {
+    name: "YouTube",
+    amount: 184,
+    paid: true,
+    date: "2025-05-23",
+    profile: yt,
+  },
+  {
+    name: "Google",
+    amount: 184,
+    paid: false,
+    date: "2025-05-23",
+    profile: google,
+  },
+  {
+    name: "Meta",
+    amount: 184,
+    paid: true,
+    date: "2025-05-23",
+    profile: meta,
+  },
+];

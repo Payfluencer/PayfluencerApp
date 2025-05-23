@@ -1,5 +1,8 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AdminSidebar } from "./admin-sidebar";
+import { SidebarProvider } from "./ui/sidebar";
+import { SidebarTrigger } from "./ui/sidebar";
+import { topCompanies, topEarners } from "@/lib/mock";
+import TopEarners from "./TopEarners";
 import { Button } from "./ui/button";
 import {
   FaAngleDoubleUp,
@@ -7,20 +10,18 @@ import {
   FaCaretDown,
   FaTimes,
 } from "react-icons/fa";
-import { mySubmissions, topBounties } from "@/lib/mock";
-import TopBounties from "./TopBounties";
-import { PayoutChart } from "./PayoutChart";
 import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
-import TopSubmission from "./TopSubmission";
+import { AdminPayoutChart } from "./AdminPayoutChart";
+import TopCompaniesSummary from "./TopCompanySummary";
+import { Calendar } from "./ui/calendar";
 
-function UserDashboard() {
+function AdminDashboard() {
   const [dateModal, setDateModal] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
     <>
       <SidebarProvider>
-        <AppSidebar />
+        <AdminSidebar />
 
         <main className="w-full mt-4 md:mt-10 md:ml-10 bg-white rounded-3xl mb-4">
           <div className="flex flex-row justify-between w-full md:w-[90%]">
@@ -30,24 +31,27 @@ function UserDashboard() {
             <div className="flex items-center justify-between mt-4">
               <div className="flex flex-col items-start">
                 <h1 style={{ fontFamily: "KarlaRegular" }} className="text-xl">
-                  Good Afternoon,
+                  Welcome Back,
                 </h1>
                 <p style={{ fontFamily: "KarlaSemiBold" }} className="text-2xl">
-                  Sylus Abel
+                  Admin
                 </p>
               </div>
             </div>
             <div className="flex flex-col md:flex-row md:justify-between">
               <div className="flex flex-col mt-8 w-full md:w-1/2">
-                <h1 style={{ fontFamily: "KarlaRegular" }} className="text-xl ">
-                  Revenue
+                <h1
+                  style={{ fontFamily: "KarlaRegular" }}
+                  className="text-lg md:text-xl "
+                >
+                  Total Bounties Paid
                 </h1>
                 <div className="flex items-center gap-2 md:gap-4">
                   <p
                     style={{ fontFamily: "KarlaSemiBold" }}
-                    className="text-5xl my-2 text-[#fa5e06]"
+                    className="text-3xl md:text-5xl my-2 text-[#fa5e06]"
                   >
-                    $190.86
+                    $14,900.86
                   </p>
                   <div className="flex items-center gap-2 ">
                     <p
@@ -62,7 +66,7 @@ function UserDashboard() {
                       className="text-sm text-gray-100 bg-green-500 rounded-full px-2 py-1 flex items-center gap-2"
                     >
                       <FaAngleDoubleUp />
-                      +$45.24
+                      +$1,450.24
                     </p>
                   </div>
                 </div>
@@ -71,7 +75,7 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaRegular" }}
                     className="text-lg text-gray-500"
                   >
-                    Vs Previous Month: $145.86
+                    Vs Previous Month: $13,450.24
                   </p>
                   <Button
                     className=" text-gray-500 shadow-none hover:bg-transparent cursor-pointer bg-transparent text-lg flex gap-2 items-center"
@@ -89,16 +93,16 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaRegular" }}
                     className="text-lg text-gray-500"
                   >
-                    My Submissions
+                    Active Companies
                   </h1>
                   <p
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8"
                   >
-                    10
+                    14
                   </p>
                   <Button className="text-gray-900 hover:bg-transparent  bg-transparent shadow-none left-0 right-0 flex gap-2 items-center justify-between absolute bottom-0 ">
-                    View All
+                    More
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
@@ -107,16 +111,16 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaRegular" }}
                     className="text-lg text-gray-300"
                   >
-                    Pending Reports
+                    Active Bounties
                   </h1>
                   <p
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8 text-gray-300"
                   >
-                    3
+                    36
                   </p>
                   <Button className="text-[#fa5e06] bg-transparent  shadow-none left-0 right-0 flex gap-2 items-center justify-between absolute bottom-0 ">
-                    View All
+                    More
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
@@ -126,13 +130,13 @@ function UserDashboard() {
               style={{ fontFamily: "KarlaSemiBold" }}
               className="text-2xl mt-10"
             >
-              Top Submissions
+              Top Earners
             </h1>
             <div className="flex items-center justify-between flex-col md:flex-row">
               <div className=" bg-[#f6f7f9] rounded-4xl p-1 mt-4 w-full md:w-3/4">
                 <div className="flex flex-col md:flex-row justify-between gap-4">
-                  {mySubmissions.map((submission) => (
-                    <TopSubmission key={submission.name} {...submission} />
+                  {topEarners.map((earner) => (
+                    <TopEarners key={earner.name} {...earner} />
                   ))}
                 </div>
               </div>
@@ -151,7 +155,7 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-2xl"
                   >
-                    Top Bounties
+                    Top Companies
                   </h1>
                   <Button
                     className="bg-transparent text-sm shadow-none hover:bg-transparent cursor-pointer text-gray-900 mt-4 md:mt-0"
@@ -162,8 +166,8 @@ function UserDashboard() {
                   </Button>
                 </div>
                 <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
-                  {topBounties.map((bounty) => (
-                    <TopBounties key={bounty.name} {...bounty} />
+                  {topCompanies.map((company) => (
+                    <TopCompaniesSummary key={company.name} {...company} />
                   ))}
                 </div>
               </div>
@@ -172,16 +176,16 @@ function UserDashboard() {
                   style={{ fontFamily: "KarlaSemiBold" }}
                   className="text-2xl"
                 >
-                  My Payout Summary
+                  Bounties Summary
                 </h1>
                 <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
-                  <PayoutChart />
+                  <AdminPayoutChart />
                 </div>
               </div>
             </div>
           </div>
         </main>
-      </SidebarProvider>{" "}
+      </SidebarProvider>
       {dateModal && (
         <div className="fixed inset-0 backdrop-blur-lg w-[100vw] h-[100vh] flex items-center justify-center">
           <div className="bg-white p-4 rounded-lg">
@@ -234,4 +238,4 @@ function UserDashboard() {
   );
 }
 
-export default UserDashboard;
+export default AdminDashboard;
