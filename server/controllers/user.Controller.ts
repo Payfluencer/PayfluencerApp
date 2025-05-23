@@ -613,6 +613,7 @@ export const refreshUser = async (
 ) => {
   try {
     let userId = res.locals.userId;
+    let userRole = res.locals.userRole;
 
     let user = await prisma.user.findUnique({
       where: { id: userId },
@@ -640,7 +641,7 @@ export const refreshUser = async (
       });
     }
 
-    // Set cookie
+    // Set auth cookie
     res.cookie("_insr010usr", signedToken.data.signed, {
       maxAge: 14 * 24 * 60 * 60 * 1000,
       path: "/",
@@ -650,20 +651,36 @@ export const refreshUser = async (
       httpOnly: isProduction,
     });
 
+    // Check if user is a company manager
+    let responseData: any = {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        phoneNumber: user.phoneNumber,
+        createdAt: user.created_at,
+        isActive: user.isActive,
+      },
+    };
+
+    // If user is a company manager, also return company information
+    if (user.role === UserRole.COMPANY_MANAGER) {
+      const company = await prisma.company.findUnique({
+        where: {
+          manager_id: user.id,
+        },
+      });
+
+      if (company) {
+        responseData.company = company;
+      }
+    }
+
     res.status(HttpStatusCode.Ok).json({
       status: "success",
       message: "Access refreshed successfully",
-      data: {
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          phoneNumber: user.phoneNumber,
-          createdAt: user.created_at,
-          isActive: user.isActive,
-        },
-      },
+      data: responseData,
     });
   } catch (err) {
     Logger.error({ message: "Error refreshing access" + err });
@@ -802,21 +819,40 @@ export const loginAdmin = async (
       httpOnly: isProduction,
     });
 
+    // Prepare response data
+    let responseData: any = {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        phoneNumber: user.phoneNumber,
+        createdAt: user.created_at,
+        isActive: user.isActive,
+      },
+    };
+
+    // If user is a company manager, also return company information
+    if (user.role === UserRole.COMPANY_MANAGER) {
+      const company = await prisma.company.findUnique({
+        where: {
+          manager_id: user.id,
+        },
+      });
+
+      if (company) {
+        responseData.company = company;
+      }
+    }
+
     // Return user data
     res.status(HttpStatusCode.Ok).json({
       status: "success",
-      message: "Admin logged in successfully",
-      data: {
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          phoneNumber: user.phoneNumber,
-          createdAt: user.created_at,
-          isActive: user.isActive,
-        },
-      },
+      message:
+        user.role === UserRole.ADMIN
+          ? "Admin logged in successfully"
+          : "User logged in successfully",
+      data: responseData,
     });
   } catch (err) {
     Logger.error({ message: "Error during admin login: " + err });

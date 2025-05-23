@@ -651,7 +651,7 @@
                   "website",
                   "phone_number",
                   "email",
-                  "address"
+                  "manager"
                 ],
                 "properties": {
                   "name": {
@@ -681,6 +681,32 @@
                   "address": {
                     "type": "string",
                     "description": "Company address"
+                  },
+                  "manager": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "email",
+                      "password"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Company manager name"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Company manager email"
+                      },
+                      "password": {
+                        "type": "string",
+                        "description": "Company manager password"
+                      },
+                      "phone_number": {
+                        "type": "string",
+                        "description": "Company manager phone number"
+                      }
+                    }
                   }
                 }
               }
@@ -1070,6 +1096,77 @@
           },
           "400": {
             "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/company/login": {
+      "post": {
+        "summary": "Login as a company manager",
+        "tags": [
+          "Company"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Company manager email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Company manager password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Company manager logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Company manager logged in successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        },
+                        "company": {
+                          "$ref": "#/components/schemas/Company"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid credentials or not a company manager"
           },
           "500": {
             "description": "Internal server error"
@@ -2761,8 +2858,7 @@
           "description",
           "website",
           "phone_number",
-          "email",
-          "address"
+          "email"
         ],
         "properties": {
           "id": {
@@ -2792,6 +2888,27 @@
           "website": {
             "type": "string",
             "description": "Company website URL"
+          },
+          "address": {
+            "type": "string",
+            "description": "Company address"
+          },
+          "manager": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Manager user ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Manager name"
+              },
+              "email": {
+                "type": "string",
+                "description": "Manager email"
+              }
+            }
           }
         }
       },

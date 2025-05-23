@@ -1,11 +1,12 @@
 import { z } from "zod";
+import { ReportStatus, UserRole } from "../prisma/generated/prisma/client";
 
 // Schema used when creating a new user
 export const UserSignupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   name: z.string().min(3),
-  role: z.enum(["admin", "user"]),
+  role: z.nativeEnum(UserRole),
 });
 
 // Schema used when updating a user
@@ -45,13 +46,33 @@ export const CreatePartnerSchema = z.object({
   managerPassword: z.string().min(6),
 });
 
+// Schema used for creating a company
+export const CreateCompanySchema = z.object({
+  // Company details
+  name: z.string().min(3),
+  logo: z.string().url(),
+  description: z.string().min(20),
+  website: z.string().url(),
+  phone_number: z.string().min(10),
+  email: z.string().email(),
+  address: z.string().min(5).optional(),
+
+  // Company manager details
+  manager: z.object({
+    name: z.string().min(3),
+    email: z.string().email(),
+    password: z.string().min(6),
+    phone_number: z.string().min(10).optional(),
+  }),
+});
+
 // Report schemas
 export const CreateReportSchema = z.object({
   bounty_id: z.string().uuid(),
   title: z.string().min(5),
   description: z.string().min(20),
   platform: z.string().min(2),
-  status: z.enum(["PENDING", "IN_PROGRESS", "RESOLVED", "REJECTED"]).optional(),
+  status: z.nativeEnum(ReportStatus).optional(),
 });
 
 export const UpdateReportSchema = z.object({
@@ -63,7 +84,7 @@ export const UpdateReportSchema = z.object({
 
 export const UpdateReportStatusSchema = z.object({
   id: z.string().uuid(),
-  status: z.enum(["PENDING", "IN_PROGRESS", "RESOLVED", "REJECTED"]),
+  status: z.nativeEnum(ReportStatus),
 });
 
 export const DeleteReportSchema = z.object({
@@ -73,7 +94,7 @@ export const DeleteReportSchema = z.object({
 export const GetAllReportsSchema = z.object({
   page: z.number().int().positive().optional().default(1),
   limit: z.number().int().positive().optional().default(10),
-  status: z.enum(["PENDING", "IN_PROGRESS", "RESOLVED", "REJECTED"]).optional(),
+  status: z.nativeEnum(ReportStatus).optional(),
 });
 
 export const SearchReportsByTitleSchema = z.object({

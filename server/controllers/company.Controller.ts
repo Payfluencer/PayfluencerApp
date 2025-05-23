@@ -1,9 +1,20 @@
+import { hash } from "bcryptjs";
 import { Logger } from "borgen";
 import { HttpStatusCode } from "axios";
 import { prisma } from "../database/prisma";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
-import { SearchCompanySchema } from "../types/zod-schema";
+import {
+  CreateCompanySchema,
+  SearchCompanySchema,
+  AdminLoginSchema,
+} from "../types/zod-schema";
+import { UserRole } from "../prisma/generated/prisma/client";
+import bcrypt from "bcryptjs";
+import { signJwtToken } from "../lib/utils";
+import { Config } from "../lib/config";
+
+const isProduction = process.env.NODE_ENV === "production";
 
 /**
  * @openapi
@@ -19,7 +30,6 @@ import { SearchCompanySchema } from "../types/zod-schema";
  *         - website
  *         - phone_number
  *         - email
- *         - address
  *       properties:
  *         id:
  *           type: string
@@ -42,6 +52,21 @@ import { SearchCompanySchema } from "../types/zod-schema";
  *         website:
  *           type: string
  *           description: Company website URL
+ *         address:
+ *           type: string
+ *           description: Company address
+ *         manager:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               description: Manager user ID
+ *             name:
+ *               type: string
+ *               description: Manager name
+ *             email:
+ *               type: string
+ *               description: Manager email
  */
 
 /**
@@ -63,7 +88,7 @@ import { SearchCompanySchema } from "../types/zod-schema";
  *               - website
  *               - phone_number
  *               - email
- *               - address
+ *               - manager
  *             properties:
  *               name:
  *                 type: string
@@ -86,6 +111,25 @@ import { SearchCompanySchema } from "../types/zod-schema";
  *               address:
  *                 type: string
  *                 description: Company address
+ *               manager:
+ *                 type: object
+ *                 required:
+ *                   - name
+ *                   - email
+ *                   - password
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: Company manager name
+ *                   email:
+ *                     type: string
+ *                     description: Company manager email
+ *                   password:
+ *                     type: string
+ *                     description: Company manager password
+ *                   phone_number:
+ *                     type: string
+ *                     description: Company manager phone number
  *     responses:
  *       200:
  *         description: Company created successfully
@@ -115,33 +159,76 @@ export const createCompany = async (
   res: Response<IServerResponse>
 ) => {
   try {
-    const { name, logo, description, website, phone_number, email, address } =
-      req.body;
+    // Validate input with Zod schema
+    const validationResult = CreateCompanySchema.safeParse(req.body);
 
-    if (!name) {
+    if (!validationResult.success) {
       return res.status(HttpStatusCode.BadRequest).json({
         status: "error",
-        message: "Company name is required",
-        data: null,
+        message: "Invalid company data",
+        data: validationResult.error.format(),
       });
     }
 
-    const company = await prisma.company.create({
-      data: {
-        name,
-        logo,
-        description,
-        website,
-        phone_number,
-        email,
-        address,
-      },
+    const {
+      name,
+      logo,
+      description,
+      website,
+      phone_number,
+      email,
+      address,
+      manager,
+    } = validationResult.data;
+
+    // Create a transaction to create both the company manager user and the company
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Create manager user
+      const hashedPassword = await hash(manager.password, 10);
+
+      const managerUser = await tx.user.create({
+        data: {
+          name: manager.name,
+          email: manager.email,
+          password: hashedPassword,
+          phoneNumber: manager.phone_number,
+          role: UserRole.COMPANY_MANAGER,
+        },
+      });
+
+      // 2. Create company with manager relationship
+      const company = await tx.company.create({
+        data: {
+          name,
+          logo,
+          description,
+          website,
+          phone_number,
+          email,
+          address,
+          manager_id: managerUser.id,
+        },
+        include: {
+          manager: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phoneNumber: true,
+            },
+          },
+        },
+      });
+
+      return { company, managerUser };
     });
 
     res.status(HttpStatusCode.Ok).json({
       status: "success",
-      message: "Company created successfully",
-      data: { company },
+      message: "Company created successfully with manager account",
+      data: {
+        company: result.company,
+      },
     });
   } catch (err) {
     Logger.error({ message: "Error creating company: " + err });
@@ -206,6 +293,16 @@ export const getCompany = async (
 
     const company = await prisma.company.findUnique({
       where: { id },
+      include: {
+        manager: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phoneNumber: true,
+          },
+        },
+      },
     });
 
     if (!company) {
@@ -317,6 +414,16 @@ export const updateCompany = async (
     const updatedCompany = await prisma.company.update({
       where: { id },
       data: updateData,
+      include: {
+        manager: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phoneNumber: true,
+          },
+        },
+      },
     });
 
     res.status(HttpStatusCode.Ok).json({
@@ -484,6 +591,16 @@ export const getAllCompanies = async (
       prisma.company.findMany({
         skip,
         take: limit,
+        include: {
+          manager: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phoneNumber: true,
+            },
+          },
+        },
       }),
       prisma.company.count(),
     ]);
@@ -590,6 +707,16 @@ export const searchCompany = async (
       // Search by ID (exact match)
       const company = await prisma.company.findUnique({
         where: { id: String(term) },
+        include: {
+          manager: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phoneNumber: true,
+            },
+          },
+        },
       });
 
       companies = company ? [company] : [];
@@ -601,6 +728,16 @@ export const searchCompany = async (
           email: { contains: String(term), mode: "insensitive" },
         },
         take: searchLimit,
+        include: {
+          manager: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phoneNumber: true,
+            },
+          },
+        },
       });
 
       total = await prisma.company.count({
@@ -615,6 +752,16 @@ export const searchCompany = async (
           name: { contains: String(term), mode: "insensitive" },
         },
         take: searchLimit,
+        include: {
+          manager: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phoneNumber: true,
+            },
+          },
+        },
       });
 
       total = await prisma.company.count({
@@ -649,6 +796,179 @@ export const searchCompany = async (
     res.status(HttpStatusCode.InternalServerError).json({
       status: "error",
       message: "Error searching companies",
+      data: null,
+    });
+  }
+};
+
+/**
+ * @openapi
+ * /api/v1/company/login:
+ *   post:
+ *     summary: Login as a company manager
+ *     tags: [Company]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Company manager email
+ *               password:
+ *                 type: string
+ *                 description: Company manager password
+ *     responses:
+ *       200:
+ *         description: Company manager logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Company manager logged in successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *                     company:
+ *                       $ref: '#/components/schemas/Company'
+ *       400:
+ *         description: Bad request - Invalid credentials or not a company manager
+ *       500:
+ *         description: Internal server error
+ */
+export const loginCompany = async (
+  req: Request,
+  res: Response<IServerResponse>
+) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate input data
+    const validationResults = AdminLoginSchema.safeParse({
+      email,
+      password,
+    });
+
+    if (!validationResults.success) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "Please enter valid email and password",
+        data: validationResults.error,
+      });
+    }
+
+    // Find user by email
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+        isActive: true,
+        role: UserRole.COMPANY_MANAGER,
+      },
+    });
+
+    // Check if user exists and is a company manager
+    if (!user || user.role !== UserRole.COMPANY_MANAGER) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message:
+          "Invalid credentials or you don't have company manager privileges",
+        data: null,
+      });
+    }
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(password, user.password || "");
+
+    if (!isPasswordValid) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "Invalid credentials",
+        data: null,
+      });
+    }
+
+    // Find associated company
+    const company = await prisma.company.findUnique({
+      where: {
+        manager_id: user.id,
+      },
+    });
+
+    if (!company) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "No company associated with this account",
+        data: null,
+      });
+    }
+
+    // Update last login timestamp
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { lastLogin: new Date() },
+    });
+
+    // Generate JWT token
+    const signedToken = signJwtToken({
+      id: user.id,
+      role: user.role,
+      expiresIn: "14d",
+    });
+
+    if (signedToken.status === "error") {
+      return res.status(HttpStatusCode.InternalServerError).json({
+        status: "error",
+        message: "Error generating authentication token",
+        data: null,
+      });
+    }
+
+    // Set auth cookie
+    res.cookie("_insr010usr", signedToken.data.signed, {
+      maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
+      path: "/",
+      domain: Config.COOKIE_DOMAIN,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      httpOnly: isProduction,
+    });
+
+    // Return user and company data
+    res.status(HttpStatusCode.Ok).json({
+      status: "success",
+      message: "Company manager logged in successfully",
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          phoneNumber: user.phoneNumber,
+          createdAt: user.created_at,
+          isActive: user.isActive,
+        },
+        company,
+      },
+    });
+  } catch (err) {
+    Logger.error({ message: "Error during company manager login: " + err });
+
+    res.status(HttpStatusCode.InternalServerError).json({
+      status: "error",
+      message: "Error during company manager login",
       data: null,
     });
   }

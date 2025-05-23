@@ -20,6 +20,7 @@ datasource db {
 enum UserRole {
   ADMIN // Site administrator
   USER // Normal user
+  COMPANY_MANAGER // Company manager with limited access
 }
 
 enum ReportStatus {
@@ -54,6 +55,7 @@ model User {
   chats          Chat[]
   passwordResets PasswordReset[]
   siteSettings   SiteSetting[]
+  managedCompany Company?        @relation("CompanyManager")
 }
 
 // Company model
@@ -68,7 +70,9 @@ model Company {
   address      String?  @default("")
   created_at   DateTime @default(now())
   update_at    DateTime @updatedAt
+  manager_id   String?  @unique
 
+  manager  User?    @relation("CompanyManager", fields: [manager_id], references: [id])
   bounties Bounty[]
 }
 

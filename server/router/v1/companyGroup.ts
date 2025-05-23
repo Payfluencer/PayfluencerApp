@@ -6,6 +6,7 @@ import {
   deleteCompany,
   getAllCompanies,
   searchCompany,
+  loginCompany,
 } from "../../controllers/company.Controller";
 import { userAuth } from "../../middleware/userAuth";
 import { UserRole } from "../../prisma/generated/prisma/client";
@@ -29,5 +30,8 @@ router.get("/all", userAuth([UserRole.ADMIN]), getAllCompanies);
 
 // Search companies by id, email, or name
 router.get("/search", userAuth([UserRole.ADMIN]), searchCompany);
+
+// Company manager login
+router.post("/login", loginCompany);
 
 export default router;
