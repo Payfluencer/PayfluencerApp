@@ -18,6 +18,24 @@ interface Admin {
     };
   };
 }
+
+interface User {
+  status: string;
+  message: string;
+  data: {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+      role: string;
+      phoneNumber: string;
+      createdAt: string;
+      isActive: boolean;
+      profilePicture: string;
+      isNewUser: true;
+    };
+  };
+}
 export const useAuth = (role: "admin" | "user") => {
   const navigate = useNavigate();
   const {
@@ -39,7 +57,8 @@ export const useAuth = (role: "admin" | "user") => {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to login");
+        const errorData = await response.json();
+        throw new Error(errorData.message);
       }
       const adminData = await response.json();
       console.log(adminData);
@@ -55,10 +74,48 @@ export const useAuth = (role: "admin" | "user") => {
     },
   });
 
+  const {
+    mutate: loginUser,
+    isPending: isUserLoading,
+    error: userError,
+  } = useMutation({
+    mutationKey: ["user", role],
+    mutationFn: async (idToken: string) => {
+      const response = await fetch(`${API_URL}/api/v1/auth/google`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idToken: idToken,
+        }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+      const userData = await response.json();
+      console.log(userData);
+      return userData as User;
+    },
+    onSuccess: (data) => {
+      if (data.status === "success") {
+        navigate("/home", { state: { userDetails: data.data.user } });
+      }
+    },
+    onError: (error) => {
+      console.error("Login failed:", error);
+    },
+  });
+
   return {
     loginAdmin,
     isAdminLoading,
     adminError,
+    loginUser,
+    isUserLoading,
+    userError,
   };
 };
 

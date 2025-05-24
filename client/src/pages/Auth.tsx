@@ -1,7 +1,6 @@
 import Lottie from "lottie-react";
 import animationData from "../assets/lottie/ms.json";
 import { FaGoogle, FaSpinner } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,20 +17,51 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import logo from "../assets/images/image.png";
 import { useAuth } from "../hooks/useAuth";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function UserAuthentication() {
+  const { loginUser, userError } = useAuth("user");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      console.log("Auth code received:", codeResponse.code);
+      loginUser(codeResponse.code);
+      setIsLoading(false);
+    },
+    onError: (error) => {
+      console.log("Google login error:", error);
+      setIsLoading(false);
+    },
+    flow: "auth-code",
+  });
+
+  const handleLogin = () => {
+    setIsLoading(true);
+    login();
+  };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="animate-spin" />
+      </div>
+    );
+  }
+  if (userError) {
+    return <div className="text-red-500">Error: {userError.message}</div>;
+  }
   return (
     <div className="w-[400px] h-[400px] rounded-md flex flex-col items-center justify-center gap-4 bg-white p-4 mx-2 md:mx-0">
       <Lottie animationData={animationData} loop={true} />
-      <Link
-        to="/home"
+      <Button
+        onClick={handleLogin}
         className="bg-[#000] text-white px-4 flex items-center w-full gap-2 py-2 rounded-xl text-xl h-12"
         style={{ fontFamily: "KarlaRegular" }}
       >
         <div className="flex gap-2 items-center justify-center w-full">
           <FaGoogle /> Sign in with Google
         </div>
-      </Link>
+      </Button>
     </div>
   );
 }
