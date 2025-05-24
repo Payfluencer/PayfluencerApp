@@ -4,7 +4,7 @@ import { authenticatedFetch } from "./useAuth";
 
 const API_URL = "http://localhost:8001";
 
-interface Bounty {
+export interface Bounty {
   id: string;
   title: string;
   description: string;
@@ -104,6 +104,7 @@ const useBounties = () => {
     bountiesError,
     totalPayout,
     payoutChange,
+    allBounties: bounties?.data?.bounties || [],
   };
 };
 

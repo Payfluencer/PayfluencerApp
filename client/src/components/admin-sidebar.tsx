@@ -31,7 +31,7 @@ const items = [
     title: "Bounties",
     url: "#",
     icon: Coins,
-    path: "/bounties",
+    path: "/admin/bounties",
   },
   {
     title: "Submissions",
@@ -67,7 +67,7 @@ export function AdminSidebar() {
                 className="text-2xl font-bold uppercase"
                 style={{ fontFamily: "KarlaSemiBold" }}
               >
-                Payfluence
+                Payfluencer
               </h1>
             </div>
           </SidebarGroupLabel>
