@@ -45,11 +45,17 @@ export const useSubmissions = () => {
       return data as SubmissionResponse;
     },
   });
+  function getSubmissionsByStatus(status: string) {
+    return submissionsResponse?.data.reports.filter(
+      (submission) => submission.status.toLowerCase() === status.toLowerCase()
+    );
+  }
 
   return {
     submissionsResponse,
     isSubmissionsLoading,
     submissionsError,
+    getSubmissionsByStatus,
   };
 };
 

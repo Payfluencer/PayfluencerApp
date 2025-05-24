@@ -6,7 +6,7 @@ import { columns } from "@/lib/reports-submission-column";
 import { useSubmissions } from "@/hooks/useSubmissions";
 
 function Submissions() {
-  const { submissionsResponse } = useSubmissions();
+  const { submissionsResponse, getSubmissionsByStatus } = useSubmissions();
   return (
     <div className="bg-[#efeff0]">
       <AdminPagesWrapper>
@@ -37,7 +37,7 @@ function Submissions() {
               className="text-4xl text-gray-500 my-8"
               style={{ fontFamily: "KarlaSemiBold" }}
             >
-              14
+              {getSubmissionsByStatus("PENDING")?.length || 0}
             </p>
           </div>
           <div className="rounded-4xl p-4 w-full md:w-64 border border-[#bfbfc5]">
@@ -59,7 +59,7 @@ function Submissions() {
               className="text-4xl text-gray-500 my-8"
               style={{ fontFamily: "KarlaSemiBold" }}
             >
-              14
+              {getSubmissionsByStatus("APPROVED")?.length || 0}
             </p>
           </div>
           <div className=" rounded-4xl p-4 w-full md:w-64 border border-[#bfbfc5]">
@@ -81,7 +81,7 @@ function Submissions() {
               className="text-4xl text-[#fa5e06] my-8"
               style={{ fontFamily: "KarlaSemiBold" }}
             >
-              7
+              {getSubmissionsByStatus("REJECTED")?.length || 0}
             </p>
           </div>
           <div className=" rounded-4xl p-4 w-full md:w-64 border border-[#bfbfc5]">
@@ -103,16 +103,16 @@ function Submissions() {
               className="text-4xl text-gray-500 my-8"
               style={{ fontFamily: "KarlaSemiBold" }}
             >
-              2
+              {getSubmissionsByStatus("SETTLED")?.length || 0}
             </p>
           </div>
         </div>
-        <div className="flex flex-col gap-8 justify-between md:flex-row">
-          <SubmissionsSummary />
+        <div className="flex flex-col gap-8 justify-between md:flex-row max-w-[1240px] mx-auto my-0">
           <ReportsTable
             columns={columns}
             data={submissionsResponse?.data.reports || []}
           />
+          <SubmissionsSummary />
         </div>
       </AdminPagesWrapper>
     </div>

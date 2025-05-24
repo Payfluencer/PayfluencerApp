@@ -7,12 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { status: "Rejected", number: 186, fill: "#fa5e06", label: "Rejected" },
-  { status: "Approved", number: 305, fill: "#008000", label: "Approved" },
-  { status: "Pending", number: 237, fill: "#0000ff", label: "Pending" },
-  { status: "Settled", number: 73, fill: "#ffa500", label: "Settled" },
-];
+import { useSubmissions } from "@/hooks/useSubmissions";
 
 const chartConfig = {
   status: {
@@ -22,6 +17,33 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function SubmissionsSummary() {
+  const { getSubmissionsByStatus } = useSubmissions();
+  const chartData = [
+    {
+      status: "Rejected",
+      number: getSubmissionsByStatus("REJECTED")?.length || 1,
+      fill: "#fa5e06",
+      label: "Rejected",
+    },
+    {
+      status: "Approved",
+      number: getSubmissionsByStatus("APPROVED")?.length || 2,
+      fill: "#008000",
+      label: "Approved",
+    },
+    {
+      status: "Pending",
+      number: getSubmissionsByStatus("PENDING")?.length || 3,
+      fill: "#0000ff",
+      label: "Pending",
+    },
+    {
+      status: "Settled",
+      number: getSubmissionsByStatus("SETTLED")?.length || 1,
+      fill: "#ffa500",
+      label: "Settled",
+    },
+  ];
   return (
     <Card className="w-full md:w-[30%] rounded-4xl shadow-none border border-[#bfbfc5]">
       <CardHeader
