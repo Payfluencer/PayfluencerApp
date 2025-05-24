@@ -26,7 +26,7 @@ const chartConfig = {
 
 export function AdminPayoutChart() {
   return (
-    <Card>
+    <Card className="">
       <CardContent>
         {chartData.length > 0 ? (
           <ChartContainer config={chartConfig}>

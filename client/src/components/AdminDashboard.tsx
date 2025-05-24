@@ -227,7 +227,7 @@ function AdminDashboard() {
                     </p>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
+                  <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl h-[400px] p-4 mt-4">
                     {companies?.data.companies.map((company) => (
                       <TopCompaniesSummary key={company.name} {...company} />
                     ))}
