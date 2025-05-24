@@ -128,8 +128,8 @@ function AdminDashboard() {
                     className="text-3xl text-start mt-4 mb-8"
                   >
                     {isCompaniesLoading ? (
-                      <span className="text-gray-500 animate-spin">
-                        <FaSpinner />
+                      <span className="flex items-center justify-center">
+                        <FaSpinner className="text-gray-500 animate-spin" />
                       </span>
                     ) : (
                       companies?.data.totalCompanies
@@ -152,8 +152,8 @@ function AdminDashboard() {
                     className="text-3xl text-start mt-4 mb-8 text-gray-300"
                   >
                     {isBountiesLoading ? (
-                      <span className="text-gray-500 animate-spin">
-                        <FaSpinner />
+                      <span className="flex items-center justify-center">
+                        <FaSpinner className="text-gray-500 animate-spin" />
                       </span>
                     ) : (
                       bounties?.data.totalBounties
