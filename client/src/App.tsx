@@ -6,6 +6,7 @@ import Messages from "./pages/Messages";
 import AdminInbox from "./pages/AdminInbox";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Bounties from "./pages/Bounties";
+import Submissions from "./pages/Submissions";
 
 function App() {
   const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ function App() {
           <Route path="/inbox" element={<Messages />} />
           <Route path="/admin/inbox" element={<AdminInbox />} />
           <Route path="/admin/bounties" element={<Bounties />} />
+          <Route path="/admin/submissions" element={<Submissions />} />
         </Routes>
       </Router>
     </QueryClientProvider>

@@ -21,7 +21,7 @@ function Footer() {
               className="text-4xl font-bold text-center my-8"
               style={{ fontFamily: "KarlaSemiBold" }}
             >
-              PAYFLUENCE
+              PAYFLUENCER
             </h1>
           </motion.div>
 

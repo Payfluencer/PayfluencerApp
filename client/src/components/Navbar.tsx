@@ -11,7 +11,7 @@ function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
           className="text-2xl font-bold uppercase"
           style={{ fontFamily: "KarlaSemiBold" }}
         >
-          Payfluence
+          Payfluencer
         </h1>
       </div>
       <div className="items-center justify-between hidden md:flex">

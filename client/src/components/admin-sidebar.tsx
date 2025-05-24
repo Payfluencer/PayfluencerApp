@@ -37,7 +37,7 @@ const items = [
     title: "Submissions",
     url: "#",
     icon: Receipt,
-    path: "/submissions",
+    path: "/admin/submissions",
   },
   {
     title: "Companies",

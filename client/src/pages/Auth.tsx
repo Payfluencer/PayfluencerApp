@@ -160,7 +160,7 @@ function Auth() {
           className="text-2xl font-bold uppercase"
           style={{ fontFamily: "KarlaSemiBold" }}
         >
-          Payfluence
+          Payfluencer
         </h1>
       </div>
       {isAdmin ? <AdminAuthentication /> : <UserAuthentication />}
