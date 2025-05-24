@@ -129,7 +129,7 @@ function UserDashboard() {
               Top Submissions
             </h1>
             <div className="flex items-center justify-between flex-col md:flex-row">
-              <div className=" bg-[#f6f7f9] rounded-4xl p-1 mt-4 w-full md:w-3/4">
+              <div className=" bg-[#efeff0] rounded-4xl p-1 mt-4 w-full md:w-3/4">
                 <div className="flex flex-col md:flex-row justify-between gap-4">
                   {mySubmissions.map((submission) => (
                     <TopSubmission key={submission.name} {...submission} />
@@ -161,7 +161,7 @@ function UserDashboard() {
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
-                <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
+                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
                   {topBounties.map((bounty) => (
                     <TopBounties key={bounty.name} {...bounty} />
                   ))}
@@ -174,7 +174,7 @@ function UserDashboard() {
                 >
                   My Payout Summary
                 </h1>
-                <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
+                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
                   <PayoutChart />
                 </div>
               </div>

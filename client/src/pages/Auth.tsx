@@ -153,7 +153,7 @@ function AdminAuthentication() {
 function Auth() {
   const [isAdmin, setIsAdmin] = useState(false);
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-[#f6f7f9]">
+    <div className="flex flex-col items-center justify-center h-screen bg-[#efeff0]">
       <div className="flex items-center mb-8">
         <img src={logo} alt="logo" className="w-10 h-10" />
         <h1

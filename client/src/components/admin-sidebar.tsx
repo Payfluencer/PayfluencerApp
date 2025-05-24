@@ -58,7 +58,7 @@ export function AdminSidebar() {
   const pathname = path.pathname;
   return (
     <Sidebar className="border-none ">
-      <SidebarContent className="bg-[#f7f9f6]">
+      <SidebarContent className="bg-[#efeff0]">
         <SidebarGroup className="">
           <SidebarGroupLabel className="my-10">
             <div className="flex items-center">

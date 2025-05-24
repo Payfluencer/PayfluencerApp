@@ -3,7 +3,7 @@ import AdminDashboard from "@/components/AdminDashboard";
 
 function Dashboard() {
   return (
-    <div className="bg-[#f6f7f9]">
+    <div className="bg-[#efeff0]">
       {/* <UserDashboard /> */}
       <AdminDashboard />
     </div>

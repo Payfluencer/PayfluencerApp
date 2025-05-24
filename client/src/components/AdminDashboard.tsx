@@ -1,10 +1,10 @@
 import { AdminSidebar } from "./admin-sidebar";
 import { SidebarProvider } from "./ui/sidebar";
 import { SidebarTrigger } from "./ui/sidebar";
-import { topCompanies } from "@/lib/mock";
 import TopEarners from "./TopEarners";
 import { Button } from "./ui/button";
 import {
+  FaAngleDoubleDown,
   FaAngleDoubleUp,
   FaArrowRight,
   FaCaretDown,
@@ -27,6 +27,8 @@ function AdminDashboard() {
   const { bounties, isBountiesLoading, totalPayout, payoutChange } =
     useBounties();
   const { topEarners, isUsersLoading } = useUsers();
+
+  console.log(companies?.data.companies);
   return (
     <>
       <SidebarProvider>
@@ -71,7 +73,11 @@ function AdminDashboard() {
                           : "bg-red-500"
                       }`}
                     >
-                      <FaAngleDoubleUp />
+                      {payoutChange.payoutChange >= 0 ? (
+                        <FaAngleDoubleUp />
+                      ) : (
+                        <FaAngleDoubleDown />
+                      )}
                       {payoutChange.payoutChange}%
                     </p>
                     <p
@@ -82,8 +88,12 @@ function AdminDashboard() {
                           : "bg-red-500"
                       }`}
                     >
-                      <FaAngleDoubleUp />$
-                      {payoutChange.payoutChangeAmount?.toLocaleString()}
+                      {payoutChange.payoutChange >= 0 ? (
+                        <FaAngleDoubleUp />
+                      ) : (
+                        <FaAngleDoubleDown />
+                      )}
+                      ${payoutChange.payoutChangeAmount?.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -210,11 +220,19 @@ function AdminDashboard() {
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
-                <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
-                  {topCompanies.map((company) => (
-                    <TopCompaniesSummary key={company.name} {...company} />
-                  ))}
-                </div>
+                {isCompaniesLoading ? (
+                  <div className="flex flex-col md:flex-row gap-4 items-center justify-center h-full">
+                    <p>
+                      <FaSpinner className="text-gray-500 animate-spin" />
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
+                    {companies?.data.companies.map((company) => (
+                      <TopCompaniesSummary key={company.name} {...company} />
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="w-full md:w-1/2">
                 <h1
@@ -223,7 +241,7 @@ function AdminDashboard() {
                 >
                   Bounties Summary
                 </h1>
-                <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
+                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
                   <AdminPayoutChart />
                 </div>
               </div>

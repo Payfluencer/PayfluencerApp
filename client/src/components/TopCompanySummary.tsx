@@ -1,27 +1,29 @@
-export interface TopCompaniesSummary {
-  name: string;
-  bounties: number;
-  profile: string;
-}
+import { type Company as CompanyType } from "@/hooks/useGetCompanies";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-function TopCompaniesSummary({ name, bounties, profile }: TopCompaniesSummary) {
+function TopCompaniesSummary({ name, id, logo }: CompanyType) {
   return (
     <div className="flex items-center justify-between bg-white rounded-xl p-2">
       <div className="flex items-center gap-2">
         <img
-          src={profile}
+          src={logo}
           alt={name}
           width={40}
           height={40}
-          className="rounded-full"
+          className="rounded-full object-contain border-[1px] border-gray-400 w-14 h-14"
         />
         <p style={{ fontFamily: "KarlaRegular" }} className="text-lg">
           {name}
         </p>
       </div>
-      <p style={{ fontFamily: "KarlaSemiBold" }} className="text-lg">
-        {bounties} Bounties
-      </p>
+      <Link
+        to={`/company/${id}`}
+        style={{ fontFamily: "KarlaSemiBold" }}
+        className="text-lg"
+      >
+        <FaExternalLinkAlt size={20} />
+      </Link>
     </div>
   );
 }

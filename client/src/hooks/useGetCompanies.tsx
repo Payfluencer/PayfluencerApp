@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { authenticatedFetch } from "./useAuth";
 
-interface Company {
+export interface Company {
   id: string;
   name: string;
   phone_number: string;
