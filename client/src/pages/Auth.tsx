@@ -1,7 +1,7 @@
 import Lottie from "lottie-react";
 import animationData from "../assets/lottie/ms.json";
 import { FaGoogle, FaSpinner } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +17,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import logo from "../assets/images/image.png";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 function UserAuthentication() {
   return (
@@ -37,7 +37,6 @@ function UserAuthentication() {
 }
 
 function AdminAuthentication() {
-  const navigate = useNavigate();
   const { loginAdmin, isAdminLoading, adminError } = useAuth("admin");
   const formSchema = z.object({
     username: z
@@ -63,12 +62,10 @@ function AdminAuthentication() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const adminDetails = loginAdmin({
+      loginAdmin({
         email: values.username,
         password: values.password,
       });
-      console.log(adminDetails);
-      navigate("/home", { state: { adminDetails } });
     } catch (error) {
       console.error("Login failed:", error);
     }

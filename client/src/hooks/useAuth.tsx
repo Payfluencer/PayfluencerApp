@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:8001";
@@ -29,6 +29,7 @@ export const useAuth = (role: "admin" | "user") => {
     mutationFn: async (loginData: { email: string; password: string }) => {
       const response = await fetch(`${API_URL}/api/v1/user/admin/login`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -41,11 +42,12 @@ export const useAuth = (role: "admin" | "user") => {
         throw new Error("Failed to login");
       }
       const adminData = await response.json();
+      console.log(adminData);
       return adminData as Admin;
     },
     onSuccess: (data) => {
       if (data.status === "success") {
-        navigate("/home");
+        navigate("/home", { state: { adminDetails: data } });
       }
     },
     onError: (error) => {
@@ -59,3 +61,30 @@ export const useAuth = (role: "admin" | "user") => {
     adminError,
   };
 };
+
+export const authenticatedFetch = async (
+  url: string,
+  options: RequestInit = {}
+) => {
+  const defaultOptions: RequestInit = {
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+    ...options,
+  };
+
+  const response = await fetch(url, defaultOptions);
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Unauthorized - please login again");
+    }
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response;
+};
+
+export default useAuth;
