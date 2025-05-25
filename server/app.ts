@@ -30,7 +30,7 @@ const limiter = rateLimit({
 // Middleware
 app.use(
   cors({
-    origin: [Config.FRONTEND_URL],
+    origin: [Config.FRONTEND_URL, "http://localhost:5173"].filter(Boolean),
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

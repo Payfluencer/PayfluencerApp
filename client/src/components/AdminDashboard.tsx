@@ -1,23 +1,34 @@
 import { AdminSidebar } from "./admin-sidebar";
 import { SidebarProvider } from "./ui/sidebar";
 import { SidebarTrigger } from "./ui/sidebar";
-import { topCompanies, topEarners } from "@/lib/mock";
 import TopEarners from "./TopEarners";
 import { Button } from "./ui/button";
 import {
+  FaAngleDoubleDown,
   FaAngleDoubleUp,
   FaArrowRight,
   FaCaretDown,
+  FaInfo,
+  FaSpinner,
   FaTimes,
 } from "react-icons/fa";
 import { useState } from "react";
 import { AdminPayoutChart } from "./AdminPayoutChart";
 import TopCompaniesSummary from "./TopCompanySummary";
 import { Calendar } from "./ui/calendar";
+import { useGetCompanies } from "@/hooks/useGetCompanies";
+import useBounties from "@/hooks/useBounties";
+import { useUsers } from "@/hooks/useUsers";
 
 function AdminDashboard() {
   const [dateModal, setDateModal] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const { companies, isCompaniesLoading } = useGetCompanies();
+  const { bounties, isBountiesLoading, totalPayout, payoutChange } =
+    useBounties();
+  const { topEarners, isUsersLoading } = useUsers();
+
+  console.log(companies?.data.companies);
   return (
     <>
       <SidebarProvider>
@@ -51,22 +62,38 @@ function AdminDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl md:text-5xl my-2 text-[#fa5e06]"
                   >
-                    $14,900.86
+                    ${totalPayout}
                   </p>
                   <div className="flex items-center gap-2 ">
                     <p
                       style={{ fontFamily: "KarlaRegular" }}
-                      className="text-sm text-gray-100 bg-green-500 rounded-full px-2 py-1 flex items-center gap-2"
+                      className={`text-sm text-gray-100 rounded-full px-2 py-1 flex items-center gap-2 ${
+                        payoutChange.payoutChange >= 0
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      }`}
                     >
-                      <FaAngleDoubleUp />
-                      +10%
+                      {payoutChange.payoutChange >= 0 ? (
+                        <FaAngleDoubleUp />
+                      ) : (
+                        <FaAngleDoubleDown />
+                      )}
+                      {payoutChange.payoutChange}%
                     </p>
                     <p
                       style={{ fontFamily: "KarlaRegular" }}
-                      className="text-sm text-gray-100 bg-green-500 rounded-full px-2 py-1 flex items-center gap-2"
+                      className={`text-sm text-gray-100 rounded-full px-2 py-1 flex items-center gap-2 ${
+                        payoutChange.payoutChange >= 0
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      }`}
                     >
-                      <FaAngleDoubleUp />
-                      +$1,450.24
+                      {payoutChange.payoutChange >= 0 ? (
+                        <FaAngleDoubleUp />
+                      ) : (
+                        <FaAngleDoubleDown />
+                      )}
+                      ${payoutChange.payoutChangeAmount?.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -75,7 +102,8 @@ function AdminDashboard() {
                     style={{ fontFamily: "KarlaRegular" }}
                     className="text-lg text-gray-500"
                   >
-                    Vs Previous Month: $13,450.24
+                    Vs Previous Month: $
+                    {payoutChange.lastMonthPayout?.toLocaleString() || 0}
                   </p>
                   <Button
                     className=" text-gray-500 shadow-none hover:bg-transparent cursor-pointer bg-transparent text-lg flex gap-2 items-center"
@@ -99,7 +127,13 @@ function AdminDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8"
                   >
-                    14
+                    {isCompaniesLoading ? (
+                      <span className="flex items-center justify-center">
+                        <FaSpinner className="text-gray-500 animate-spin" />
+                      </span>
+                    ) : (
+                      companies?.data.totalCompanies
+                    )}
                   </p>
                   <Button className="text-gray-900 hover:bg-transparent  bg-transparent shadow-none left-0 right-0 flex gap-2 items-center justify-between absolute bottom-0 ">
                     More
@@ -117,7 +151,13 @@ function AdminDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8 text-gray-300"
                   >
-                    36
+                    {isBountiesLoading ? (
+                      <span className="flex items-center justify-center">
+                        <FaSpinner className="text-gray-500 animate-spin" />
+                      </span>
+                    ) : (
+                      bounties?.data.totalBounties
+                    )}
                   </p>
                   <Button className="text-[#fa5e06] bg-transparent  shadow-none left-0 right-0 flex gap-2 items-center justify-between absolute bottom-0 ">
                     More
@@ -133,19 +173,34 @@ function AdminDashboard() {
               Top Earners
             </h1>
             <div className="flex items-center justify-between flex-col md:flex-row">
-              <div className=" bg-[#f6f7f9] rounded-4xl p-1 mt-4 w-full md:w-3/4">
-                <div className="flex flex-col md:flex-row justify-between gap-4">
-                  {topEarners.map((earner) => (
-                    <TopEarners key={earner.name} {...earner} />
-                  ))}
-                </div>
+              <div className=" bg-[#efeff0] rounded-4xl p-2 mt-4 w-full md:w-3/4">
+                {isUsersLoading ? (
+                  <div className="flex flex-col md:flex-row gap-4 items-center justify-center h-full">
+                    <p>
+                      <FaSpinner className="text-gray-500 animate-spin" />
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col md:flex-row justify-between gap-4">
+                    {topEarners?.map((earner) => (
+                      <TopEarners key={earner.name} {...earner} />
+                    ))}
+                  </div>
+                )}
               </div>
               <Button
                 className="bg-transparent text-lg shadow-none hover:bg-transparent cursor-pointer text-gray-900 mt-4 md:mt-0"
                 style={{ fontFamily: "KarlaSemiBold" }}
+                disabled={!topEarners || topEarners.length === 0}
               >
-                View All
-                <FaArrowRight size={20} />
+                {!topEarners || topEarners.length === 0
+                  ? "No Earners"
+                  : "View All"}
+                {!topEarners || topEarners.length === 0 ? (
+                  <FaInfo size={20} />
+                ) : (
+                  <FaArrowRight size={16} />
+                )}
               </Button>
             </div>
             <div className="mt-10 flex flex-col gap-10 md:flex-row">
@@ -165,11 +220,19 @@ function AdminDashboard() {
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
-                <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
-                  {topCompanies.map((company) => (
-                    <TopCompaniesSummary key={company.name} {...company} />
-                  ))}
-                </div>
+                {isCompaniesLoading ? (
+                  <div className="flex flex-col md:flex-row gap-4 items-center justify-center h-full">
+                    <p>
+                      <FaSpinner className="text-gray-500 animate-spin" />
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl h-[400px] p-4 mt-4">
+                    {companies?.data.companies.map((company) => (
+                      <TopCompaniesSummary key={company.name} {...company} />
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="w-full md:w-1/2">
                 <h1
@@ -178,7 +241,7 @@ function AdminDashboard() {
                 >
                   Bounties Summary
                 </h1>
-                <div className="flex flex-col gap-1 bg-[#f6f7f9] rounded-4xl p-4 mt-4">
+                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
                   <AdminPayoutChart />
                 </div>
               </div>

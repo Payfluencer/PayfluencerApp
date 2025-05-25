@@ -31,13 +31,13 @@ const items = [
     title: "Bounties",
     url: "#",
     icon: Coins,
-    path: "/bounties",
+    path: "/admin/bounties",
   },
   {
     title: "Submissions",
     url: "#",
     icon: Receipt,
-    path: "/submissions",
+    path: "/admin/submissions",
   },
   {
     title: "Companies",
@@ -58,7 +58,7 @@ export function AdminSidebar() {
   const pathname = path.pathname;
   return (
     <Sidebar className="border-none ">
-      <SidebarContent className="bg-[#f7f9f6]">
+      <SidebarContent className="bg-[#efeff0]">
         <SidebarGroup className="">
           <SidebarGroupLabel className="my-10">
             <div className="flex items-center">
@@ -67,7 +67,7 @@ export function AdminSidebar() {
                 className="text-2xl font-bold uppercase"
                 style={{ fontFamily: "KarlaSemiBold" }}
               >
-                Payfluence
+                Payfluencer
               </h1>
             </div>
           </SidebarGroupLabel>
