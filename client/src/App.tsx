@@ -8,6 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Bounties from "./pages/Bounties";
 import Submissions from "./pages/Submissions";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import AdminDashboard from "./pages/AdminDashboard";
+import ErrorPage from "./pages/ErrorPage";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_OAUTH_ID;
 
@@ -22,9 +24,11 @@ function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/home" element={<Dashboard />} />
             <Route path="/inbox" element={<Messages />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/inbox" element={<AdminInbox />} />
             <Route path="/admin/bounties" element={<Bounties />} />
             <Route path="/admin/submissions" element={<Submissions />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </Router>
       </GoogleOAuthProvider>

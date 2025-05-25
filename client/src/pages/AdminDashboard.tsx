@@ -1,8 +1,8 @@
-import { AdminSidebar } from "./admin-sidebar";
-import { SidebarProvider } from "./ui/sidebar";
-import { SidebarTrigger } from "./ui/sidebar";
-import TopEarners from "./TopEarners";
-import { Button } from "./ui/button";
+import { AdminSidebar } from "@/components/admin-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import TopEarners from "@/components/TopEarners";
+import { Button } from "@/components/ui/button";
 import {
   FaAngleDoubleDown,
   FaAngleDoubleUp,
@@ -13,9 +13,9 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { useState } from "react";
-import { AdminPayoutChart } from "./AdminPayoutChart";
-import TopCompaniesSummary from "./TopCompanySummary";
-import { Calendar } from "./ui/calendar";
+import { AdminPayoutChart } from "@/components/AdminPayoutChart";
+import TopCompaniesSummary from "@/components/TopCompanySummary";
+import { Calendar } from "@/components/ui/calendar";
 import { useGetCompanies } from "@/hooks/useGetCompanies";
 import useBounties from "@/hooks/useBounties";
 import { useUsers } from "@/hooks/useUsers";
@@ -28,9 +28,8 @@ function AdminDashboard() {
     useBounties();
   const { topEarners, isUsersLoading } = useUsers();
 
-  console.log(companies?.data.companies);
   return (
-    <>
+    <div className="bg-[#efeff0]">
       <SidebarProvider>
         <AdminSidebar />
 
@@ -156,7 +155,7 @@ function AdminDashboard() {
                         <FaSpinner className="text-gray-500 animate-spin" />
                       </span>
                     ) : (
-                      bounties?.data.totalBounties
+                      bounties?.length
                     )}
                   </p>
                   <Button className="text-[#fa5e06] bg-transparent  shadow-none left-0 right-0 flex gap-2 items-center justify-between absolute bottom-0 ">
@@ -221,13 +220,13 @@ function AdminDashboard() {
                   </Button>
                 </div>
                 {isCompaniesLoading ? (
-                  <div className="flex flex-col md:flex-row gap-4 items-center justify-center h-full">
+                  <div className="flex flex-col md:flex-row gap-4 items-center justify-center min-h-[300px]">
                     <p>
                       <FaSpinner className="text-gray-500 animate-spin" />
                     </p>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl h-[400px] p-4 mt-4">
+                  <div className="flex flex-col gap-1 rounded-4xl min-h-[400px] p-4 mt-4">
                     {companies?.data.companies.map((company) => (
                       <TopCompaniesSummary key={company.name} {...company} />
                     ))}
@@ -297,7 +296,7 @@ function AdminDashboard() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

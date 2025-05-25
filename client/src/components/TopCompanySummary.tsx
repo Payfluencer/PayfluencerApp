@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function TopCompaniesSummary({ name, id, logo }: CompanyType) {
   return (
-    <div className="flex items-center justify-between bg-white rounded-xl p-2">
+    <div className="flex items-center justify-between bg-[#efeff0] rounded-3xl p-2 px-4">
       <div className="flex items-center gap-2">
         <img
           src={logo}

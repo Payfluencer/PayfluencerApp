@@ -145,7 +145,7 @@ function UserDashboard() {
             </h1>
             <div className="flex items-center justify-between flex-col md:flex-row">
               <div className=" bg-[#efeff0] rounded-4xl p-1 mt-4 w-full md:w-3/4">
-                <div className="flex flex-col md:flex-row justify-between gap-4">
+                <div className="flex flex-col md:flex-row justify-between gap-4 py-4 md:py-0">
                   {mySubmissions.map((submission) => (
                     <TopSubmission key={submission.name} {...submission} />
                   ))}
@@ -176,13 +176,13 @@ function UserDashboard() {
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
-                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4 min-h-[250px]">
+                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4 min-h-[280px]">
                   {bounties.length > 0 &&
                     bounties?.map((bounty) => (
                       <TopBounties key={bounty.id} {...bounty} />
                     ))}
                   {bounties.length === 0 && (
-                    <div className="flex items-center justify-center h-full min-h-[250px]">
+                    <div className="flex items-center justify-center h-full min-h-[280px]">
                       <p
                         style={{ fontFamily: "KarlaRegular" }}
                         className="text-gray-500"

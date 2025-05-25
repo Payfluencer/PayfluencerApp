@@ -61,12 +61,11 @@ export const useAuth = (role: "admin" | "user") => {
         throw new Error(errorData.message);
       }
       const adminData = await response.json();
-      console.log(adminData);
       return adminData as Admin;
     },
     onSuccess: (data) => {
       if (data.status === "success") {
-        navigate("/home", { state: { adminDetails: data } });
+        navigate("/admin");
       }
     },
     onError: (error) => {

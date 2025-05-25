@@ -1,4 +1,4 @@
-import AdminDashboard from "@/components/AdminDashboard";
+import AdminDashboard from "./AdminDashboard";
 import UserDashboard from "@/components/UserDashboard";
 import useUserStore from "@/store/user";
 
