@@ -5,16 +5,25 @@ import {
   FaAngleDoubleUp,
   FaArrowRight,
   FaCaretDown,
+  FaSpinner,
   FaTimes,
 } from "react-icons/fa";
-import { mySubmissions, topBounties } from "@/lib/mock";
+import { mySubmissions } from "@/lib/mock";
 import TopBounties from "./TopBounties";
 import { PayoutChart } from "./PayoutChart";
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import TopSubmission from "./TopSubmission";
+import useUserStore from "@/store/user";
+import { useUserSubmissions } from "@/hooks/useSubmissions";
+import useBounties from "@/hooks/useBounties";
 
 function UserDashboard() {
+  const { name, id } = useUserStore((state) => state);
+  const { userSubmissions, getPendingSubmissions, getRevenueEarned } =
+    useUserSubmissions(id);
+  const { bounties } = useBounties();
+  console.log(bounties);
   const [dateModal, setDateModal] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
@@ -33,7 +42,7 @@ function UserDashboard() {
                   Good Afternoon,
                 </h1>
                 <p style={{ fontFamily: "KarlaSemiBold" }} className="text-2xl">
-                  Sylus Abel
+                  {name}
                 </p>
               </div>
             </div>
@@ -42,14 +51,17 @@ function UserDashboard() {
                 <h1 style={{ fontFamily: "KarlaRegular" }} className="text-xl ">
                   Revenue
                 </h1>
-                <div className="flex items-center gap-2 md:gap-4">
+                <div className="flex items-center gap-2">
                   <p
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-5xl my-2 text-[#fa5e06]"
                   >
-                    $190.86
+                    $
+                    {getRevenueEarned() && (
+                      <FaSpinner className="animate-spin" />
+                    )}
                   </p>
-                  <div className="flex items-center gap-2 ">
+                  <div className="flex items-center gap-1">
                     <p
                       style={{ fontFamily: "KarlaRegular" }}
                       className="text-sm text-gray-100 bg-green-500 rounded-full px-2 py-1 flex items-center gap-2"
@@ -95,7 +107,9 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8"
                   >
-                    10
+                    {userSubmissions?.length && (
+                      <FaSpinner className="animate-spin" />
+                    )}
                   </p>
                   <Button className="text-gray-900 hover:bg-transparent  bg-transparent shadow-none left-0 right-0 flex gap-2 items-center justify-between absolute bottom-0 ">
                     View All
@@ -113,7 +127,9 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8 text-gray-300"
                   >
-                    3
+                    {getPendingSubmissions()?.length && (
+                      <FaSpinner className="animate-spin" />
+                    )}
                   </p>
                   <Button className="text-[#fa5e06] bg-transparent  shadow-none left-0 right-0 flex gap-2 items-center justify-between absolute bottom-0 ">
                     View All
@@ -162,9 +178,20 @@ function UserDashboard() {
                   </Button>
                 </div>
                 <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
-                  {topBounties.map((bounty) => (
-                    <TopBounties key={bounty.name} {...bounty} />
-                  ))}
+                  {bounties.length > 0 &&
+                    bounties?.map((bounty) => (
+                      <TopBounties key={bounty.id} {...bounty} />
+                    ))}
+                  {bounties.length === 0 && (
+                    <div className="flex items-center justify-center h-full">
+                      <p
+                        style={{ fontFamily: "KarlaRegular" }}
+                        className="text-gray-500"
+                      >
+                        No bounties found
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="w-full md:w-1/2">

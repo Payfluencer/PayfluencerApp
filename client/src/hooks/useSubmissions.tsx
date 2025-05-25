@@ -84,3 +84,41 @@ export const useSubmission = (id: string) => {
     submissionError,
   };
 };
+
+export const useUserSubmissions = (userId: string) => {
+  const {
+    data: userSubmissions,
+    isLoading: isUserSubmissionsLoading,
+    error: userSubmissionsError,
+  } = useQuery<SubmissionResponse>({
+    queryKey: ["userSubmissions"],
+    queryFn: async () => {
+      const response = await authenticatedFetch(
+        `${API_URL}/api/v1/report/user/${userId}`,
+        {
+          method: "GET",
+        }
+      );
+      const data = await response.json();
+      return data as SubmissionResponse;
+    },
+  });
+  function getRevenueEarned() {
+    // TODO: Request backend to add an amount to report/submission
+    return 0;
+  }
+  function getPendingSubmissions() {
+    return (
+      userSubmissions?.data.reports.filter(
+        (submission) => submission.status.toLowerCase() === "pending"
+      ) || []
+    );
+  }
+  return {
+    userSubmissions: userSubmissions?.data.reports || [],
+    isUserSubmissionsLoading,
+    userSubmissionsError,
+    getRevenueEarned,
+    getPendingSubmissions,
+  };
+};

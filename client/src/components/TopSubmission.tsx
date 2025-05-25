@@ -1,3 +1,5 @@
+import { FaCheckCircle, FaTimes } from "react-icons/fa";
+
 export interface TopSubmission {
   name: string;
   amount: number;
@@ -6,17 +8,10 @@ export interface TopSubmission {
   date: string;
 }
 
-function TopSubmission({ name, amount, profile, paid }: TopSubmission) {
+function TopSubmission({ name, amount, paid }: TopSubmission) {
   return (
     <div className="flex items-center justify-between bg-white rounded-3xl p-2 w-full">
       <div className="flex items-center gap-2">
-        <img
-          src={profile}
-          alt={name}
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
         <p style={{ fontFamily: "KarlaRegular" }} className="text-lg">
           {name}
         </p>
@@ -26,7 +21,11 @@ function TopSubmission({ name, amount, profile, paid }: TopSubmission) {
           style={{ fontFamily: "KarlaSemiBold" }}
           className={`text-sm ${paid ? "text-green-500" : "text-red-500"}`}
         >
-          {paid ? "Paid" : "Pending"}
+          {paid ? (
+            <FaCheckCircle color="green" />
+          ) : (
+            <FaTimes className="" color="red" />
+          )}
         </p>
       </div>
       <p style={{ fontFamily: "KarlaSemiBold" }} className="text-lg">

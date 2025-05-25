@@ -6,15 +6,32 @@ import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FaGoogle } from "react-icons/fa";
 import { Button } from "./ui/button";
+import useUserStore from "@/store/user";
+
+export interface LoggedInUser {
+  id: string;
+  email: string;
+  name: string;
+  role: TRole;
+  phoneNumber: string | null;
+  profilePicture: string;
+  isActive: boolean;
+  isNewUser: boolean;
+  createdAt: string;
+}
+
+export type TRole = "ADMIN" | "USER" | "COMPANY_MANAGER";
 
 const GoogleLoginBtn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { setDetails } = useUserStore((state) => state);
 
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      handleUserLogin(tokenResponse.access_token);
+      handleUserLogin(tokenResponse.code);
     },
+    flow: "auth-code",
     onError: (error) => {
       console.error(error);
       setIsLoading(false);
@@ -34,10 +51,9 @@ const GoogleLoginBtn = () => {
 
       if (!response?.data?.data?.user) return toast.error("Login failed.");
 
-      const user = response.data.data.user;
+      const user = response.data.data.user as LoggedInUser;
       console.log(user);
-      toast.success(response.data.message);
-
+      setDetails(user);
       navigate("/home");
     } catch (err) {
       console.error(err);
@@ -46,10 +62,23 @@ const GoogleLoginBtn = () => {
     }
   };
 
+  const handleLoginWithGoogle = () => {
+    setIsLoading(true);
+    login();
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader size={24} className="animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
   return (
     <Button
       type="button"
-      onClick={() => login()}
+      onClick={handleLoginWithGoogle}
       disabled={isLoading}
       className="bg-[#000] text-white px-4 flex items-center w-full gap-2 py-2 rounded-xl text-xl h-12"
       style={{ fontFamily: "KarlaRegular" }}
