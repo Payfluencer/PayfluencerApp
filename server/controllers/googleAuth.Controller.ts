@@ -6,7 +6,7 @@ import { signJwtToken } from "../lib/utils";
 import type { IServerResponse } from "../types";
 import type { Request, Response } from "express";
 import { UserRole } from "../prisma/generated/prisma/client";
-import { verifyGoogleIdToken } from "../lib/googleAuth";
+import { getGoogleUserInfo } from "../lib/googleAuth";
 import axios from "axios";
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -105,7 +105,7 @@ export const googleAuth = async (
     }
 
     // Verify ID token and get user info
-    const userInfoResult = await verifyGoogleIdToken(idToken);
+    const userInfoResult = await getGoogleUserInfo(idToken);
 
     if (userInfoResult.status === "error" || !userInfoResult.data) {
       return res.status(HttpStatusCode.BadRequest).json({

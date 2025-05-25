@@ -26,7 +26,6 @@ function UserAuthentication() {
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      console.log("Auth code received:", codeResponse.code);
       loginUser(codeResponse.code);
       setIsLoading(false);
     },
