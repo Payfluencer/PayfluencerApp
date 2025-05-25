@@ -1,6 +1,6 @@
 import Lottie from "lottie-react";
 import animationData from "../assets/lottie/ms.json";
-import { FaGoogle, FaSpinner } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import logo from "../assets/images/image.png";
 import { useAuth } from "../hooks/useAuth";
 import { useGoogleLogin } from "@react-oauth/google";
+import GoogleLoginBtn from "@/components/LoginInwithGoogle";
 
 function UserAuthentication() {
   const { loginUser, userError } = useAuth("user");
@@ -58,9 +59,7 @@ function UserAuthentication() {
         className="bg-[#000] text-white px-4 flex items-center w-full gap-2 py-2 rounded-xl text-xl h-12"
         style={{ fontFamily: "KarlaRegular" }}
       >
-        <div className="flex gap-2 items-center justify-center w-full">
-          <FaGoogle /> Sign in with Google
-        </div>
+        <GoogleLoginBtn />
       </Button>
     </div>
   );
