@@ -1,6 +1,6 @@
 import { Label, Pie, PieChart } from "recharts";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   type ChartConfig,
   ChartContainer,
@@ -113,11 +113,6 @@ export function PayoutChart() {
           )}
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm -mt-4">
-        <div className="leading-none text-muted-foreground">
-          Showing total payout for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   );
 }

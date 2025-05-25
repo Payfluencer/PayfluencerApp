@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Home, Inbox, Settings, Receipt, Coins } from "lucide-react";
 import logo from "../assets/images/image.png";
 
@@ -11,7 +12,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import useUserStore from "@/store/user";
+import type { LoggedInUser } from "./LoginInwithGoogle";
+import { authenticatedFetch } from "@/hooks/useAuth";
+import { FaSpinner } from "react-icons/fa";
 
 // Menu items.
 const items = [
@@ -46,10 +52,49 @@ const items = [
     path: "/settings",
   },
 ];
+const API_URL = "http://localhost:8001";
 
 export function AppSidebar() {
+  const { setDetails, id } = useUserStore();
+  const [loading, setLoading] = useState(true);
+
   const path = useLocation();
+  const navigate = useNavigate();
   const pathname = path.pathname;
+
+  useEffect(() => {
+    const refreshUser = async () => {
+      if (!id) {
+        const response = await authenticatedFetch(
+          `${API_URL}/api/v1/user/refresh`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        const user = data.data as LoggedInUser;
+        if (user) {
+          setDetails(user);
+          setLoading(false);
+        } else {
+          navigate("/auth");
+        }
+      }
+    };
+    refreshUser();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 backdrop-blur-lg w-[100vw] h-[100vh] flex items-center justify-center z-50">
+        <div className="flex flex-col items-center justify-center">
+          <FaSpinner className="animate-spin text-2xl text-gray-500" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Sidebar className="border-none ">
       <SidebarContent className="bg-[#f7f9f6]">

@@ -23,7 +23,6 @@ function UserDashboard() {
   const { userSubmissions, getPendingSubmissions, getRevenueEarned } =
     useUserSubmissions(id);
   const { bounties } = useBounties();
-  console.log(bounties);
   const [dateModal, setDateModal] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
@@ -177,13 +176,13 @@ function UserDashboard() {
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
-                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
+                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4 min-h-[250px]">
                   {bounties.length > 0 &&
                     bounties?.map((bounty) => (
                       <TopBounties key={bounty.id} {...bounty} />
                     ))}
                   {bounties.length === 0 && (
-                    <div className="flex items-center justify-center h-full">
+                    <div className="flex items-center justify-center h-full min-h-[250px]">
                       <p
                         style={{ fontFamily: "KarlaRegular" }}
                         className="text-gray-500"

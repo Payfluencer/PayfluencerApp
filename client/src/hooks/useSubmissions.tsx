@@ -99,6 +99,7 @@ export const useUserSubmissions = (userId: string) => {
           method: "GET",
         }
       );
+      console.log("Api response", response);
       const data = await response.json();
       return data as SubmissionResponse;
     },
