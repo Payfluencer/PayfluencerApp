@@ -14,6 +14,8 @@ import MySubmissions from "./pages/MySubmissions";
 import MyBounties from "./pages/MyBounties";
 import Bounty from "./pages/Bounty";
 import AdminBounty from "./pages/AdminBounty";
+import Submission from "./pages/Submission";
+import AdminSubmission from "./pages/AdminSubmission";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_OAUTH_ID;
 
@@ -31,11 +33,16 @@ function App() {
             <Route path="/submissions" element={<MySubmissions />} />
             <Route path="/bounties" element={<MyBounties />} />
             <Route path="/bounties/:id" element={<Bounty />} />
+            <Route path="/submissions/:id" element={<Submission />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/inbox" element={<AdminInbox />} />
             <Route path="/admin/bounties" element={<Bounties />} />
             <Route path="/admin/bounties/:id" element={<AdminBounty />} />
             <Route path="/admin/submissions" element={<Submissions />} />
+            <Route
+              path="/admin/submissions/:id"
+              element={<AdminSubmission />}
+            />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </Router>
