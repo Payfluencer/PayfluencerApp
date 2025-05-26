@@ -1,16 +1,16 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import logo from "@/assets/images/google.png";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
+import { AdminSidebar } from "@/components/admin-sidebar";
 
 function Submission() {
   const navigate = useNavigate();
   return (
     <SidebarProvider className="bg-[#efeff0]">
-      <AppSidebar />
+      <AdminSidebar />
       <main className="w-full mt-4 md:mt-10 md:ml-10 bg-white rounded-3xl mb-4 px-2">
         <div className="flex flex-row justify-between w-full md:w-[90%] ">
           <div className="flex items-center justify-between w-full">
