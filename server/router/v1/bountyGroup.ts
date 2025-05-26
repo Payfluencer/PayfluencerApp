@@ -25,12 +25,12 @@ router.get("/company/:companyId", getBountiesByCompany);
 // Get details for a specific bounty
 router.get("/:id", getBountyById);
 
-router.post("/", userAuth([UserRole.COMPANY_MANAGER]), createBounty);
+router.post("/", userAuth([UserRole.COMPANY_MANAGER,UserRole.ADMIN]), createBounty);
 
-// Update an existing bounty (authenticated users only)
-router.put("/:id", userAuth([UserRole.COMPANY_MANAGER]), updateBounty);
+// Update an existing bounty
+router.put("/:id", userAuth([UserRole.ADMIN]), updateBounty);
 
-// Delete a bounty (admin or company only)
-router.delete("/:id", userAuth([UserRole.COMPANY_MANAGER]), deleteBounty);
+// Delete a bounty
+router.delete("/:id", userAuth([UserRole.ADMIN]), deleteBounty);
 
 export default router;
