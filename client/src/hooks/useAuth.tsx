@@ -61,12 +61,11 @@ export const useAuth = (role: "admin" | "user") => {
         throw new Error(errorData.message);
       }
       const adminData = await response.json();
-      console.log(adminData);
       return adminData as Admin;
     },
     onSuccess: (data) => {
       if (data.status === "success") {
-        navigate("/home", { state: { adminDetails: data } });
+        navigate("/admin");
       }
     },
     onError: (error) => {
@@ -96,7 +95,7 @@ export const useAuth = (role: "admin" | "user") => {
         throw new Error(errorData.message);
       }
       const userData = await response.json();
-      console.log(userData);
+      console.log("Login response:", userData);
       return userData as User;
     },
     onSuccess: (data) => {

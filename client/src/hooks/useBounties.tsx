@@ -99,7 +99,7 @@ const useBounties = () => {
   }, [bounties?.data?.bounties]);
 
   return {
-    bounties,
+    bounties: bounties?.data?.bounties || [],
     isBountiesLoading,
     bountiesError,
     totalPayout,

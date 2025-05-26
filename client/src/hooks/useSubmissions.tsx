@@ -67,12 +67,13 @@ export const useSubmission = (id: string) => {
   } = useQuery<Submission>({
     queryKey: ["submission", id],
     queryFn: async () => {
-      const response = await authenticatedFetch(
-        `${API_URL}/api/v1/report?id=${id}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${API_URL}/api/v1/report?id=${id}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const data = await response.json();
       return data as Submission;
     },
@@ -82,5 +83,53 @@ export const useSubmission = (id: string) => {
     submission,
     isSubmissionLoading,
     submissionError,
+  };
+};
+
+export const useUserSubmissions = (userId: string) => {
+  const {
+    data: userSubmissions,
+    isLoading: isUserSubmissionsLoading,
+    error: userSubmissionsError,
+  } = useQuery<SubmissionResponse>({
+    queryKey: ["userSubmissions"],
+    queryFn: async () => {
+      const response = await fetch(`${API_URL}/api/v1/report/user/${userId}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Api response", response);
+      const data = await response.json();
+      return data as SubmissionResponse;
+    },
+  });
+  function getRevenueEarned() {
+    // TODO: Request backend to add an amount to report/submission
+    return 0;
+  }
+  function getPendingSubmissions() {
+    return (
+      userSubmissions?.data?.reports.filter(
+        (submission) => submission.status.toLowerCase() === "pending"
+      ) || []
+    );
+  }
+  function getSubmissionsByStatus(status: string) {
+    return (
+      userSubmissions?.data?.reports.filter(
+        (submission) => submission.status.toLowerCase() === status.toLowerCase()
+      ) || []
+    );
+  }
+  return {
+    userSubmissions: userSubmissions?.data?.reports || [],
+    isUserSubmissionsLoading,
+    userSubmissionsError,
+    getRevenueEarned,
+    getPendingSubmissions,
+    getSubmissionsByStatus,
   };
 };

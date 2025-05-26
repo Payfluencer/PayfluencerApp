@@ -11,7 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa";
 
 // Menu items.
 const items = [
@@ -19,7 +20,7 @@ const items = [
     title: "Home",
     url: "#",
     icon: Home,
-    path: "/home",
+    path: "/admin",
   },
   {
     title: "Inbox",
@@ -43,7 +44,7 @@ const items = [
     title: "Companies",
     url: "#",
     icon: Users,
-    path: "/companies",
+    path: "/admin/companies",
   },
   {
     title: "Settings",
@@ -55,6 +56,7 @@ const items = [
 
 export function AdminSidebar() {
   const path = useLocation();
+  const navigate = useNavigate();
   const pathname = path.pathname;
   return (
     <Sidebar className="border-none ">
@@ -93,6 +95,25 @@ export function AdminSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuButton
+                asChild
+                className={`py-4 h-10 my-2 duration-300 ease-in-out transition-all hover:bg-[#fa5e06] hover:text-white ${
+                  pathname === "/bounties" ? "bg-[#fa5e06] text-white" : ""
+                }`}
+                onClick={() => {
+                  navigate("/auth");
+                }}
+              >
+                <a href="/" className="">
+                  <FaSignOutAlt />
+                  <span
+                    style={{ fontFamily: "KarlaRegular" }}
+                    className="ml-2 text-lg"
+                  >
+                    Logout
+                  </span>
+                </a>
+              </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

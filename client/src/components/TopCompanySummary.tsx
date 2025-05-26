@@ -1,10 +1,14 @@
 import { type Company as CompanyType } from "@/hooks/useGetCompanies";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function TopCompaniesSummary({ name, id, logo }: CompanyType) {
+  const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-between bg-white rounded-xl p-2">
+    <div
+      className="flex items-center justify-between border border-gray-200 shadow-none rounded-3xl p-2 px-4"
+      onClick={() => navigate(`/admin/companies`)}
+    >
       <div className="flex items-center gap-2">
         <img
           src={logo}
