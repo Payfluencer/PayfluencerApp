@@ -181,7 +181,7 @@ function AdminDashboard() {
                   </div>
                 ) : (
                   <div className="flex flex-col md:flex-row justify-between gap-4">
-                    {topEarners?.map((earner) => (
+                    {topEarners?.slice(0, 3)?.map((earner) => (
                       <TopEarners key={earner.name} {...earner} />
                     ))}
                   </div>
@@ -226,7 +226,7 @@ function AdminDashboard() {
                     </p>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-1 rounded-4xl min-h-[400px] p-4 mt-4">
+                  <div className="flex flex-col gap-1 rounded-4xl min-h-[400px] py-4 mt-4">
                     {companies?.data.companies.map((company) => (
                       <TopCompaniesSummary key={company.name} {...company} />
                     ))}
