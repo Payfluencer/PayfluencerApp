@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FaEllipsisH, FaEye } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa";
-import logo from "@/assets/images/admin.png";
 
 export interface CompanyProps {
   id: string;
@@ -54,7 +53,7 @@ function Company({ company }: { company: CompanyProps }) {
               <img
                 src={company.logo}
                 alt="logo"
-                className="w-16 h-16 md:w-24 md:h-24 border border-gray-200 rounded-full"
+                className="w-16 h-16 md:w-24 md:h-24"
               />
               <div className="flex flex-col w-full md:w-1/2">
                 <h1
@@ -95,6 +94,20 @@ function Company({ company }: { company: CompanyProps }) {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="flex flex-col items-start mb-2 w-full">
+              <h1
+                className="text-lg font-bold"
+                style={{ fontFamily: "KarlaSemiBold" }}
+              >
+                Description
+              </h1>
+              <p
+                className="text-md font-bold text-gray-500"
+                style={{ fontFamily: "KarlaRegular" }}
+              >
+                {company.description}
+              </p>
             </div>
           </div>
           <div className="flex flex-col items-start mb-2">
@@ -137,7 +150,7 @@ function Company({ company }: { company: CompanyProps }) {
                 className="text-md font-bold text-gray-500 flex justify-between items-center gap-2"
                 style={{ fontFamily: "KarlaRegular" }}
               >
-                **********
+                {company.manager.email}
                 <FaEye className="text-gray-500 cursor-pointer" />
               </p>
             </div>
