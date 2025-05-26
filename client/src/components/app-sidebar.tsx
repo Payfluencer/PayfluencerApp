@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Home, Inbox, Settings, Receipt, Coins } from "lucide-react";
+import { Home, Inbox, Receipt, Coins } from "lucide-react";
 import logo from "../assets/images/image.png";
 
 import {
@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import useUserStore from "@/store/user";
 import type { LoggedInUser } from "./LoginInwithGoogle";
 import { authenticatedFetch } from "@/hooks/useAuth";
-import { FaSpinner } from "react-icons/fa";
+import { FaSignOutAlt, FaSpinner } from "react-icons/fa";
 
 // Menu items.
 const items = [
@@ -44,12 +44,6 @@ const items = [
     url: "#",
     icon: Receipt,
     path: "/submissions",
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-    path: "/settings",
   },
 ];
 const API_URL = "http://localhost:8001";
@@ -134,6 +128,25 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuButton
+                asChild
+                className={`py-4 h-10 my-2 duration-300 ease-in-out transition-all hover:bg-[#fa5e06] hover:text-white ${
+                  pathname === "/bounties" ? "bg-[#fa5e06] text-white" : ""
+                }`}
+                onClick={() => {
+                  navigate("/auth");
+                }}
+              >
+                <a href="/" className="">
+                  <FaSignOutAlt />
+                  <span
+                    style={{ fontFamily: "KarlaRegular" }}
+                    className="ml-2 text-lg"
+                  >
+                    Logout
+                  </span>
+                </a>
+              </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

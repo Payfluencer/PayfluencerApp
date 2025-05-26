@@ -11,6 +11,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import AdminDashboard from "./pages/AdminDashboard";
 import ErrorPage from "./pages/ErrorPage";
 import MySubmissions from "./pages/MySubmissions";
+import MyBounties from "./pages/MyBounties";
+import Bounty from "./pages/Bounty";
+import AdminBounty from "./pages/AdminBounty";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_OAUTH_ID;
 
@@ -26,9 +29,12 @@ function App() {
             <Route path="/home" element={<Dashboard />} />
             <Route path="/inbox" element={<Messages />} />
             <Route path="/submissions" element={<MySubmissions />} />
+            <Route path="/bounties" element={<MyBounties />} />
+            <Route path="/bounties/:id" element={<Bounty />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/inbox" element={<AdminInbox />} />
-            <Route path="/bounties" element={<Bounties />} />
+            <Route path="/admin/bounties" element={<Bounties />} />
+            <Route path="/admin/bounties/:id" element={<AdminBounty />} />
             <Route path="/admin/submissions" element={<Submissions />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
