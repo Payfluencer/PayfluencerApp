@@ -7,6 +7,7 @@ import insta from "../assets/images/insta.png";
 import meta from "../assets/images/meta.png";
 import ms from "../assets/images/ms.png";
 import binance from "../assets/images/bina.png";
+import type { CompanyProps } from "@/components/Company";
 
 export const topEarners = [
   {
@@ -54,36 +55,96 @@ export const topBounties = [
   },
 ];
 
-export const topCompanies = [
+export const topCompanies: CompanyProps[] = [
   {
-    name: "YouTube",
-    bounties: 47,
-    profile: yt,
+    id: "1",
+    name: "Company1",
+    phone_number: "1234567890",
+    email: "company1@gmail.com",
+    logo: yt,
+    description: "Company1 Description",
+    website: "https://company1.com",
+    address: "1234567890",
+    manager: {
+      id: "1",
+      name: "Manager1",
+      email: "manager1@gmail.com",
+    },
   },
   {
-    name: "Google",
-    bounties: 36,
-    profile: google,
+    id: "2",
+    name: "Company2",
+    phone_number: "1234567890",
+    email: "company2@gmail.com",
+    logo: google,
+    description: "Company2 Description",
+    website: "https://company2.com",
+    address: "1234567890",
+    manager: {
+      id: "2",
+      name: "Manager2",
+      email: "manager2@gmail.com",
+    },
   },
   {
-    name: "Instagram",
-    bounties: 24,
-    profile: insta,
+    id: "3",
+    name: "Company3",
+    phone_number: "1234567890",
+    email: "company3@gmail.com",
+    logo: insta,
+    description: "Company3 Description",
+    website: "https://company3.com",
+    address: "1234567890",
+    manager: {
+      id: "3",
+      name: "Manager3",
+      email: "manager3@gmail.com",
+    },
   },
   {
-    name: "Meta",
-    bounties: 11,
-    profile: meta,
+    id: "4",
+    name: "Company4",
+    phone_number: "1234567890",
+    email: "company4@gmail.com",
+    logo: meta,
+    description: "Company4 Description",
+    website: "https://company4.com",
+    address: "1234567890",
+    manager: {
+      id: "4",
+      name: "Manager4",
+      email: "manager4@gmail.com",
+    },
   },
   {
-    name: "Microsoft",
-    bounties: 7,
-    profile: ms,
+    id: "5",
+    name: "Company5",
+    phone_number: "1234567890",
+    email: "company5@gmail.com",
+    logo: ms,
+    description: "Company5 Description",
+    website: "https://company5.com",
+    address: "1234567890",
+    manager: {
+      id: "5",
+      name: "Manager5",
+      email: "manager5@gmail.com",
+    },
   },
   {
-    name: "Binance",
-    bounties: 4,
-    profile: binance,
+    id: "6",
+    name: "Company6",
+    phone_number: "1234567890",
+    email: "company6@gmail.com",
+    logo: binance,
+    description: "Company6 Description",
+    website: "https://company6.com",
+    address: "1234567890",
+    manager: {
+      id: "6",
+      name: "Manager6",
+      email: "manager6@gmail.com",
+    },
   },
 ];
 

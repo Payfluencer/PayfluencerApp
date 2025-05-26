@@ -20,7 +20,7 @@ const items = [
     title: "Home",
     url: "#",
     icon: Home,
-    path: "/home",
+    path: "/admin",
   },
   {
     title: "Inbox",
@@ -44,7 +44,7 @@ const items = [
     title: "Companies",
     url: "#",
     icon: Users,
-    path: "/companies",
+    path: "/admin/companies",
   },
   {
     title: "Settings",
