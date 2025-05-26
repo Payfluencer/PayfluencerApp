@@ -31,7 +31,7 @@ const items = [
     title: "Bounties",
     url: "#",
     icon: Coins,
-    path: "/admin/bounties",
+    path: "/bounties",
   },
   {
     title: "Submissions",

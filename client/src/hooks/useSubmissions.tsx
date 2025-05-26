@@ -115,11 +115,19 @@ export const useUserSubmissions = (userId: string) => {
       ) || []
     );
   }
+  function getSubmissionsByStatus(status: string) {
+    return (
+      userSubmissions?.data.reports.filter(
+        (submission) => submission.status.toLowerCase() === status.toLowerCase()
+      ) || []
+    );
+  }
   return {
     userSubmissions: userSubmissions?.data.reports || [],
     isUserSubmissionsLoading,
     userSubmissionsError,
     getRevenueEarned,
     getPendingSubmissions,
+    getSubmissionsByStatus,
   };
 };
