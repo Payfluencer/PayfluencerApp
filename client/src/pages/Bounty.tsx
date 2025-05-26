@@ -1,7 +1,7 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
+
 import logo from "@/assets/images/google.png";
 import {
   FaCheck,
@@ -12,16 +12,27 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import bountyImage from "@/assets/images/bountyImage.png";
+import { useNavigate } from "react-router-dom";
 
 function Bounty() {
+  const navigate = useNavigate();
   return (
     <SidebarProvider className="bg-[#efeff0]">
       <AppSidebar />
       <main className="w-full mt-4 md:mt-10 md:ml-10 bg-white rounded-3xl mb-4 px-2">
-        <div className="flex flex-row justify-between w-full md:w-[90%]">
-          <SidebarTrigger className="m-2 md:m-4" />
+        <div className="flex flex-row justify-between w-full md:w-[90%] ">
+          <div className="flex items-center justify-between w-full">
+            <SidebarTrigger className="m-2 md:m-4" />
+            <p
+              className="flex md:hidden underline text-md px-4"
+              style={{ fontFamily: "KarlaRegular" }}
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </p>
+          </div>
         </div>
-        <div className="w-full flex flex-col items-center justify-center mb-8 bg-[#f8f8f8] rounded-4xl px-8">
+        <div className="w-full flex flex-col items-center justify-center mb-8 bg-[#f8f8f8] rounded-4xl px-4 md:px-8">
           <div className="flex justify-between items-center my-2 w-full mt-4">
             <div className="flex items-center gap-4">
               <div className="w-2 rounded-2xl h-8 bg-[#fa5e06]"></div>
@@ -48,7 +59,7 @@ function Bounty() {
             <img
               src={logo}
               alt="logo"
-              className="w-24 h-24 border border-gray-200 rounded-full"
+              className="w-16 h-16 md:w-24 md:h-24 border border-gray-200 rounded-full"
             />
             <div className="flex flex-col w-full md:w-1/2">
               <h1
@@ -104,7 +115,7 @@ function Bounty() {
             </div>
           </div>
           <div className="flex flex-col w-full md:flex-row gap-4 items-center my-4">
-            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white">
+            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white w-full md:w-auto">
               <FaHeart className="text-gray-900 text-4xl" />
               <div>
                 <h1
@@ -121,7 +132,7 @@ function Bounty() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white">
+            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white w-full md:w-auto">
               <FaEye className="text-gray-900 text-4xl" />
               <div>
                 <h1
@@ -138,7 +149,7 @@ function Bounty() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white">
+            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white w-full md:w-auto">
               <FaComment className="text-gray-900 text-4xl" />
               <div>
                 <h1
@@ -155,7 +166,7 @@ function Bounty() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white">
+            <div className="flex items-center gap-2 border border-gray-200 rounded-2xl p-4 bg-white w-full md:w-auto">
               <FaSave className="text-gray-900 text-4xl" />
               <div>
                 <h1
@@ -175,12 +186,12 @@ function Bounty() {
           </div>
         </div>
         <h1
-          className="text-2xl px-8 mt-8 mb-4 font-bold"
+          className="text-2xl px-4 md:px-8 mt-8 mb-4 font-bold"
           style={{ fontFamily: "KarlaSemiBold" }}
         >
           Bounty Details
         </h1>
-        <div className=" px-8 flex flex-col items-center justify-center md:justify-start md:flex-row gap-4 md:gap-8">
+        <div className="px-4 md:px-8 flex flex-col items-center justify-center md:justify-start md:flex-row gap-4 md:gap-8">
           <img
             src={bountyImage}
             alt="bountyImage"
@@ -205,7 +216,7 @@ function Bounty() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between px-8 gap-4 mt-8">
+        <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between px-4 md:px-8 gap-4 mt-8">
           <div className="w-full md:w-1/2">
             <h1
               className="text-2xl font-bold mb-4"
