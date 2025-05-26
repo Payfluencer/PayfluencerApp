@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import bountyImage from "@/assets/images/bountyImage.png";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 function Bounty() {
   const navigate = useNavigate();
@@ -214,6 +215,12 @@ function Bounty() {
               reprehenderit ea, perferendis dolor consectetur saepe recusandae,
               officia error asperiores eaque iure! Exercitationem, dolores.
             </p>
+            <Button
+              className="w-full md:w-1/4 bg-[#fa5e06] text-white shadow-md hover:bg-[#e05200] transition-all duration-300 ease-in-out"
+              style={{ fontFamily: "KarlaSemiBold" }}
+            >
+              Join Bounty
+            </Button>
           </div>
         </div>
         <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between px-4 md:px-8 gap-4 mt-8">
