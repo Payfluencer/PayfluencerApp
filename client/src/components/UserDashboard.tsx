@@ -22,9 +22,11 @@ function UserDashboard() {
   const { name, id } = useUserStore((state) => state);
   const { userSubmissions, getPendingSubmissions, getRevenueEarned } =
     useUserSubmissions(id);
+  console.log(userSubmissions);
   const { bounties } = useBounties();
   const [dateModal, setDateModal] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
+
   return (
     <>
       <SidebarProvider>
@@ -144,7 +146,7 @@ function UserDashboard() {
               Top Submissions
             </h1>
             <div className="flex items-center justify-between flex-col md:flex-row">
-              <div className=" bg-[#efeff0] rounded-4xl p-1 mt-4 w-full md:w-3/4">
+              <div className="rounded-4xl p-1 mt-4 w-full md:w-3/4">
                 <div className="flex flex-col md:flex-row justify-between gap-4 py-4 md:py-0">
                   {mySubmissions.map((submission) => (
                     <TopSubmission key={submission.name} {...submission} />

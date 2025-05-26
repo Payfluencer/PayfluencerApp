@@ -95,7 +95,7 @@ export const useAuth = (role: "admin" | "user") => {
         throw new Error(errorData.message);
       }
       const userData = await response.json();
-      console.log(userData);
+      console.log("Login response:", userData);
       return userData as User;
     },
     onSuccess: (data) => {

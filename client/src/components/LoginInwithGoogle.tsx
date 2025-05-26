@@ -44,6 +44,9 @@ const GoogleLoginBtn = () => {
         "http://localhost:8001/api/v1/auth/google",
         {
           idToken,
+        },
+        {
+          withCredentials: true, // This ensures cookies are sent and received
         }
       );
 

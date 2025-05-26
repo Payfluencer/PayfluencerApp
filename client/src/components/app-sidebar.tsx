@@ -16,7 +16,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useUserStore from "@/store/user";
 import type { LoggedInUser } from "./LoginInwithGoogle";
-import { authenticatedFetch } from "@/hooks/useAuth";
 import { FaSignOutAlt, FaSpinner } from "react-icons/fa";
 
 // Menu items.
@@ -49,7 +48,7 @@ const items = [
 const API_URL = "http://localhost:8001";
 
 export function AppSidebar() {
-  const { setDetails, id } = useUserStore();
+  const { setDetails, id, logout } = useUserStore();
   const [loading, setLoading] = useState(true);
 
   const path = useLocation();
@@ -58,20 +57,48 @@ export function AppSidebar() {
 
   useEffect(() => {
     const refreshUser = async () => {
-      if (!id) {
-        const response = await authenticatedFetch(
-          `${API_URL}/api/v1/user/refresh`,
-          {
+      console.log("User store id:", id);
+      console.log("id length:", id.length);
+      if (id.length === 0) {
+        setLoading(true);
+        try {
+          console.log("Attempting to refresh user session...");
+          console.log("Current cookies:", document.cookie);
+          const response = await fetch(`${API_URL}/api/v1/user/refresh`, {
             method: "GET",
             credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("Refresh response status:", response.status);
+          console.log("Refresh response ok:", response.ok);
+
+          if (!response.ok) {
+            console.log(
+              `Authentication failed with status ${response.status}, redirecting to auth`
+            );
+            const errorText = await response.text();
+            console.log("Error response:", errorText);
+            navigate("/auth");
+            return;
           }
-        );
-        const data = await response.json();
-        const user = data.data as LoggedInUser;
-        if (user) {
-          setDetails(user);
-          setLoading(false);
-        } else {
+
+          const data = await response.json();
+          console.log("Refresh response data:", data);
+          const user = data.data?.user as LoggedInUser;
+
+          if (user && data.status === "success") {
+            console.log("Successfully refreshed user:", user);
+            setDetails(user);
+            setLoading(false);
+          } else {
+            console.log("No valid user in response, redirecting to auth");
+            navigate("/auth");
+          }
+        } catch (error) {
+          console.error("Error refreshing user:", error);
           navigate("/auth");
         }
       } else {
@@ -85,7 +112,13 @@ export function AppSidebar() {
     return (
       <div className="fixed inset-0 backdrop-blur-lg w-[100vw] h-[100vh] flex items-center justify-center z-50">
         <div className="flex flex-col items-center justify-center">
-          <FaSpinner className="animate-spin text-2xl text-gray-500" />
+          <FaSpinner className="animate-spin text-2xl text-gray-00" />
+          <p
+            style={{ fontFamily: "KarlaRegular" }}
+            className="text-gray-900 mt-4"
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -130,10 +163,9 @@ export function AppSidebar() {
               ))}
               <SidebarMenuButton
                 asChild
-                className={`py-4 h-10 my-2 duration-300 ease-in-out transition-all hover:bg-[#fa5e06] hover:text-white ${
-                  pathname === "/bounties" ? "bg-[#fa5e06] text-white" : ""
-                }`}
+                className={`py-4 h-10 my-2 duration-300 ease-in-out transition-all hover:bg-[#fa5e06] hover:text-white`}
                 onClick={() => {
+                  logout(); // Clear the persisted store
                   navigate("/auth");
                 }}
               >
