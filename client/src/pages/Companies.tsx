@@ -6,8 +6,10 @@ import logo from "@/assets/images/admin.png";
 import { Button } from "@/components/ui/button";
 import { topCompanies } from "@/lib/mock";
 import Company from "@/components/Company";
+import { useNavigate } from "react-router-dom";
 
 function Companies() {
+  const navigate = useNavigate();
   return (
     <SidebarProvider className="bg-[#efeff0]">
       <AdminSidebar />
@@ -33,6 +35,7 @@ function Companies() {
                   <Button
                     className="bg-[#fa5e06] text-white flex items-center gap-2"
                     style={{ fontFamily: "KarlaSemiBold" }}
+                    onClick={() => navigate("/admin/create-company")}
                   >
                     <FaPlus className="text-white" />
                     Add Company
