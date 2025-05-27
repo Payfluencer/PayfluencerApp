@@ -28,7 +28,7 @@ function BountyTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div className="w-full bg-[#efeff0] rounded-4xl p-4 max-w-[1240px] mx-auto my-0">
+    <div className="w-full bg-[#efeff0] rounded-4xl p-4">
       <div className="">
         <h1
           className="text-2xl font-bold"
