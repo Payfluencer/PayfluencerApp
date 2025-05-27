@@ -37,7 +37,21 @@ export const useCreateCompany = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(company),
+        body: JSON.stringify({
+          name: company.name,
+          logo: company.logo,
+          description: company.description,
+          website: company.website,
+          phone_number: company.phone_number,
+          email: company.email,
+          address: company.address,
+          manager: {
+            name: company.manager.name,
+            email: company.manager.email,
+            password: company.manager.password,
+            phone_number: company.manager.phone_number,
+          },
+        }),
       });
       if (!response.ok) {
         throw new Error("Failed to create company");

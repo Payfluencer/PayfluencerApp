@@ -27,10 +27,10 @@ const items = [
     path: "/home",
   },
   {
-    title: "Inbox",
+    title: "Notifications",
     url: "#",
     icon: Inbox,
-    path: "/inbox",
+    path: "/notifications",
   },
   {
     title: "Bounties",

@@ -16,7 +16,8 @@ export default function MobileMenuOverlay({
         style={{ fontFamily: "KarlaSemiBold" }}
       >
         <Link
-          to="/"
+          to="https://form.typeform.com/to/L2BDZcS7"
+          target="_blank"
           className="mx-2 p-2 text-2xl font-bold text-white border-b-2 border-white"
         >
           For Companies
