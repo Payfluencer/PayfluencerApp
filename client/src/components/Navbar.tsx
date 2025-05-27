@@ -15,7 +15,11 @@ function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
         </h1>
       </div>
       <div className="items-center justify-between hidden md:flex">
-        <Link to="/" className="mx-2 p-2">
+        <Link
+          to="https://form.typeform.com/to/L2BDZcS7"
+          target="_blank"
+          className="mx-2 p-2"
+        >
           For Companies
         </Link>
         <Link to="/auth" className="mx-2 p-2">
@@ -25,7 +29,7 @@ function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
           Sign In
         </Link>
         <Link
-          to="/auth"
+          to="/all-bounties"
           className="mx-2 p-2 bg-[#FA5E06] text-white rounded-md"
         >
           Start Creating

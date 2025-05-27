@@ -22,12 +22,12 @@ function TopEarners({ name, email }: UserType) {
           {name.charAt(0)}
         </div>
         <p style={{ fontFamily: "KarlaRegular" }} className="text-md">
-          {name}
+          {name.slice(0, name.indexOf(" "))}
         </p>
       </div>
       <p style={{ fontFamily: "KarlaSemiBold" }} className="text-md">
-        {email.slice(0, email.indexOf("@"))}****
-        {email.slice(email.indexOf("@") + 1)}
+        {email.slice(0, email.indexOf("@") - 3)}****
+        {email.slice(email.indexOf("@") + 3)}
       </p>
     </div>
   );

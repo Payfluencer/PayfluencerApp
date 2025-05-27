@@ -11,6 +11,7 @@ import { createPortal } from "react-dom";
 
 function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div style={{ fontFamily: "KarlaRegular" }}>
       <Navbar onMenuClick={() => setMenuOpen(true)} />
@@ -21,7 +22,9 @@ function Landing() {
         )}
       <Hero />
       <Companies />
+
       <How />
+
       <CTA />
       <FAQ />
       <Footer />

@@ -34,10 +34,10 @@ function ReportsTable<TData, TValue>({
           className="text-2xl font-bold"
           style={{ fontFamily: "KarlaRegular" }}
         >
-          Bounties
+          Submissions
         </h1>
         <p className="text-gray-500" style={{ fontFamily: "KarlaRegular" }}>
-          Recent published bounties
+          Recent submissions
         </p>
       </div>
       <Table style={{ fontFamily: "KarlaRegular" }}>
