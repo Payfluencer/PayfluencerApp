@@ -31,7 +31,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/home" element={<Dashboard />} />
-            <Route path="/inbox" element={<Messages />} />
+            <Route path="/notifications" element={<Messages />} />
             <Route path="/submissions" element={<MySubmissions />} />
             <Route path="/bounties" element={<MyBounties />} />
             <Route path="/bounties/:id" element={<Bounty />} />

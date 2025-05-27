@@ -1,4 +1,4 @@
-import { Home, Inbox, Settings, Receipt, Coins, Users } from "lucide-react";
+import { Home, Inbox, Receipt, Coins, Users } from "lucide-react";
 import logo from "../assets/images/image.png";
 
 import {
@@ -45,12 +45,6 @@ const items = [
     url: "#",
     icon: Users,
     path: "/admin/companies",
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-    path: "/settings",
   },
 ];
 
