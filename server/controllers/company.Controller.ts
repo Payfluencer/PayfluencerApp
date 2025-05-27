@@ -166,7 +166,7 @@ export const createCompany = async (
       return res.status(HttpStatusCode.BadRequest).json({
         status: "error",
         message: "Invalid company data",
-        data: validationResult.error.format(),
+        data: validationResult.error.flatten(),
       });
     }
 
@@ -181,7 +181,37 @@ export const createCompany = async (
       manager,
     } = validationResult.data;
 
-    // Create a transaction to create both the company manager user and the company
+    // Defensive: Check for existing manager email
+    const existingManager = await prisma.user.findFirst({
+      where: { email: manager.email },
+    });
+    if (existingManager) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "A user with this manager email already exists.",
+        data: null,
+      });
+    }
+
+    // Defensive: Check for existing company by unique fields
+    const existingCompany = await prisma.company.findFirst({
+      where: {
+        OR: [
+          { email },
+          { website },
+          { phone_number },
+        ],
+      },
+    });
+    if (existingCompany) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: "A company with this email, website, or phone number already exists.",
+        data: null,
+      });
+    }
+
+    // Transaction: create manager and company
     const result = await prisma.$transaction(async (tx) => {
       // 1. Create manager user
       const hashedPassword = await hash(manager.password, 10);
@@ -230,8 +260,17 @@ export const createCompany = async (
         company: result.company,
       },
     });
-  } catch (err) {
-    Logger.error({ message: "Error creating company: " + err });
+  } catch (err: any) {
+    // Prisma unique constraint violation
+    if (err.code === "P2002" && err.meta?.target) {
+      return res.status(HttpStatusCode.BadRequest).json({
+        status: "error",
+        message: `Duplicate value for unique field: ${err.meta.target.join(", ")}`,
+        data: null,
+      });
+    }
+
+    Logger.error({ message: "Error creating company: " + (err.message || err) });
     res.status(HttpStatusCode.InternalServerError).json({
       status: "error",
       message: "Error creating company",
