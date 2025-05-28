@@ -22,7 +22,6 @@ function UserDashboard() {
   const { name, id } = useUserStore((state) => state);
   const { userSubmissions, getPendingSubmissions, getRevenueEarned } =
     useUserSubmissions(id);
-  console.log(userSubmissions);
   const { bounties } = useBounties();
   const [dateModal, setDateModal] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -178,7 +177,7 @@ function UserDashboard() {
                     <FaArrowRight size={20} />
                   </Button>
                 </div>
-                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4 min-h-[280px]">
+                <div className="flex flex-col gap-1 rounded-4xl p-4 mt-4 min-h-[280px]">
                   {bounties.length > 0 &&
                     bounties?.map((bounty) => (
                       <TopBounties key={bounty.id} {...bounty} />

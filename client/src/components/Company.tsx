@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { FaEllipsisH, FaEye } from "react-icons/fa";
+import { FaEdit, FaEllipsisH, FaEye, FaTrash } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { FaPlus } from "react-icons/fa";
 
 export interface CompanyProps {
   id: string;
@@ -43,8 +42,17 @@ function Company({ company }: { company: CompanyProps }) {
                     className="bg-[#fa5e06] text-white flex items-center gap-2"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    <FaPlus className="text-white" />
+                    <FaTrash className="text-white" />
                     Delete Company
+                  </Button>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Button
+                    className="bg-[#f6f7f8] text-gray-500 border border-gray-200 flex items-center gap-2"
+                    style={{ fontFamily: "KarlaSemiBold" }}
+                  >
+                    <FaEdit className="text-gray-500" />
+                    Update Company
                   </Button>
                 </div>
               </div>
@@ -62,7 +70,7 @@ function Company({ company }: { company: CompanyProps }) {
                 >
                   {company.name}
                 </h1>
-                <div className="flex flex-col md:flex-row justify-between mt-2 w-full">
+                <div className="flex flex-col md:flex-row md:gap-4 justify-between mt-2 w-full">
                   <div className="flex flex-col items-start mb-2">
                     <h1
                       className="text-lg font-bold text-gray-500"
