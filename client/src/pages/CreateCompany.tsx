@@ -24,41 +24,44 @@ export interface CreateCompanyForm {
   website: string;
   phone_number: string;
   email: string;
-  address: string;
+  address?: string;
   manager: {
     name: string;
     email: string;
-    phone_number: string;
+    phone_number?: string;
     password: string;
   };
 }
 
+export const CreateCompanySchema = z.object({
+  name: z.string().min(3),
+  logo: z.string().url(),
+  description: z.string().min(20),
+  website: z.string().url(),
+  phone_number: z.string().min(10),
+  email: z.string().email(),
+  address: z.string().min(5).optional(),
+
+  // Company manager details
+  manager: z.object({
+    name: z.string().min(3),
+    email: z.string().email(),
+    password: z.string().min(6),
+    phone_number: z.string().min(10).optional(),
+  }),
+});
+
 function CreateCompany() {
   const { mutate, isPending } = useCreateCompany();
-  const formSchema = z.object({
-    name: z.string().min(1, { message: "Name is required" }),
-    logo: z.string().min(1, { message: "Logo is required" }),
-    description: z.string().min(1, { message: "Description is required" }),
-    website: z
-      .string()
-      .min(1, { message: "Website is required" })
-      .url({ message: "Invalid website URL" }),
-    address: z.string().min(1, { message: "Address is required" }),
-    manager: z.object({
-      name: z.string().min(1, { message: "Name is required" }),
-      email: z.string().email({ message: "Invalid email address" }),
-      phone_number: z.string().min(1, { message: "Phone number is required" }),
-      password: z.string().min(1, { message: "Password is required" }),
-    }),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof CreateCompanySchema>>({
+    resolver: zodResolver(CreateCompanySchema),
     defaultValues: {
       name: "",
       logo: "",
       description: "",
       website: "",
+      phone_number: "",
+      email: "",
       address: "",
       manager: {
         name: "",
@@ -69,14 +72,14 @@ function CreateCompany() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof CreateCompanySchema>) {
     const formData: CreateCompanyForm = {
       name: values.name,
       logo: values.logo,
       description: values.description,
       website: values.website,
-      email: values.manager.email,
-      phone_number: values.manager.phone_number,
+      email: values.email,
+      phone_number: values.phone_number,
       address: values.address,
       manager: values.manager,
     };
@@ -237,6 +240,52 @@ function CreateCompany() {
                       <FormControl>
                         <Input
                           placeholder="Company Website"
+                          {...field}
+                          style={{ fontFamily: "KarlaRegular" }}
+                          className="w-full mt-2 h-14 rounded-3xl shadow-none"
+                        />
+                      </FormControl>
+                      <FormMessage style={{ fontFamily: "KarlaRegular" }} />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        style={{ fontFamily: "KarlaSemiBold" }}
+                        className="mt-2"
+                      >
+                        Company Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Company Email"
+                          {...field}
+                          style={{ fontFamily: "KarlaRegular" }}
+                          className="w-full mt-2 h-14 rounded-3xl shadow-none"
+                        />
+                      </FormControl>
+                      <FormMessage style={{ fontFamily: "KarlaRegular" }} />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phone_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        style={{ fontFamily: "KarlaSemiBold" }}
+                        className="mt-2"
+                      >
+                        Company Phone Number
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Company Phone Number"
                           {...field}
                           style={{ fontFamily: "KarlaRegular" }}
                           className="w-full mt-2 h-14 rounded-3xl shadow-none"
