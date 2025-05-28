@@ -171,17 +171,6 @@ export const googleAuth = async (
       });
 
       isNewUser = true;
-    } else if (!user.googleId) {
-      // If user exists but doesn't have Google ID (registered via email/password)
-      // Link the Google account to the existing account
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          googleId,
-          googlePicture: picture,
-          update_at: new Date(),
-        },
-      });
     }
 
     // Update last login time
