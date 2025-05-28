@@ -12,7 +12,7 @@ export interface LoggedInUser {
   id: string;
   email: string;
   name: string;
-  role: TRole;
+  role: UserRole;
   phoneNumber: string | null;
   profilePicture: string;
   isActive: boolean;
@@ -20,7 +20,11 @@ export interface LoggedInUser {
   createdAt: string;
 }
 
-export type TRole = "ADMIN" | "USER" | "COMPANY_MANAGER";
+export enum UserRole {
+    ADMIN = "ADMIN",
+    USER = "USER",
+    COMPANY_MANAGER = "COMPANY_MANAGER",
+}
 
 const GoogleLoginBtn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +59,7 @@ const GoogleLoginBtn = () => {
       if (!response?.data?.data?.user) return toast.error("Login failed.");
 
       const user = response.data.data.user as LoggedInUser;
-      console.log(user);
+
       setDetails(user);
       navigate("/home");
     } catch (err) {
