@@ -12,11 +12,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useUserStore from "@/store/user";
-import type { LoggedInUser } from "./LoginInwithGoogle";
+import withUserAuthRequired from "@/HOC/user-hoc";
 import { FaSignOutAlt, FaSpinner } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Menu items.
 const items = [
@@ -45,68 +45,14 @@ const items = [
     path: "/submissions",
   },
 ];
-const API_URL = "http://localhost:8001";
 
-export function AppSidebar() {
-  const { setDetails, id, logout } = useUserStore();
-  const [loading, setLoading] = useState(true);
+function AppSidebar() {
+  const { logout } = useUserStore();
+  const [loading] = useState(false);
 
   const path = useLocation();
   const navigate = useNavigate();
   const pathname = path.pathname;
-
-  useEffect(() => {
-    const refreshUser = async () => {
-      console.log("User store id:", id);
-      console.log("id length:", id.length);
-      if (id.length === 0) {
-        setLoading(true);
-        try {
-          console.log("Attempting to refresh user session...");
-          console.log("Current cookies:", document.cookie);
-          const response = await fetch(`${API_URL}/api/v1/user/refresh`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          console.log("Refresh response status:", response.status);
-          console.log("Refresh response ok:", response.ok);
-
-          if (!response.ok) {
-            console.log(
-              `Authentication failed with status ${response.status}, redirecting to auth`
-            );
-            const errorText = await response.text();
-            console.log("Error response:", errorText);
-            navigate("/auth");
-            return;
-          }
-
-          const data = await response.json();
-          console.log("Refresh response data:", data);
-          const user = data.data?.user as LoggedInUser;
-
-          if (user && data.status === "success") {
-            console.log("Successfully refreshed user:", user);
-            setDetails(user);
-            setLoading(false);
-          } else {
-            console.log("No valid user in response, redirecting to auth");
-            navigate("/auth");
-          }
-        } catch (error) {
-          console.error("Error refreshing user:", error);
-          navigate("/auth");
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-    refreshUser();
-  }, []);
 
   if (loading) {
     return (
@@ -186,3 +132,5 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+export default withUserAuthRequired(AppSidebar);

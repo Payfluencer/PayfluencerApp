@@ -1,5 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AdminSidebar } from "@/components/admin-sidebar";
+import AdminSidebar from "@/components/admin-sidebar";
 import { Input } from "@/components/ui/input";
 import { FaCheck, FaSpinner, FaTimes } from "react-icons/fa";
 import { z } from "zod";

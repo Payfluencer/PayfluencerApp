@@ -1,7 +1,7 @@
 import React from "react";
 import { SidebarTrigger } from "./ui/sidebar";
 import { SidebarProvider } from "./ui/sidebar";
-import { AdminSidebar } from "./admin-sidebar";
+import AdminSidebar from "@/components/admin-sidebar";
 
 function AdminPagesWrapper({ children }: { children: React.ReactNode }) {
   return (

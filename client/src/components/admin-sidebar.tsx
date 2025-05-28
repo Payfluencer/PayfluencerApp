@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
+import withAdminAuthRequired from "@/HOC/admin-hoc";
 
 // Menu items.
 const items = [
@@ -48,7 +49,7 @@ const items = [
   },
 ];
 
-export function AdminSidebar() {
+function AdminSidebar() {
   const path = useLocation();
   const navigate = useNavigate();
   const pathname = path.pathname;
@@ -115,3 +116,5 @@ export function AdminSidebar() {
     </Sidebar>
   );
 }
+
+export default withAdminAuthRequired(AdminSidebar);
