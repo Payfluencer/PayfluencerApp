@@ -6,6 +6,5 @@ const router = Router();
 
 // Google OAuth routes - Only using client-side flow with ID tokens
 router.post("/", GoogleAuthController.googleAuth);
-router.get("/callback", GoogleAuthController.googleAuthCallback);
 
 export default router;
