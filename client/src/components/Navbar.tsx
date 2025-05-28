@@ -23,9 +23,6 @@ function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
           For Companies
         </Link>
         <Link to="/auth" className="mx-2 p-2">
-          Sign Up
-        </Link>
-        <Link to="/auth" className="mx-2 p-2">
           Sign In
         </Link>
         <Link

@@ -1,7 +1,7 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import logo from "@/assets/images/company.png";
 
-import logo from "@/assets/images/google.png";
 import {
   FaCheck,
   FaComment,
@@ -12,11 +12,64 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import bountyImage from "@/assets/images/bountyImage.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "@/components/admin-sidebar";
+import useGetBounty from "@/hooks/useGetBounty";
+import { Button } from "@/components/ui/button";
 
 function Bounty() {
   const navigate = useNavigate();
+  const params = useParams();
+  const { bounty, isBountyLoading, bountyError } = useGetBounty(params.id);
+
+  if (isBountyLoading) {
+    return (
+      <SidebarProvider className="bg-[#efeff0]">
+        <AdminSidebar />
+        <main className="w-full mt-4 md:mt-10 md:ml-10 bg-white rounded-3xl mb-4 px-2">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-xl" style={{ fontFamily: "KarlaRegular" }}>
+              Loading bounty details...
+            </div>
+          </div>
+        </main>
+      </SidebarProvider>
+    );
+  }
+
+  if (bountyError) {
+    return (
+      <SidebarProvider className="bg-[#efeff0]">
+        <AdminSidebar />
+        <main className="w-full mt-4 md:mt-10 md:ml-10 bg-white rounded-3xl mb-4 px-2">
+          <div className="flex items-center justify-center h-96">
+            <div
+              className="text-xl text-red-500"
+              style={{ fontFamily: "KarlaRegular" }}
+            >
+              Error loading bounty: {bountyError.message}
+            </div>
+          </div>
+        </main>
+      </SidebarProvider>
+    );
+  }
+
+  if (!bounty) {
+    return (
+      <SidebarProvider className="bg-[#efeff0]">
+        <AdminSidebar />
+        <main className="w-full mt-4 md:mt-10 md:ml-10 bg-white rounded-3xl mb-4 px-2">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-xl" style={{ fontFamily: "KarlaRegular" }}>
+              Bounty not found
+            </div>
+          </div>
+        </main>
+      </SidebarProvider>
+    );
+  }
+
   return (
     <SidebarProvider className="bg-[#efeff0]">
       <AdminSidebar />
@@ -24,13 +77,15 @@ function Bounty() {
         <div className="flex flex-row justify-between w-full md:w-[90%] ">
           <div className="flex items-center justify-between w-full">
             <SidebarTrigger className="m-2 md:m-4" />
-            <p
-              className="flex md:hidden underline text-md px-4"
-              style={{ fontFamily: "KarlaRegular" }}
-              onClick={() => navigate(-1)}
-            >
-              Back
-            </p>
+            <div className="flex items-center gap-4">
+              <p
+                className="flex md:hidden underline text-md px-4"
+                style={{ fontFamily: "KarlaRegular" }}
+                onClick={() => navigate(-1)}
+              >
+                Back
+              </p>
+            </div>
           </div>
         </div>
         <div className="w-full flex flex-col items-center justify-center mb-8 bg-[#f8f8f8] rounded-4xl px-4 md:px-8">
@@ -46,16 +101,30 @@ function Bounty() {
             </div>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#fa5e06] animate-pulse"></div>
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    bounty.is_active
+                      ? "bg-[#fa5e06] animate-pulse"
+                      : "bg-gray-400"
+                  }`}
+                ></div>
                 <h1
                   className="text-md font-bold"
                   style={{ fontFamily: "KarlaRegular" }}
                 >
-                  Active
+                  {bounty.is_active ? "Active" : "Inactive"}
                 </h1>
               </div>
-
-              <FaEdit className="text-gray-900 text-lg cursor-pointer" />
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2"
+                  style={{ fontFamily: "KarlaSemiBold" }}
+                >
+                  <FaEdit />
+                  Edit Bounty
+                </Button>
+              </div>
             </div>
           </div>
           <div className="w-full flex items-center gap-8 my-4">
@@ -69,7 +138,7 @@ function Bounty() {
                 className="text-2xl font-bold"
                 style={{ fontFamily: "KarlaSemiBold" }}
               >
-                Google
+                {bounty.title}
               </h1>
               <div className="flex items-center justify-between mt-2 w-full">
                 <div className="">
@@ -83,7 +152,7 @@ function Bounty() {
                     className="text-md font-bold text-gray-500"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    Twitter
+                    {bounty.platform}
                   </p>
                 </div>
                 <div className="">
@@ -97,7 +166,7 @@ function Bounty() {
                     className="text-md font-bold text-gray-500"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    English
+                    {bounty.language}
                   </p>
                 </div>
                 <div className="flex flex-col items-start">
@@ -111,7 +180,7 @@ function Bounty() {
                     className="text-md font-bold text-gray-500"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    $100
+                    ${bounty.max_payout}
                   </p>
                 </div>
               </div>
@@ -125,7 +194,7 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaRegular" }}
                 >
-                  100
+                  {bounty.required_likes}
                 </h1>
                 <p
                   className="text-md font-bold text-gray-500"
@@ -142,7 +211,7 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaRegular" }}
                 >
-                  100
+                  {bounty.required_views}
                 </h1>
                 <p
                   className="text-md font-bold text-gray-500"
@@ -159,7 +228,7 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaRegular" }}
                 >
-                  100
+                  {bounty.required_comments}
                 </h1>
                 <p
                   className="text-md font-bold text-gray-500"
@@ -176,7 +245,7 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaRegular" }}
                 >
-                  100
+                  {bounty.required_saves}
                 </h1>
                 <p
                   className="text-md font-bold text-gray-500"
@@ -206,17 +275,29 @@ function Bounty() {
               className="text-xl font-bold"
               style={{ fontFamily: "KarlaSemiBold" }}
             >
-              The Big Bounty
+              {bounty.title}
             </h1>
             <p
               className="flex flex-col w-full text-gray-500 md:flex-row gap-4 items-center my-4 max-w-2xl leading-relaxed md:text-lg"
               style={{ fontFamily: "KarlaRegular" }}
             >
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Excepturi fuga qui beatae expedita quaerat iste similique
-              reprehenderit ea, perferendis dolor consectetur saepe recusandae,
-              officia error asperiores eaque iure! Exercitationem, dolores.
+              {bounty.description}
             </p>
+            <div className="flex gap-4">
+              <Button
+                className="w-full md:w-auto bg-[#fa5e06] text-white shadow-md hover:bg-[#e05200] transition-all duration-300 ease-in-out"
+                style={{ fontFamily: "KarlaSemiBold" }}
+              >
+                Approve Bounty
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full md:w-auto"
+                style={{ fontFamily: "KarlaSemiBold" }}
+              >
+                Reject Bounty
+              </Button>
+            </div>
           </div>
         </div>
         <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between px-4 md:px-8 gap-4 mt-8">
@@ -247,7 +328,11 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  <FaCheck className="text-green-500 text-2xl" />
+                  {bounty.show_other_brands ? (
+                    <FaCheck className="text-green-500 text-2xl" />
+                  ) : (
+                    <FaTimes className="text-red-500 text-2xl" />
+                  )}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -269,7 +354,11 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  <FaCheck className="text-green-500 text-2xl" />
+                  {bounty.nsfw ? (
+                    <FaCheck className="text-green-500 text-2xl" />
+                  ) : (
+                    <FaTimes className="text-red-500 text-2xl" />
+                  )}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -291,7 +380,11 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  <FaTimes className="text-green-500 text-2xl" />
+                  {bounty.cursing ? (
+                    <FaCheck className="text-green-500 text-2xl" />
+                  ) : (
+                    <FaTimes className="text-red-500 text-2xl" />
+                  )}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -313,7 +406,11 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  <FaCheck className="text-green-500 text-2xl" />
+                  {bounty.nudity ? (
+                    <FaCheck className="text-green-500 text-2xl" />
+                  ) : (
+                    <FaTimes className="text-red-500 text-2xl" />
+                  )}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -328,14 +425,19 @@ function Bounty() {
                     className="text-xs font-bold text-gray-500"
                     style={{ fontFamily: "KarlaRegular" }}
                   >
-                    Vaseline, Dove, etc.
+                    {bounty.specific_products ||
+                      "No specific products mentioned"}
                   </p>
                 </div>
                 <p
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  <FaCheck className="text-green-500 text-2xl" />
+                  {bounty.specific_products ? (
+                    <FaCheck className="text-green-500 text-2xl" />
+                  ) : (
+                    <FaTimes className="text-red-500 text-2xl" />
+                  )}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -357,7 +459,13 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  <FaTimes className="text-red-500 text-2xl" />
+                  {bounty.age_restriction > 0 ? (
+                    <span className="text-orange-500">
+                      {bounty.age_restriction}+
+                    </span>
+                  ) : (
+                    <FaTimes className="text-green-500 text-2xl" />
+                  )}
                 </p>
               </div>
             </div>
@@ -389,7 +497,7 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  1 Week
+                  {bounty.pay_duration}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -411,7 +519,7 @@ function Bounty() {
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  $1,000
+                  ${bounty.max_payout}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -420,20 +528,20 @@ function Bounty() {
                     className="text-lg font-bold text-gray-900"
                     style={{ fontFamily: "KarlaRegular" }}
                   >
-                    Payment Method
+                    Status
                   </h1>
                   <p
                     className="text-xs font-bold text-gray-500"
                     style={{ fontFamily: "KarlaRegular" }}
                   >
-                    How will the payment be made?
+                    Current bounty status
                   </p>
                 </div>
                 <p
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  Wallet address
+                  {bounty.status}
                 </p>
               </div>
             </div>
