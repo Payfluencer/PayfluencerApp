@@ -1,7 +1,7 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import logo from "@/assets/images/company.png";
 
-import logo from "@/assets/images/google.png";
 import {
   FaCheck,
   FaComment,

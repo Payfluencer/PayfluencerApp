@@ -1,8 +1,8 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-
 import logo from "@/assets/images/company.png";
+
 import {
   FaCheck,
   FaComment,

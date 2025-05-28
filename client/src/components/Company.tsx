@@ -48,7 +48,7 @@ function Company({ company }: { company: CompanyProps }) {
                 </div>
                 <div className="flex items-center gap-1">
                   <Button
-                    className="bg-[#f6f7f8] text-gray-500 border border-gray-200 flex items-center gap-2"
+                    className="bg-[#f6f7f8] text-gray-500 border border-gray-200 flex items-center gap-2 hover:text-gray-300"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
                     <FaEdit className="text-gray-500" />
@@ -94,8 +94,9 @@ function Company({ company }: { company: CompanyProps }) {
                       Website
                     </h1>
                     <p
-                      className="text-md font-bold text-gray-500 underline"
+                      className="text-md font-bold text-gray-500 underline cursor-pointer"
                       style={{ fontFamily: "KarlaRegular" }}
+                      onClick={() => window.open(company.website, "_blank")}
                     >
                       {company.website}
                     </p>

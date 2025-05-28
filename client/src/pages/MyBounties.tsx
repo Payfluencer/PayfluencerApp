@@ -3,15 +3,10 @@ import { Input } from "@/components/ui/input";
 import UserPagesWrapper from "@/components/UserPagesWrapper";
 import useBounties from "@/hooks/useBounties";
 import { columns } from "@/lib/bounties-columns";
-import { Button } from "@/components/ui/button";
-import { FaPlus, FaSpinner } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { useGetCompanies } from "@/hooks/useGetCompanies";
+import { FaSpinner } from "react-icons/fa";
 
 function Bounties() {
   const { allBounties, isBountiesLoading, totalPayout } = useBounties();
-  const { companies, isCompaniesLoading } = useGetCompanies();
-  const navigate = useNavigate();
 
   return (
     <div className="bg-[#efeff0]">
