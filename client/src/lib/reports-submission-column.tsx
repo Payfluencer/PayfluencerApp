@@ -36,3 +36,22 @@ export const columns: ColumnDef<Submission>[] = [
     accessorKey: "status",
   },
 ];
+
+export const userColumns: ColumnDef<Submission>[] = [
+  {
+    header: "ID",
+    accessorKey: "id",
+  },
+  {
+    header: "Bounty ID",
+    accessorKey: "bounty_id",
+  },
+  {
+    header: "Title",
+    accessorKey: "title",
+  },
+  {
+    header: "Status",
+    accessorKey: "status",
+  },
+];

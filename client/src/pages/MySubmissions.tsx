@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { useUserSubmissions } from "@/hooks/useSubmissions";
 import { Input } from "@/components/ui/input";
 import ReportsTable from "@/components/ReportsTable";
-import { columns } from "@/lib/reports-submission-column";
+import { userColumns } from "@/lib/reports-submission-column";
 import { SubmissionsSummary } from "@/components/SumbissionsChart";
 import useUserStore from "@/store/user";
 
@@ -119,7 +119,7 @@ function MySubmissions() {
           </div>
         </div>
         <div className="flex flex-col gap-8 justify-between md:flex-row max-w-[1240px] mx-auto my-0">
-          <ReportsTable columns={columns} data={userSubmissions || []} />
+          <ReportsTable columns={userColumns} data={userSubmissions || []} />
           <SubmissionsSummary />
         </div>
       </main>

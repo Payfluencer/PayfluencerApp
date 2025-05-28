@@ -34,63 +34,6 @@ function Bounties() {
                 General Details
               </h1>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <Button
-                  className="bg-[#fa5e06] text-white flex items-center gap-2"
-                  style={{ fontFamily: "KarlaSemiBold" }}
-                  onClick={() => navigate("/admin/create-bounty")}
-                >
-                  <FaPlus className="text-white" />
-                  Add Bounty
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className="w-full flex items-center gap-8 my-4">
-            <div className="flex flex-col w-full md:w-1/2">
-              <h1
-                className="text-2xl font-bold"
-                style={{ fontFamily: "KarlaSemiBold" }}
-              >
-                Bounties Summary
-              </h1>
-              <div className="flex items-center justify-between mt-2 w-full">
-                <div className="">
-                  <h1
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaRegular" }}
-                  >
-                    Bounties
-                  </h1>
-                  <p
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaSemiBold" }}
-                  >
-                    {isBountiesLoading ? (
-                      <FaSpinner className="text-gray-500 animate-spin" />
-                    ) : (
-                      allBounties?.length
-                    )}
-                  </p>
-                </div>
-
-                <div className="flex flex-col items-start">
-                  <h1
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaRegular" }}
-                  >
-                    Revenue
-                  </h1>
-                  <p
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaSemiBold" }}
-                  >
-                    ${totalPayout.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
           <div className="w-full flex flex-col items-start mt-4 mb-4">
             <div className="flex flex-col w-full md:flex-row gap-4 items-center flex-wrap">
