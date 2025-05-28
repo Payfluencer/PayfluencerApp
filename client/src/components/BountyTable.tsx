@@ -11,7 +11,11 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  type Row,
 } from "@tanstack/react-table";
+import { useNavigate } from "react-router-dom";
+import useUserStore from "@/store/user";
+import { type Bounty } from "@/hooks/useBounties";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -22,11 +26,27 @@ function BountyTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const navigate = useNavigate();
+  const { role } = useUserStore();
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const handleRowClick = (row: Row<TData>) => {
+    const bounty = row.original as Bounty;
+    const bountyId = bounty.id;
+
+    // Route based on user role
+    if (role === "ADMIN") {
+      navigate(`/admin/bounties/${bountyId}`);
+    } else {
+      navigate(`/bounties/${bountyId}`);
+    }
+  };
+
   return (
     <div className="w-full bg-[#efeff0] rounded-4xl p-4">
       <div className="">
@@ -65,6 +85,8 @@ function BountyTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                onClick={() => handleRowClick(row)}
+                className="cursor-pointer hover:bg-gray-50 transition-colors"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
