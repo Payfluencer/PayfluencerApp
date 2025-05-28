@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import logo from "../assets/images/image.png";
 import { useAuth } from "../hooks/useAuth";
 import GoogleLoginBtn from "@/components/LoginInwithGoogle";
+import { Link } from "react-router-dom";
 
 function UserAuthentication() {
   return (
@@ -138,6 +139,12 @@ function AdminAuthentication() {
           {adminError.message}
         </p>
       )}
+      <Link
+        to="/company"
+        className="text-sm text-gray-500 hover:text-gray-600 mt-4"
+      >
+        Company Manager?
+      </Link>
     </div>
   );
 }
@@ -163,6 +170,12 @@ function Auth() {
       >
         {isAdmin ? "User Login" : "Admin Login"}
       </Button>
+      <Link
+        to="/company"
+        className="text-sm text-gray-500 hover:text-gray-600 mt-4"
+      >
+        Company Manager?
+      </Link>
     </div>
   );
 }
