@@ -1,5 +1,4 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import logo from "@/assets/images/company.png";
 
@@ -15,7 +14,7 @@ import {
 import bountyImage from "@/assets/images/bountyImage.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import useGetBounty from "@/hooks/useGetBounty";
+import AppSidebar from "@/components/app-sidebar";
 
 function Bounty() {
   const navigate = useNavigate();

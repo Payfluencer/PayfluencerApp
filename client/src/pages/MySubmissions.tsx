@@ -1,12 +1,12 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
 import { useUserSubmissions } from "@/hooks/useSubmissions";
 import { Input } from "@/components/ui/input";
 import ReportsTable from "@/components/ReportsTable";
 import { userColumns } from "@/lib/reports-submission-column";
 import { SubmissionsSummary } from "@/components/SumbissionsChart";
 import useUserStore from "@/store/user";
+import AppSidebar from "@/components/app-sidebar";
 
 function MySubmissions() {
   const { id } = useUserStore();

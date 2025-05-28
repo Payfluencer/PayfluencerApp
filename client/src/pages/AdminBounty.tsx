@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import bountyImage from "@/assets/images/bountyImage.png";
 import { useNavigate, useParams } from "react-router-dom";
-import { AdminSidebar } from "@/components/admin-sidebar";
+import AdminSidebar from "@/components/admin-sidebar";
 import useGetBounty from "@/hooks/useGetBounty";
 import { Button } from "@/components/ui/button";
 

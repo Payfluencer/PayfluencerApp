@@ -1,6 +1,6 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import AppSidebar from "@/components/app-sidebar";
 import { Button } from "./ui/button";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import {
   FaAngleDoubleUp,
   FaArrowRight,

@@ -1,4 +1,4 @@
-import { AdminSidebar } from "@/components/admin-sidebar";
+import AdminSidebar from "@/components/admin-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import TopEarners from "@/components/TopEarners";
