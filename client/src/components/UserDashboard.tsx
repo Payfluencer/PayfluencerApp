@@ -201,7 +201,7 @@ function UserDashboard() {
                 >
                   My Payout Summary
                 </h1>
-                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
+                <div className="flex flex-col gap-1 rounded-4xl p-4 mt-4">
                   <PayoutChart />
                 </div>
               </div>
