@@ -4,7 +4,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import logo from "@/assets/images/google.png";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
-import { AdminSidebar } from "@/components/admin-sidebar";
+import AdminSidebar from "@/components/admin-sidebar";
 
 function Submission() {
   const navigate = useNavigate();

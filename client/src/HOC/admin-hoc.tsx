@@ -1,10 +1,9 @@
-import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
-import { apiBase } from '@/lib/config'
+import { UserRole } from '@/types/user'
 import useUserStore from '@/store/user'
 import { useNavigate } from 'react-router-dom'
-import { useLayoutEffect, useState } from 'react'
-import { UserRole } from '@/components/LoginInwithGoogle'
+import { useEffect, useState } from 'react'
+import { refreshUserAccess } from '@/actions/user'
 
 const withAdminAuthRequired = (ChildComponent: React.ComponentType<any>) => {
   return (props: any) => {
@@ -13,17 +12,14 @@ const withAdminAuthRequired = (ChildComponent: React.ComponentType<any>) => {
     const navigate = useNavigate()
 
     async function fetchUserDetails() {
-      const response = await apiBase.get("/user/refresh")
+      const response = await refreshUserAccess()
 
       if (!response) {
         setIsLoading(false)
         return navigate('/auth')
       }
 
-      const user = response.data.data.user
-
-      // Set global user state
-      if (!user) return toast.error("Login failed.");
+      const user = response.data.user
 
       // Check role
       if(user.role !== UserRole.ADMIN){
@@ -35,7 +31,7 @@ const withAdminAuthRequired = (ChildComponent: React.ComponentType<any>) => {
       setIsLoading(false)
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
       if (!isLoggedIn) {
         fetchUserDetails()
       } else {

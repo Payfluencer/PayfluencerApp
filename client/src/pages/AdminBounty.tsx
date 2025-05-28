@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import bountyImage from "@/assets/images/bountyImage.png";
 import { useNavigate } from "react-router-dom";
-import { AdminSidebar } from "@/components/admin-sidebar";
+import AdminSidebar from "@/components/admin-sidebar";
 
 function Bounty() {
   const navigate = useNavigate();

@@ -1,11 +1,18 @@
 import { create } from 'zustand'
-import { UserRole, type LoggedInUser } from '@/components/LoginInwithGoogle'
+import { type LoggedInUser } from '@/components/LoginInwithGoogle'
+import { UserRole } from '@/types/user'
 
 interface UserStore {
   id: string
   email: string
   name: string
   role: UserRole
+  company: {
+    id: string
+    name: string
+    logoUrl: string | null
+
+  }
   isLoggedIn: boolean
   setDetails: (data: LoggedInUser) => void
   logout: () => void
@@ -16,6 +23,11 @@ const useUserStore = create<UserStore>()((set) => ({
   email: '',
   name: '',
   role: UserRole.USER,
+  company: {
+    id: '',
+    name: '',
+    logoUrl: null,
+  },
   isLoggedIn: false,
   setDetails: (data: LoggedInUser) =>
     set({

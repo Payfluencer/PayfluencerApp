@@ -1,7 +1,7 @@
 import React from "react";
 import { SidebarTrigger } from "./ui/sidebar";
 import { SidebarProvider } from "./ui/sidebar";
-import { AppSidebar } from "./app-sidebar";
+import AppSidebar from "./app-sidebar";
 
 function UserPagesWrapper({ children }: { children: React.ReactNode }) {
   return (
