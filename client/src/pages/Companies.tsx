@@ -1,15 +1,18 @@
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaSpinner } from "react-icons/fa";
 import logo from "@/assets/images/admin.png";
 import { Button } from "@/components/ui/button";
-import { topCompanies } from "@/lib/mock";
 import Company from "@/components/Company";
 import { useNavigate } from "react-router-dom";
+import { useGetCompanies } from "@/hooks/useGetCompanies";
+import useBounties from "@/hooks/useBounties";
 
 function Companies() {
   const navigate = useNavigate();
+  const { companies, isCompaniesLoading } = useGetCompanies();
+  const { allBounties, isBountiesLoading, totalPayout } = useBounties();
   return (
     <SidebarProvider className="bg-[#efeff0]">
       <AdminSidebar />
@@ -68,7 +71,11 @@ function Companies() {
                       className="text-md font-bold text-gray-500"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      14
+                      {isCompaniesLoading ? (
+                        <FaSpinner className="text-gray-500 animate-spin" />
+                      ) : (
+                        companies?.data.companies.length
+                      )}
                     </p>
                   </div>
                   <div className="">
@@ -82,7 +89,11 @@ function Companies() {
                       className="text-md font-bold text-gray-500"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      89
+                      {isBountiesLoading ? (
+                        <FaSpinner className="text-gray-500 animate-spin" />
+                      ) : (
+                        allBounties?.length
+                      )}
                     </p>
                   </div>
                   <div className="flex flex-col items-start">
@@ -96,7 +107,7 @@ function Companies() {
                       className="text-md font-bold text-gray-500"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      $100K
+                      ${totalPayout.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -119,13 +130,13 @@ function Companies() {
                       className="text-lg text-gray-900"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      Company1 Name
+                      {companies?.data.companies[0].name}
                     </h1>
                     <p
                       className="text-sm font-bold text-gray-500"
                       style={{ fontFamily: "KarlaRegular" }}
                     >
-                      company1@gmail.com
+                      {companies?.data.companies[0].email}
                     </p>
                   </div>
                 </div>
@@ -138,13 +149,13 @@ function Companies() {
                       className="text-lg text-gray-900"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      Company2 Name
+                      {companies?.data.companies[1].name}
                     </h1>
                     <p
                       className="text-sm font-bold text-gray-500"
                       style={{ fontFamily: "KarlaRegular" }}
                     >
-                      company2@gmail.com
+                      {companies?.data.companies[1].email}
                     </p>
                   </div>
                 </div>
@@ -157,13 +168,13 @@ function Companies() {
                       className="text-lg text-gray-900"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      Company3 Name
+                      {companies?.data.companies[2].name}
                     </h1>
                     <p
                       className="text-sm font-bold text-gray-500"
                       style={{ fontFamily: "KarlaRegular" }}
                     >
-                      company3@gmail.com
+                      {companies?.data.companies[2].email}
                     </p>
                   </div>
                 </div>
@@ -178,9 +189,15 @@ function Companies() {
               All Companies
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {topCompanies.map((company) => (
-                <Company key={company.id} company={company} />
-              ))}
+              {isCompaniesLoading ? (
+                <div className="flex items-center justify-center h-full w-full mt-10">
+                  <FaSpinner className="text-gray-500 animate-spin" />
+                </div>
+              ) : (
+                companies?.data.companies.map((company) => (
+                  <Company key={company.id} company={company} />
+                ))
+              )}
             </div>
           </div>
         </div>

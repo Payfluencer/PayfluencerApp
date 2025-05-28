@@ -40,13 +40,14 @@ const GoogleLoginBtn = () => {
 
   const handleUserLogin = async (idToken: string) => {
     try {
+      console.log("idToken", idToken);
       const response = await axios.post(
         "http://localhost:8001/api/v1/auth/google",
         {
           idToken,
         },
         {
-          withCredentials: true, // This ensures cookies are sent and received
+          withCredentials: true,
         }
       );
 

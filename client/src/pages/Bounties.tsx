@@ -4,13 +4,14 @@ import { Input } from "@/components/ui/input";
 import useBounties from "@/hooks/useBounties";
 import { columns } from "@/lib/bounties-columns";
 import { Button } from "@/components/ui/button";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useGetCompanies } from "@/hooks/useGetCompanies";
 
 function Bounties() {
-  const { allBounties } = useBounties();
+  const { allBounties, isBountiesLoading, totalPayout } = useBounties();
+  const { companies, isCompaniesLoading } = useGetCompanies();
   const navigate = useNavigate();
-  console.log(allBounties);
 
   return (
     <div className="bg-[#efeff0]">
@@ -67,7 +68,11 @@ function Bounties() {
                       className="text-md font-bold text-gray-500"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      14
+                      {isBountiesLoading ? (
+                        <FaSpinner className="text-gray-500 animate-spin" />
+                      ) : (
+                        allBounties?.length
+                      )}
                     </p>
                   </div>
                   <div className="">
@@ -81,7 +86,11 @@ function Bounties() {
                       className="text-md font-bold text-gray-500"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      89
+                      {isCompaniesLoading ? (
+                        <FaSpinner className="text-gray-500 animate-spin" />
+                      ) : (
+                        companies?.data.companies.length
+                      )}
                     </p>
                   </div>
                   <div className="flex flex-col items-start">
@@ -95,7 +104,7 @@ function Bounties() {
                       className="text-md font-bold text-gray-500"
                       style={{ fontFamily: "KarlaSemiBold" }}
                     >
-                      $100K
+                      ${totalPayout.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -122,7 +131,11 @@ function Bounties() {
                     className="text-4xl text-gray-500 my-8"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    14
+                    {isBountiesLoading ? (
+                      <FaSpinner className="text-gray-500 animate-spin" />
+                    ) : (
+                      allBounties?.length
+                    )}
                   </p>
                   <p
                     className="text-gray-500"
@@ -150,7 +163,7 @@ function Bounties() {
                     className="text-4xl text-[#fa5e06] my-8"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    $14K
+                    ${totalPayout.toLocaleString()}
                   </p>
                   <p
                     className="text-[#efeff0]"
@@ -178,7 +191,11 @@ function Bounties() {
                     className="text-4xl text-[#efeff0] my-8"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    7
+                    {isCompaniesLoading ? (
+                      <FaSpinner className="text-gray-500 animate-spin" />
+                    ) : (
+                      companies?.data.companies.length
+                    )}
                   </p>
                   <p
                     className="text-[#efeff0]"
@@ -206,7 +223,7 @@ function Bounties() {
                     className="text-4xl text-[#fa5e06] my-8"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    2
+                    0
                   </p>
                   <p
                     className="text-[#efeff0]"

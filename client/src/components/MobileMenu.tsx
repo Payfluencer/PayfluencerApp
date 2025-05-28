@@ -22,17 +22,12 @@ export default function MobileMenuOverlay({
         >
           For Companies
         </Link>
-        <Link
-          to="/auth"
-          className="mx-2 p-2 text-2xl font-bold text-white border-b-2 border-white"
-        >
-          Sign Up
-        </Link>
+
         <Link to="/auth" className="mx-2 p-2 text-2xl font-bold text-white">
           Sign In
         </Link>
         <Link
-          to="/auth"
+          to="/all-bounties"
           className="mx-2 p-2 bg-[#FA5E06] text-white rounded-md"
         >
           Start Creating
