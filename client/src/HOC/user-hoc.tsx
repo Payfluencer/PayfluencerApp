@@ -14,9 +14,8 @@ const withUserAuthRequired = (ChildComponent: React.ComponentType<any>) => {
     async function fetchUserDetails() {
       const response = await refreshUserAccess();
 
-      console.log(response);
-
       if (!response) {
+        console.log(response);
         setIsLoading(false);
         return navigate("/auth");
       }
