@@ -17,6 +17,7 @@ import TopSubmission from "./TopSubmission";
 import useUserStore from "@/store/user";
 import { useUserSubmissions } from "@/hooks/useSubmissions";
 import useBounties from "@/hooks/useBounties";
+import FloatingChatIcon from "./FloatingChatIcon";
 
 function UserDashboard() {
   const { name, id } = useUserStore((state) => state);
@@ -257,6 +258,7 @@ function UserDashboard() {
           </div>
         </div>
       )}
+      <FloatingChatIcon userId={id} />
     </>
   );
 }
