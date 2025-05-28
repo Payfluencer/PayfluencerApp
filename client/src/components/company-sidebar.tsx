@@ -1,4 +1,4 @@
-import { Home, Inbox, Receipt, Coins, Users } from "lucide-react";
+import { Home, Inbox } from "lucide-react";
 import logo from "../assets/images/image.png";
 
 import {
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
+import withCompanyAuthRequired from "@/HOC/company-hoc";
+import useCompanyStore from "@/store/company";
 
 // Menu items.
 const items = [
@@ -34,6 +36,13 @@ function CompanySidebar() {
   const path = useLocation();
   const navigate = useNavigate();
   const pathname = path.pathname;
+  const { logout } = useCompanyStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/auth");
+  };
+
   return (
     <Sidebar className="border-none ">
       <SidebarContent className="bg-[#efeff0]">
@@ -72,15 +81,10 @@ function CompanySidebar() {
                 </SidebarMenuItem>
               ))}
               <SidebarMenuButton
-                asChild
-                className={`py-4 h-10 my-2 duration-300 ease-in-out transition-all hover:bg-[#fa5e06] hover:text-white ${
-                  pathname === "/bounties" ? "bg-[#fa5e06] text-white" : ""
-                }`}
-                onClick={() => {
-                  navigate("/auth");
-                }}
+                className="py-4 h-10 my-2 duration-300 ease-in-out transition-all hover:bg-[#fa5e06] hover:text-white cursor-pointer"
+                onClick={handleLogout}
               >
-                <a href="/" className="">
+                <div className="flex items-center">
                   <FaSignOutAlt />
                   <span
                     style={{ fontFamily: "KarlaRegular" }}
@@ -88,7 +92,7 @@ function CompanySidebar() {
                   >
                     Logout
                   </span>
-                </a>
+                </div>
               </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -98,4 +102,4 @@ function CompanySidebar() {
   );
 }
 
-export default CompanySidebar;
+export default withCompanyAuthRequired(CompanySidebar);

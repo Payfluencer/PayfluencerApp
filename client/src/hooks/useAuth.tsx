@@ -1,5 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import useCompanyStore from "@/store/company";
+import { UserRole } from "@/types/user";
 
 const API_URL = "http://localhost:8001";
 
@@ -36,8 +38,42 @@ interface User {
     };
   };
 }
-export const useAuth = (role: "admin" | "user") => {
+
+interface Company {
+  status: string;
+  message: string;
+  data: {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+      role: string;
+      phoneNumber: string;
+      createdAt: string;
+      isActive: boolean;
+    };
+    company: {
+      id: string;
+      name: string;
+      phone_number: string;
+      email: string;
+      logo: string;
+      description: string;
+      website: string;
+      address: string;
+      manager: {
+        id: string;
+        name: string;
+        email: string;
+      };
+    };
+  };
+}
+
+export const useAuth = (role: "admin" | "user" | "company") => {
   const navigate = useNavigate();
+  const { setCompanyDetails } = useCompanyStore();
+
   const {
     mutate: loginAdmin,
     isPending: isAdminLoading,
@@ -70,6 +106,45 @@ export const useAuth = (role: "admin" | "user") => {
     },
     onError: (error) => {
       console.error("Login failed:", error);
+    },
+  });
+
+  const {
+    mutate: loginCompany,
+    isPending: isCompanyLoading,
+    error: companyError,
+  } = useMutation({
+    mutationKey: ["company", role],
+    mutationFn: async (loginData: { email: string; password: string }) => {
+      const response = await fetch(`${API_URL}/api/v1/company/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: loginData.email,
+          password: loginData.password,
+        }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+      const companyData = await response.json();
+      return companyData as Company;
+    },
+    onSuccess: (data) => {
+      if (data.status === "success") {
+        setCompanyDetails(
+          { ...data.data.user, role: data.data.user.role as UserRole }, 
+          data.data.company
+        );
+        navigate("/company");
+      }
+    },
+    onError: (error) => {
+      console.error("Company login failed:", error);
     },
   });
 
@@ -112,6 +187,9 @@ export const useAuth = (role: "admin" | "user") => {
     loginAdmin,
     isAdminLoading,
     adminError,
+    loginCompany,
+    isCompanyLoading,
+    companyError,
     loginUser,
     isUserLoading,
     userError,
