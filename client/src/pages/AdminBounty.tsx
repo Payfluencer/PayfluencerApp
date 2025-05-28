@@ -78,14 +78,6 @@ function Bounty() {
           <div className="flex items-center justify-between w-full">
             <SidebarTrigger className="m-2 md:m-4" />
             <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                className="flex items-center gap-2"
-                style={{ fontFamily: "KarlaSemiBold" }}
-              >
-                <FaEdit />
-                Edit Bounty
-              </Button>
               <p
                 className="flex md:hidden underline text-md px-4"
                 style={{ fontFamily: "KarlaRegular" }}
@@ -122,6 +114,16 @@ function Bounty() {
                 >
                   {bounty.is_active ? "Active" : "Inactive"}
                 </h1>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2"
+                  style={{ fontFamily: "KarlaSemiBold" }}
+                >
+                  <FaEdit />
+                  Edit Bounty
+                </Button>
               </div>
             </div>
           </div>
