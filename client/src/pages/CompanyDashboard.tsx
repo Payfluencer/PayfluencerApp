@@ -19,6 +19,7 @@ import { useGetCompanies } from "@/hooks/useGetCompanies";
 import useBounties from "@/hooks/useBounties";
 import { useUsers } from "@/hooks/useUsers";
 import CompanySidebar from "@/components/company-sidebar";
+import useCompanyStore from "@/store/company";
 
 function CompanyDashboard() {
   const [dateModal, setDateModal] = useState(false);
@@ -27,6 +28,7 @@ function CompanyDashboard() {
   const { bounties, isBountiesLoading, totalPayout, payoutChange } =
     useBounties();
   const { topEarners, isUsersLoading } = useUsers();
+  const { user } = useCompanyStore();
 
   return (
     <div className="bg-[#efeff0]">
@@ -44,7 +46,7 @@ function CompanyDashboard() {
                   Welcome Back,
                 </h1>
                 <p style={{ fontFamily: "KarlaSemiBold" }} className="text-2xl">
-                  Company Manager
+                  {user?.name || "Company Manager"}
                 </p>
               </div>
             </div>

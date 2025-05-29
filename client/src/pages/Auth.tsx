@@ -69,7 +69,7 @@ function AdminAuthentication() {
         className="text-2xl font-bold"
         style={{ fontFamily: "KarlaSemiBold" }}
       >
-        Welcome Back
+        Welcome Back Admin
       </h1>
       <Form {...form}>
         <form
@@ -139,18 +139,142 @@ function AdminAuthentication() {
           {adminError.message}
         </p>
       )}
-      <Link
-        to="/company"
-        className="text-sm text-gray-500 hover:text-gray-600 mt-4"
+    </div>
+  );
+}
+
+function CompanyAuthentication() {
+  const { loginCompany, isCompanyLoading, companyError } = useAuth("company");
+  const formSchema = z.object({
+    email: z
+      .string()
+      .email({
+        message: "Please enter a valid email.",
+      })
+      .min(2, {
+        message: "Email must be at least 2 characters.",
+      }),
+    password: z
+      .string()
+      .min(2, {
+        message: "Password must be at least 2 characters.",
+      })
+      .max(50),
+  });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      loginCompany({
+        email: values.email,
+        password: values.password,
+      });
+    } catch (error) {
+      console.error("Company login failed:", error);
+    }
+  }
+
+  return (
+    <div className="w-[400px] h-[400px] rounded-md flex flex-col items-center justify-center gap-4 bg-white p-4 mx-2 md:mx-0">
+      <h1
+        className="text-2xl font-bold"
+        style={{ fontFamily: "KarlaSemiBold" }}
       >
-        Company Manager?
-      </Link>
+        Company Manager
+      </h1>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full"
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel style={{ fontFamily: "KarlaSemiBold" }}>
+                  Email
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="company@example.com"
+                    type="email"
+                    {...field}
+                    style={{ fontFamily: "KarlaRegular" }}
+                  />
+                </FormControl>
+                <FormMessage style={{ fontFamily: "KarlaRegular" }} />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel style={{ fontFamily: "KarlaSemiBold" }}>
+                  Password
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="*******"
+                    type="password"
+                    {...field}
+                    style={{ fontFamily: "KarlaRegular" }}
+                  />
+                </FormControl>
+                <FormMessage style={{ fontFamily: "KarlaRegular" }} />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className={`w-full bg-[#fa5e06] text-white mt-4 hover:bg-[#fa5e06]/80 ${
+              isCompanyLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {isCompanyLoading ? (
+              <span className="animate-spin">
+                <FaSpinner />
+              </span>
+            ) : (
+              "Login"
+            )}
+          </Button>
+        </form>
+      </Form>
+      {companyError && (
+        <p
+          className="text-red-500 text-sm"
+          style={{ fontFamily: "KarlaRegular" }}
+        >
+          {companyError.message}
+        </p>
+      )}
     </div>
   );
 }
 
 function Auth() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [authType, setAuthType] = useState<"user" | "admin" | "company">("user");
+  
+  const renderAuthComponent = () => {
+    switch (authType) {
+      case "admin":
+        return <AdminAuthentication />;
+      case "company":
+        return <CompanyAuthentication />;
+      default:
+        return <UserAuthentication />;
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#efeff0]">
       <div className="flex items-center mb-8">
@@ -162,20 +286,42 @@ function Auth() {
           Payfluencer
         </h1>
       </div>
-      {isAdmin ? <AdminAuthentication /> : <UserAuthentication />}
-      <Button
-        onClick={() => setIsAdmin(!isAdmin)}
-        className="px-4 flex items-center gap-2 py-2 rounded-md h-12 justify-center text-blue-500 bg-transparent hover:bg-transparent shadow-none text-sm cursor-pointer"
-        style={{ fontFamily: "KarlaRegular" }}
-      >
-        {isAdmin ? "User Login" : "Admin Login"}
-      </Button>
-      <Link
-        to="/company"
-        className="text-sm text-gray-500 hover:text-gray-600 mt-4"
-      >
-        Company Manager?
-      </Link>
+      {renderAuthComponent()}
+      <div className="flex gap-2 mt-4">
+        <Button
+          onClick={() => setAuthType("user")}
+          className={`px-4 py-2 rounded-md h-12 text-sm ${
+            authType === "user"
+              ? "bg-[#fa5e06] text-white"
+              : "bg-transparent text-blue-500 hover:bg-transparent"
+          }`}
+          style={{ fontFamily: "KarlaRegular" }}
+        >
+          User Login
+        </Button>
+        <Button
+          onClick={() => setAuthType("admin")}
+          className={`px-4 py-2 rounded-md h-12 text-sm ${
+            authType === "admin"
+              ? "bg-[#fa5e06] text-white"
+              : "bg-transparent text-blue-500 hover:bg-transparent"
+          }`}
+          style={{ fontFamily: "KarlaRegular" }}
+        >
+          Admin Login
+        </Button>
+        <Button
+          onClick={() => setAuthType("company")}
+          className={`px-4 py-2 rounded-md h-12 text-sm ${
+            authType === "company"
+              ? "bg-[#fa5e06] text-white"
+              : "bg-transparent text-blue-500 hover:bg-transparent"
+          }`}
+          style={{ fontFamily: "KarlaRegular" }}
+        >
+          Company Login
+        </Button>
+      </div>
     </div>
   );
 }

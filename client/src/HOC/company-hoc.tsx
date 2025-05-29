@@ -1,13 +1,13 @@
 import { Loader } from 'lucide-react'
 import { UserRole } from '@/types/user'
-import useUserStore from '@/store/user'
+import useCompanyStore from '@/store/company'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { refreshUserAccess } from '@/actions/user'
 
 const withCompanyAuthRequired = (ChildComponent: React.ComponentType<any>) => {
   return (props: any) => {
-    const { isLoggedIn, setDetails } = useUserStore((state) => state)
+    const { isLoggedIn, setCompanyDetails } = useCompanyStore((state) => state)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const navigate = useNavigate()
 
@@ -20,13 +20,14 @@ const withCompanyAuthRequired = (ChildComponent: React.ComponentType<any>) => {
       }
 
       const user = response.data.user
+      const company = response.data.company
 
       // Check role
       if(user.role !== UserRole.COMPANY_MANAGER){
           return navigate('/auth')
       }
 
-      setDetails(user);
+      setCompanyDetails({ ...user, role: user.role as UserRole }, company);
 
       setIsLoading(false)
     }
