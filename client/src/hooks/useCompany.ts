@@ -27,7 +27,7 @@ interface UseCompanyResponse {
 
 const API_URL = "http://localhost:8001";
 
-export const useCompany = (companyId: string) => {
+export const useCompany = (companyId: string | undefined) => {
   const {
     data: company,
     isLoading: isCompanyLoading,

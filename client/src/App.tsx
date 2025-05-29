@@ -22,6 +22,7 @@ import CreateBounty from "./pages/CreateBounty";
 import QuickBountiesView from "./pages/QuickBountiesView";
 import CompanyDashboard from "./pages/CompanyDashboard";
 import CompanyInbox from "./pages/CompanyInbox";
+import CreateReport from "./pages/CreateReport";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_OAUTH_ID;
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/admin/submissions" element={<Submissions />} />
             <Route path="/admin/create-company" element={<CreateCompany />} />
             <Route path="/admin/create-bounty" element={<CreateBounty />} />
+            <Route path="/create-report/:id" element={<CreateReport />} />
             <Route
               path="/admin/submissions/:id"
               element={<AdminSubmission />}

@@ -15,6 +15,7 @@ import bountyImage from "@/assets/images/bountyImage.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AppSidebar from "@/components/app-sidebar";
+import useGetBounty from "@/hooks/useGetBounty";
 
 function Bounty() {
   const navigate = useNavigate();
@@ -250,7 +251,7 @@ function Bounty() {
         >
           Bounty Details
         </h1>
-        <div className="px-4 md:px-8 flex flex-col items-center justify-center md:justify-start md:flex-row gap-4 md:gap-8">
+        <div className="px-4 md:px-8 flex flex-col md:justify-start md:flex-row gap-4 md:gap-8">
           <img
             src={bountyImage}
             alt="bountyImage"
@@ -265,14 +266,15 @@ function Bounty() {
               {bounty.title}
             </h1>
             <p
-              className="flex flex-col w-full text-gray-500 md:flex-row gap-4 items-center my-4 max-w-2xl leading-relaxed md:text-lg"
+              className="flex flex-col w-full text-gray-500 md:flex-row gap-4 md:items-center my-4 max-w-2xl leading-relaxed md:text-lg"
               style={{ fontFamily: "KarlaRegular" }}
             >
               {bounty.description}
             </p>
             <Button
-              className="w-full bg-[#fa5e06] text-white shadow-md hover:bg-[#e05200] transition-all duration-300 ease-in-out"
+              className="w-full bg-[#fa5e06] text-white py-4 hover:bg-[#e05200] transition-all duration-300 ease-in-out"
               style={{ fontFamily: "KarlaSemiBold" }}
+              onClick={() => navigate(`/create-report/${bounty.id}`)}
             >
               Join Bounty
             </Button>

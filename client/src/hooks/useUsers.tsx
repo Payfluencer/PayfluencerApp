@@ -48,3 +48,25 @@ export const useUsers = () => {
     topEarners,
   };
 };
+
+export const useUser = (id: string | undefined) => {
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useQuery({
+    queryKey: ["user", id],
+    queryFn: async () => {
+      const response = await authenticatedFetch(
+        `${API_URL}/api/v1/user?id=${id}`,
+        {
+          method: "GET",
+        }
+      );
+      const data = await response.json();
+      return data.data.user as User;
+    },
+    enabled: !!id,
+  });
+  return { user, isUserLoading, userError };
+};
