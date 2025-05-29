@@ -23,6 +23,7 @@ import QuickBountiesView from "./pages/QuickBountiesView";
 import CompanyDashboard from "./pages/CompanyDashboard";
 import CompanyInbox from "./pages/CompanyInbox";
 import CreateReport from "./pages/CreateReport";
+import Profile from "./components/Profile";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_OAUTH_ID;
 
@@ -42,6 +43,7 @@ function App() {
             <Route path="/bounties" element={<MyBounties />} />
             <Route path="/bounties/:id" element={<Bounty />} />
             <Route path="/submissions/:id" element={<Submission />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/inbox" element={<AdminInbox />} />
             <Route path="/admin/bounties" element={<Bounties />} />

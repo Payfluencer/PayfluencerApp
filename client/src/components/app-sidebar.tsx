@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Home, Inbox, Receipt, Coins } from "lucide-react";
+import { Home, Inbox, Receipt, Coins, User } from "lucide-react";
 import logo from "../assets/images/image.png";
 
 import {
@@ -44,8 +44,15 @@ const items = [
     icon: Receipt,
     path: "/submissions",
   },
+  {
+    title: "My Profile",
+    url: "#",
+    icon: User,
+    path: "/profile",
+  },
 ];
 
+// eslint-disable-next-line react-refresh/only-export-components
 function AppSidebar() {
   const { logout } = useUserStore();
   const [loading] = useState(false);

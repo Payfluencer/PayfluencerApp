@@ -163,6 +163,7 @@ export const useUserSubmissions = (
         `${API_URL}/api/v1/report/user/${userId}?${params.toString()}`,
         {
           method: "GET",
+          credentials: "include",
         }
       );
       const data = await response.json();
