@@ -33,6 +33,7 @@ export const useUsers = () => {
     queryFn: async () => {
       const response = await authenticatedFetch(`${API_URL}/api/v1/user/all`, {
         method: "GET",
+        credentials: "include",
       });
       const data = await response.json();
       return data as UseUsersResponse;
@@ -61,6 +62,7 @@ export const useUser = (id: string | undefined) => {
         `${API_URL}/api/v1/user?id=${id}`,
         {
           method: "GET",
+          credentials: "include",
         }
       );
       const data = await response.json();

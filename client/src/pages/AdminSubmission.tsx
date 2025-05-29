@@ -142,14 +142,14 @@ function AdminSubmission() {
                     className="text-lg font-bold text-gray-900"
                     style={{ fontFamily: "KarlaRegular" }}
                   >
-                    Submission Date
+                    Platform
                   </h1>
                 </div>
                 <p
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  {submission?.updatedAt}
+                  {submission?.platform}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">

@@ -53,12 +53,11 @@ export const columns: ColumnDef<Submission>[] = [
 
 export const userColumns: ColumnDef<Submission>[] = [
   {
-    header: "ID",
-    accessorKey: "id",
-  },
-  {
     header: "Bounty ID",
     accessorKey: "bounty_id",
+    cell: ({ row }) => {
+      return <TruncatedIdCell id={row.original.bounty_id} />;
+    },
   },
   {
     header: "Title",
@@ -67,5 +66,9 @@ export const userColumns: ColumnDef<Submission>[] = [
   {
     header: "Status",
     accessorKey: "status",
+  },
+  {
+    header: "Platform",
+    accessorKey: "platform",
   },
 ];
