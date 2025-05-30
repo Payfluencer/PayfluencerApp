@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "tsx watch app.ts",
     "build": "tsc",
-    "deploy": "pm2 start  build/app.js --name template-backend --instances 2",
+    "deploy": "pm2 start  build/app.js --name payfluencer-backend --instances 2",
     "start": "node ./build/app.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
