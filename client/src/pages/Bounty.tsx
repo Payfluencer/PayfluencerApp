@@ -15,6 +15,7 @@ import bountyImage from "@/assets/images/bountyImage.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AppSidebar from "@/components/app-sidebar";
+import useGetBounty from "@/hooks/useGetBounty";
 
 function Bounty() {
   const navigate = useNavigate();
