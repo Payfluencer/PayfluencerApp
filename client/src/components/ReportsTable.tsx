@@ -10,8 +10,12 @@ import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
+  type Row,
   useReactTable,
 } from "@tanstack/react-table";
+import useUserStore from "@/store/user";
+import { useNavigate } from "react-router-dom";
+import { type Submission } from "@/hooks/useSubmissions";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -22,11 +26,25 @@ function ReportsTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const navigate = useNavigate();
+  const { role } = useUserStore();
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const handleRowClick = (row: Row<TData>) => {
+    const submission = row.original as Submission;
+    const submissionId = submission.id;
+
+    if (role === "ADMIN") {
+      navigate(`/admin/submissions/${submissionId}`);
+    } else {
+      navigate(`/submissions/${submissionId}`);
+    }
+  };
   return (
     <div className="w-full md:w-[75%] bg-[#f6f7f9] rounded-4xl p-4 max-w-[1240px] mx-auto my-0">
       <div className="">
@@ -65,6 +83,8 @@ function ReportsTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                onClick={() => handleRowClick(row)}
+                className="cursor-pointer hover:bg-gray-50 transition-colors"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

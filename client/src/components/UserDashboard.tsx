@@ -108,7 +108,7 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8"
                   >
-                    {userSubmissions?.length && (
+                    {userSubmissions?.length || (
                       <FaSpinner className="animate-spin" />
                     )}
                   </p>
@@ -128,7 +128,7 @@ function UserDashboard() {
                     style={{ fontFamily: "KarlaSemiBold" }}
                     className="text-3xl text-start mt-4 mb-8 text-gray-300"
                   >
-                    {getPendingSubmissions()?.length && (
+                    {getPendingSubmissions()?.length || (
                       <FaSpinner className="animate-spin" />
                     )}
                   </p>

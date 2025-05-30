@@ -39,7 +39,6 @@ function BountyTable<TData, TValue>({
     const bounty = row.original as Bounty;
     const bountyId = bounty.id;
 
-    // Route based on user role
     if (role === "ADMIN") {
       navigate(`/admin/bounties/${bountyId}`);
     } else {
