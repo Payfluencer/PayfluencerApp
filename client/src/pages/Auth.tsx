@@ -18,7 +18,6 @@ import { useForm } from "react-hook-form";
 import logo from "../assets/images/image.png";
 import { useAuth } from "../hooks/useAuth";
 import GoogleLoginBtn from "@/components/LoginInwithGoogle";
-import { Link } from "react-router-dom";
 
 function UserAuthentication() {
   return (
@@ -263,7 +262,7 @@ function CompanyAuthentication() {
 
 function Auth() {
   const [authType, setAuthType] = useState<"user" | "admin" | "company">("user");
-  
+
   const renderAuthComponent = () => {
     switch (authType) {
       case "admin":
