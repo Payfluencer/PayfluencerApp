@@ -14,7 +14,7 @@ if [[ $site == 1 ]]; then
   rm -rf client
 
   cp -r PayfluencerApp/client ./
-  cp .env.local ./client
+  cp .env.client ./client
 
   cd client
   pnpm install
@@ -62,7 +62,7 @@ elif [[ $site == 3 ]]; then
   rm -rf client
 
   cp -r PayfluencerApp/client ./
-  cp .env.local ./client
+  cp .env.client ./client
 
   cd client
   pnpm install
