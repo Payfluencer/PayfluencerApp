@@ -48,6 +48,7 @@ const useBounties = () => {
     queryFn: async () => {
       const response = await authenticatedFetch(`${serverUrl}/api/v1/bounties`, {
         method: "GET",
+        credentials: "include",
       });
       const data = await response.json();
       return data as UseBountyResponse;

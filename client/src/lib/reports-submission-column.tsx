@@ -1,6 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
-
 import { type Submission } from "@/hooks/useSubmissions";
+import UserCell from "@/components/UserCell";
+import { TruncatedIdCell } from "@/components/BountyTableCells";
 
 // interface Submission {
 //     id: string;
@@ -15,17 +16,30 @@ import { type Submission } from "@/hooks/useSubmissions";
 //   }
 
 export const columns: ColumnDef<Submission>[] = [
+  // {
+  //   header: "ID",
+  //   accessorKey: "id",
+  //   cell: ({ row }) => {
+  //     return (
+  //       <span className="text-blue-500 underline cursor-pointer">
+  //         {row.original.id.slice(0, 6)}...
+  //       </span>
+  //     );
+  //   },
+  // },
   {
-    header: "ID",
-    accessorKey: "id",
-  },
-  {
-    header: "User ID",
+    header: "User",
     accessorKey: "user_id",
+    cell: ({ row }) => {
+      return <UserCell id={row.original.user_id} />;
+    },
   },
   {
     header: "Bounty ID",
     accessorKey: "bounty_id",
+    cell: ({ row }) => {
+      return <TruncatedIdCell id={row.original.bounty_id} />;
+    },
   },
   {
     header: "Title",
@@ -39,12 +53,11 @@ export const columns: ColumnDef<Submission>[] = [
 
 export const userColumns: ColumnDef<Submission>[] = [
   {
-    header: "ID",
-    accessorKey: "id",
-  },
-  {
     header: "Bounty ID",
     accessorKey: "bounty_id",
+    cell: ({ row }) => {
+      return <TruncatedIdCell id={row.original.bounty_id} />;
+    },
   },
   {
     header: "Title",
@@ -53,5 +66,9 @@ export const userColumns: ColumnDef<Submission>[] = [
   {
     header: "Status",
     accessorKey: "status",
+  },
+  {
+    header: "Platform",
+    accessorKey: "platform",
   },
 ];

@@ -26,7 +26,8 @@ interface UseCompanyResponse {
   };
 }
 
-export const useCompany = (companyId: string) => {
+export const useCompany = (companyId: string | undefined) => {
+
   const {
     data: company,
     isLoading: isCompanyLoading,

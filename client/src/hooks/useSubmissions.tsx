@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { authenticatedFetch } from "./useAuth";
 import { serverUrl } from "@/lib/config";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export interface Submission {
   id: string;
@@ -160,6 +162,7 @@ export const useUserSubmissions = (
         `${serverUrl}/api/v1/report/user/${userId}?${params.toString()}`,
         {
           method: "GET",
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -287,6 +290,7 @@ export const useSearchSubmissions = (title: string, page = 1, limit = 10) => {
 // Create submission mutation
 export const useCreateSubmission = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     mutate: createSubmission,
@@ -297,6 +301,7 @@ export const useCreateSubmission = () => {
     mutationFn: async (submissionData: CreateSubmissionData) => {
       const response = await authenticatedFetch(`${serverUrl}/api/v1/report`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -318,6 +323,11 @@ export const useCreateSubmission = () => {
       queryClient.invalidateQueries({
         queryKey: ["bountySubmissions", data.data.report.bounty_id],
       });
+      navigate(`/submissions/${data.data.report.id}`);
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(error.message);
     },
   });
 

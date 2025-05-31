@@ -1,12 +1,28 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-
-import logo from "@/assets/images/google.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AppSidebar from "@/components/app-sidebar";
+import { useSubmission } from "@/hooks/useSubmissions";
+import { FaSpinner } from "react-icons/fa";
+import useGetBounty from "@/hooks/useGetBounty";
+import { useCompany } from "@/hooks/useCompany";
 
 function Submission() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { submission, isSubmissionLoading } = useSubmission(id);
+  const { bounty } = useGetBounty(submission?.bounty_id);
+  const { company } = useCompany(bounty?.company_id);
+
+  console.log(submission);
+
+  if (isSubmissionLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <FaSpinner className="animate-spin" />
+      </div>
+    );
+  }
   return (
     <SidebarProvider className="bg-[#efeff0]">
       <AppSidebar />
@@ -41,23 +57,23 @@ function Submission() {
                   className="text-md font-bold"
                   style={{ fontFamily: "KarlaRegular" }}
                 >
-                  Active
+                  {submission?.status}
                 </h1>
               </div>
             </div>
           </div>
           <div className="w-full flex items-center gap-8 my-4">
             <img
-              src={logo}
+              src={company?.logo}
               alt="logo"
-              className="w-16 h-16 md:w-24 md:h-24 border border-gray-200 rounded-full"
+              className="md:w-16 md:h-16 w-10 h-10 border border-gray-200 rounded-full"
             />
             <div className="flex flex-col w-full md:w-1/2">
               <h1
                 className="text-2xl font-bold"
                 style={{ fontFamily: "KarlaSemiBold" }}
               >
-                Bounty Name
+                {submission?.title}
               </h1>
               <div className="flex items-center justify-between mt-2 w-full">
                 <div className="">
@@ -71,35 +87,7 @@ function Submission() {
                     className="text-md font-bold text-gray-500"
                     style={{ fontFamily: "KarlaSemiBold" }}
                   >
-                    Twitter
-                  </p>
-                </div>
-                <div className="">
-                  <h1
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaRegular" }}
-                  >
-                    Status
-                  </h1>
-                  <p
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaSemiBold" }}
-                  >
-                    PENDING
-                  </p>
-                </div>
-                <div className="flex flex-col items-start">
-                  <h1
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaRegular" }}
-                  >
-                    Submission Date
-                  </h1>
-                  <p
-                    className="text-md font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaSemiBold" }}
-                  >
-                    2025-05-26
+                    {submission?.platform}
                   </p>
                 </div>
               </div>
@@ -112,14 +100,13 @@ function Submission() {
               className="text-xl font-bold text-gray-900"
               style={{ fontFamily: "KarlaRegular" }}
             >
-              Submission Title
+              {submission?.title}
             </h1>
             <p
               className="text-md font-bold text-gray-500 max-w-2xl leading-relaxed"
               style={{ fontFamily: "KarlaRegular" }}
             >
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-              quos.
+              {submission?.description}
             </p>
           </div>
         </div>
@@ -139,18 +126,14 @@ function Submission() {
                     className="text-lg font-bold text-gray-900"
                     style={{ fontFamily: "KarlaRegular" }}
                   >
-                    Submitted By
+                    Max Payout
                   </h1>
-                  <p
-                    className="text-xs font-bold text-gray-500"
-                    style={{ fontFamily: "KarlaRegular" }}
-                  ></p>
                 </div>
                 <p
-                  className="text-md font-bold text-gray-500 underline cursor-pointer"
+                  className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  John Doe
+                  ${bounty?.max_payout}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
@@ -159,14 +142,14 @@ function Submission() {
                     className="text-lg font-bold text-gray-900"
                     style={{ fontFamily: "KarlaRegular" }}
                   >
-                    Max Payout
+                    Platform
                   </h1>
                 </div>
                 <p
                   className="text-md font-bold text-gray-500"
                   style={{ fontFamily: "KarlaSemiBold" }}
                 >
-                  $1,000
+                  {submission?.platform}
                 </p>
               </div>
               <div className="flex items-center justify-between border border-gray-200 rounded-2xl p-4">
