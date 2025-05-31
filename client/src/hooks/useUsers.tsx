@@ -58,7 +58,7 @@ export const useUser = (id: string | undefined) => {
     queryKey: ["user", id],
     queryFn: async () => {
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/user?id=${id}`,
+        `${serverUrl}/api/v1/user?id=${id}`,
         {
           method: "GET",
           credentials: "include",
