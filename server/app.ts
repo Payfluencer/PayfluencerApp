@@ -46,7 +46,7 @@ app.use(limiter);
 
 // API Reference
 app.use(
-  "/openapi",
+  "/api/v1/openapi",
   express.static(path.join(__dirname, "./docs/openapi.json"))
 );
 app.use(
@@ -57,7 +57,7 @@ app.use(
     realm: "payfluencer_api_docs",
   }),
   apiReference({
-    url: `${apiDocsServer}/openapi`,
+    url: `${apiDocsServer}/api/v1/openapi`,
   })
 );
 
