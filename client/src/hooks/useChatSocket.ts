@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { serverUrl } from "@/lib/config";
+import { socketUrl } from "@/lib/config";
 
 interface Message {
   id: string;
@@ -29,12 +29,12 @@ export function useChatSocket(reportId?: string, chatId?: string) {
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(true);
   const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
-  
+
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
     // Initialize Socket.IO connection
-    const newSocket = io(serverUrl, {
+    const newSocket = io(socketUrl, {
       path: "/chat/ws",
       withCredentials: true, // Important for cookie-based auth
     });
@@ -49,7 +49,7 @@ export function useChatSocket(reportId?: string, chatId?: string) {
 
       // Join chat room
       const joinData: { reportId?: string; chatId?: string } = {};
-      
+
       if (reportId) {
         joinData.reportId = reportId;
       }
@@ -70,7 +70,7 @@ export function useChatSocket(reportId?: string, chatId?: string) {
       if (response.status === "success") {
         setCurrentChatId(response.data.chatId);
         setIsConnecting(false);
-        
+
         // Load chat history
         newSocket.emit("chat:history", { chatId: response.data.chatId });
       } else {
@@ -90,7 +90,7 @@ export function useChatSocket(reportId?: string, chatId?: string) {
       if (response.status === "success") {
         setMessages((prev) => [...prev, response.data.message]);
         setIsOnline(response.data.online || false);
-        
+
         // Hide typing indicator for the sender
         setTypingUsers((prev) => {
           const newSet = new Set(prev);
@@ -103,7 +103,7 @@ export function useChatSocket(reportId?: string, chatId?: string) {
     newSocket.on("chat:typing", (response: ChatSocketResponse) => {
       if (response.status === "success") {
         const { userId, isTyping } = response.data;
-        
+
         setTypingUsers((prev) => {
           const newSet = new Set(prev);
           if (isTyping) {
@@ -169,4 +169,4 @@ export function useChatSocket(reportId?: string, chatId?: string) {
     typingUsers,
     leaveChat,
   };
-} 
+}
