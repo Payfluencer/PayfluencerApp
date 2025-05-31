@@ -10,7 +10,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8001"
+      "url": "http://localhost:8001",
+      "description": "Development server"
+    },
+    {
+      "url": "https://payfluence.xyz",
+      "description": "Production server"
     }
   ],
   "paths": {

@@ -37,9 +37,11 @@ For support or questions, contact the Payfluencer team at support@payfluencer.xy
   servers: [
     {
       url: devDocsServer,
+      description: "Development server",
     },
     {
       url: apiDocsServer,
+      description: "Production server",
     },
   ],
 }
