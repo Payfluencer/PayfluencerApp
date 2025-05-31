@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { authenticatedFetch } from "./useAuth";
 import type { LoggedInUser } from "@/components/LoginInwithGoogle";
+import { serverUrl } from "@/lib/config";
 
 interface RefreshedUserResponse {
   status: string;
   message: string;
   data: LoggedInUser;
 }
-
-const API_URL = "http://localhost:8001";
 
 export const useRefresh = () => {
   const {
@@ -19,7 +18,7 @@ export const useRefresh = () => {
     queryKey: ["refresh"],
     queryFn: async () => {
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/user/refresh`,
+        `${serverUrl}/api/v1/user/refresh`,
         {
           method: "GET",
           credentials: "include",

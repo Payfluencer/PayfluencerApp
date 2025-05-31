@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { authenticatedFetch } from "./useAuth";
-
-const API_URL = "http://localhost:8001";
+import { serverUrl } from "@/lib/config";
 
 export interface Bounty {
   id: string;
@@ -49,7 +48,7 @@ const useGetBounty = (id: string | undefined) => {
         throw new Error("Bounty ID is required");
       }
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/bounties/${id}`,
+        `${serverUrl}/api/v1/bounties/${id}`,
         {
           method: "GET",
           credentials: "include",

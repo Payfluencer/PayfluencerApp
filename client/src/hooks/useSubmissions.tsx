@@ -1,9 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { authenticatedFetch } from "./useAuth";
+import { serverUrl } from "@/lib/config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-const API_URL = "http://localhost:8001";
 
 export interface Submission {
   id: string;
@@ -75,7 +74,7 @@ export const useSubmissions = (page = 1, limit = 10, status?: string) => {
       }
 
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/report/all?${params.toString()}`,
+        `${serverUrl}/api/v1/report/all?${params.toString()}`,
         {
           method: "GET",
         }
@@ -118,7 +117,7 @@ export const useSubmission = (id: string | undefined) => {
         throw new Error("Submission ID is required");
       }
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/report?id=${id}`,
+        `${serverUrl}/api/v1/report?id=${id}`,
         {
           method: "GET",
         }
@@ -160,7 +159,7 @@ export const useUserSubmissions = (
       });
 
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/report/user/${userId}?${params.toString()}`,
+        `${serverUrl}/api/v1/report/user/${userId}?${params.toString()}`,
         {
           method: "GET",
           credentials: "include",
@@ -229,7 +228,7 @@ export const useBountySubmissions = (
       });
 
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/report/bounty/${bountyId}?${params.toString()}`,
+        `${serverUrl}/api/v1/report/bounty/${bountyId}?${params.toString()}`,
         {
           method: "GET",
         }
@@ -267,7 +266,7 @@ export const useSearchSubmissions = (title: string, page = 1, limit = 10) => {
       });
 
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/report/search?${params.toString()}`,
+        `${serverUrl}/api/v1/report/search?${params.toString()}`,
         {
           method: "GET",
         }
@@ -300,7 +299,7 @@ export const useCreateSubmission = () => {
     data: createdSubmission,
   } = useMutation<SingleSubmissionResponse, Error, CreateSubmissionData>({
     mutationFn: async (submissionData: CreateSubmissionData) => {
-      const response = await authenticatedFetch(`${API_URL}/api/v1/report`, {
+      const response = await authenticatedFetch(`${serverUrl}/api/v1/report`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -351,7 +350,7 @@ export const useUpdateSubmission = () => {
     data: updatedSubmission,
   } = useMutation<SingleSubmissionResponse, Error, UpdateSubmissionData>({
     mutationFn: async (submissionData: UpdateSubmissionData) => {
-      const response = await authenticatedFetch(`${API_URL}/api/v1/report`, {
+      const response = await authenticatedFetch(`${serverUrl}/api/v1/report`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -400,7 +399,7 @@ export const useUpdateSubmissionStatus = () => {
   } = useMutation<SingleSubmissionResponse, Error, UpdateSubmissionStatusData>({
     mutationFn: async (statusData: UpdateSubmissionStatusData) => {
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/report/status`,
+        `${serverUrl}/api/v1/report/status`,
         {
           method: "PUT",
           headers: {
@@ -455,7 +454,7 @@ export const useDeleteSubmission = () => {
     string
   >({
     mutationFn: async (submissionId: string) => {
-      const response = await authenticatedFetch(`${API_URL}/api/v1/report`, {
+      const response = await authenticatedFetch(`${serverUrl}/api/v1/report`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

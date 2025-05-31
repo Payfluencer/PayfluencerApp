@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { authenticatedFetch } from "./useAuth";
+import { serverUrl } from "@/lib/config";
 
 export interface Company {
   id: string;
@@ -25,9 +26,8 @@ interface UseCompanyResponse {
   };
 }
 
-const API_URL = "http://localhost:8001";
-
 export const useCompany = (companyId: string | undefined) => {
+
   const {
     data: company,
     isLoading: isCompanyLoading,
@@ -36,7 +36,7 @@ export const useCompany = (companyId: string | undefined) => {
     queryKey: ["company", companyId],
     queryFn: async () => {
       const response = await authenticatedFetch(
-        `${API_URL}/api/v1/company?id=${companyId}`,
+        `${serverUrl}/api/v1/company?id=${companyId}`,
         {
           method: "GET",
         }

@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { type CreateCompanyForm } from "@/pages/CreateCompany";
 import { useNavigate } from "react-router-dom";
+import { serverUrl } from "@/lib/config";
 
 interface CreateCompanyResponse {
   status: string;
@@ -24,14 +25,12 @@ interface CreateCompanyResponse {
   };
 }
 
-const API_URL = "http://localhost:8001/api/v1/company";
-
 export const useCreateCompany = () => {
   const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
     mutationFn: async (company: CreateCompanyForm) => {
       console.log("Company:", company);
-      const response = await fetch(API_URL, {
+      const response = await fetch(serverUrl, {
         method: "POST",
         credentials: "include",
         headers: {
