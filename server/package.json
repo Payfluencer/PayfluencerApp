@@ -11,7 +11,7 @@
     "prisma:migrate:prod": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "postinstall": "prisma generate",
-    "postbuild": "mkdir -p build/prisma/generated && cp -r prisma/generated/* build/prisma/generated"
+    "postbuild": "mkdir -p build/prisma/generated && cp -r prisma/generated/* build/prisma/generated && cp docs/openapi.json build/docs"
   },
   "dependencies": {
     "@prisma/client": "6.4.1",

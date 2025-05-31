@@ -4,10 +4,8 @@ import { Logger } from 'borgen'
 import { Config } from '../lib/config'
 import swaggerJSDoc from 'swagger-jsdoc'
 
-const isProduction = process.env.NODE_ENV === 'production'
-export const apiDocsServer = isProduction
-  ? `https://payfluence.xyz`
-  : `http://localhost:${Config.SERVER_PORT}`
+export const apiDocsServer = `https://payfluence.xyz`
+export const devDocsServer = `http://localhost:${Config.SERVER_PORT}`
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -37,6 +35,9 @@ For support or questions, contact the Payfluencer team at support@payfluencer.xy
     },
   },
   servers: [
+    {
+      url: devDocsServer,
+    },
     {
       url: apiDocsServer,
     },
