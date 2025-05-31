@@ -6,7 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc'
 
 const isProduction = process.env.NODE_ENV === 'production'
 export const apiDocsServer = isProduction
-  ? `https://payfluencer.xyz`
+  ? `https://payfluence.xyz`
   : `http://localhost:${Config.SERVER_PORT}`
 
 const swaggerDefinition = {
