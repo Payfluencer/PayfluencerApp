@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { authenticatedFetch } from "./useAuth";
-
-const API_URL = "http://localhost:8001";
+import { serverUrl } from "@/lib/config";
 
 export interface Bounty {
   id: string;
@@ -47,7 +46,7 @@ const useBounties = () => {
   } = useQuery({
     queryKey: ["bounties"],
     queryFn: async () => {
-      const response = await authenticatedFetch(`${API_URL}/api/v1/bounties`, {
+      const response = await authenticatedFetch(`${serverUrl}/api/v1/bounties`, {
         method: "GET",
       });
       const data = await response.json();

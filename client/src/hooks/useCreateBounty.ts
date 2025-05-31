@@ -1,3 +1,4 @@
+import { serverUrl } from "@/lib/config";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -52,14 +53,11 @@ interface CreateBountyResponse {
   };
 }
 
-const API_URL = "http://localhost:8001/api/v1/bounties";
-
 export const useCreateBounty = () => {
   const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
     mutationFn: async (bounty: CreateBountyForm) => {
-      console.log("Bounty:", bounty);
-      const response = await fetch(API_URL, {
+      const response = await fetch(serverUrl, {
         method: "POST",
         credentials: "include",
         headers: {

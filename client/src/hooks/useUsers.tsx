@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { authenticatedFetch } from "./useAuth";
 import { useMemo } from "react";
-
-const API_URL = "http://localhost:8001";
+import { serverUrl } from "@/lib/config";
 
 export interface User {
   id: string;
@@ -31,7 +30,7 @@ export const useUsers = () => {
   } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const response = await authenticatedFetch(`${API_URL}/api/v1/user/all`, {
+      const response = await authenticatedFetch(`${serverUrl}/api/v1/user/all`, {
         method: "GET",
       });
       const data = await response.json();

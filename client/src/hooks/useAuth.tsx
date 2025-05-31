@@ -2,8 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import useCompanyStore from "@/store/company";
 import { UserRole } from "@/types/user";
-
-const API_URL = "http://localhost:8001";
+import { serverUrl } from "@/lib/config";
 
 interface Admin {
   status: string;
@@ -81,7 +80,7 @@ export const useAuth = (role: "admin" | "user" | "company") => {
   } = useMutation({
     mutationKey: ["admin", role],
     mutationFn: async (loginData: { email: string; password: string }) => {
-      const response = await fetch(`${API_URL}/api/v1/user/admin/login`, {
+      const response = await fetch(`${serverUrl}/api/v1/user/admin/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -116,7 +115,7 @@ export const useAuth = (role: "admin" | "user" | "company") => {
   } = useMutation({
     mutationKey: ["company", role],
     mutationFn: async (loginData: { email: string; password: string }) => {
-      const response = await fetch(`${API_URL}/api/v1/company/login`, {
+      const response = await fetch(`${serverUrl}/api/v1/company/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -137,7 +136,7 @@ export const useAuth = (role: "admin" | "user" | "company") => {
     onSuccess: (data) => {
       if (data.status === "success") {
         setCompanyDetails(
-          { ...data.data.user, role: data.data.user.role as UserRole }, 
+          { ...data.data.user, role: data.data.user.role as UserRole },
           data.data.company
         );
         navigate("/company");
@@ -155,7 +154,7 @@ export const useAuth = (role: "admin" | "user" | "company") => {
   } = useMutation({
     mutationKey: ["user", role],
     mutationFn: async (idToken: string) => {
-      const response = await fetch(`${API_URL}/api/v1/auth/google`, {
+      const response = await fetch(`${serverUrl}/api/v1/auth/google`, {
         method: "POST",
         credentials: "include",
         headers: {
