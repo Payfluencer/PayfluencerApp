@@ -8,6 +8,7 @@ import { FaGoogle } from "react-icons/fa";
 import { Button } from "./ui/button";
 import useUserStore from "@/store/user";
 import type { UserRole } from "@/types/user";
+import { serverUrl } from "@/lib/config";
 
 export interface LoggedInUser {
   id: string;
@@ -39,9 +40,8 @@ const GoogleLoginBtn = () => {
 
   const handleUserLogin = async (idToken: string) => {
     try {
-      console.log("idToken", idToken);
       const response = await axios.post(
-        "http://localhost:8001/api/v1/auth/google",
+        `${serverUrl}/api/v1/auth/google`,
         {
           idToken,
         },
