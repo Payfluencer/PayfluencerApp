@@ -6,7 +6,7 @@ function TopCompaniesSummary({ name, id, logo }: CompanyType) {
   const navigate = useNavigate();
   return (
     <div
-      className="flex items-center justify-between border border-gray-200 shadow-none rounded-3xl p-2 px-4"
+      className="flex items-center justify-between border border-gray-200 shadow-none rounded-3xl p-2 px-4 my-1"
       onClick={() => navigate(`/admin/companies`)}
     >
       <div className="flex items-center gap-2">
@@ -15,7 +15,7 @@ function TopCompaniesSummary({ name, id, logo }: CompanyType) {
           alt={name}
           width={40}
           height={40}
-          className="rounded-full object-contain border-[1px] border-gray-400 w-14 h-14"
+          className="rounded-full object-contain w-14 h-14"
         />
         <p style={{ fontFamily: "KarlaRegular" }} className="text-lg">
           {name}

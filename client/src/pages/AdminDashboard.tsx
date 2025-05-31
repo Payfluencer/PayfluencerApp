@@ -19,6 +19,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useGetCompanies } from "@/hooks/useGetCompanies";
 import useBounties from "@/hooks/useBounties";
 import { useUsers } from "@/hooks/useUsers";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
   const [dateModal, setDateModal] = useState(false);
@@ -27,7 +28,7 @@ function AdminDashboard() {
   const { bounties, isBountiesLoading, totalPayout, payoutChange } =
     useBounties();
   const { topEarners, isUsersLoading } = useUsers();
-
+  const navigate = useNavigate();
   return (
     <div className="bg-[#efeff0]">
       <SidebarProvider>
@@ -54,7 +55,7 @@ function AdminDashboard() {
                   style={{ fontFamily: "KarlaRegular" }}
                   className="text-lg md:text-xl "
                 >
-                  Total Bounties Paid
+                  Total Bounties Value
                 </h1>
                 <div className="flex items-center gap-2 md:gap-4">
                   <p
@@ -191,6 +192,7 @@ function AdminDashboard() {
                 className="bg-transparent text-lg shadow-none hover:bg-transparent cursor-pointer text-gray-900 mt-4 md:mt-0"
                 style={{ fontFamily: "KarlaSemiBold" }}
                 disabled={!topEarners || topEarners.length === 0}
+                onClick={() => navigate("/admin/bounties")}
               >
                 {!topEarners || topEarners.length === 0
                   ? "No Earners"
@@ -211,13 +213,6 @@ function AdminDashboard() {
                   >
                     Top Companies
                   </h1>
-                  <Button
-                    className="bg-transparent text-sm shadow-none hover:bg-transparent cursor-pointer text-gray-900 mt-4 md:mt-0"
-                    style={{ fontFamily: "KarlaRegular" }}
-                  >
-                    View All
-                    <FaArrowRight size={20} />
-                  </Button>
                 </div>
                 {isCompaniesLoading ? (
                   <div className="flex flex-col md:flex-row gap-4 items-center justify-center min-h-[300px]">
@@ -227,9 +222,16 @@ function AdminDashboard() {
                   </div>
                 ) : (
                   <div className="flex flex-col gap-1 rounded-4xl min-h-[400px] py-4 mt-4">
-                    {companies?.data.companies.map((company) => (
+                    {companies?.data.companies.slice(0, 3).map((company) => (
                       <TopCompaniesSummary key={company.name} {...company} />
                     ))}
+                    <Button
+                      className="bg-transparent text-sm shadow-none hover:bg-transparent cursor-pointer text-gray-900 mt-4 md:mt-0"
+                      onClick={() => navigate("/admin/companies")}
+                    >
+                      View All
+                      <FaArrowRight size={20} />
+                    </Button>
                   </div>
                 )}
               </div>
@@ -240,7 +242,7 @@ function AdminDashboard() {
                 >
                   Bounties Summary
                 </h1>
-                <div className="flex flex-col gap-1 bg-[#efeff0] rounded-4xl p-4 mt-4">
+                <div className="flex flex-col gap-1 rounded-4xl p-4 mt-4">
                   <AdminPayoutChart />
                 </div>
               </div>
