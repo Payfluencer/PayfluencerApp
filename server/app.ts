@@ -66,7 +66,9 @@ app.use("/", router);
 
 const startServer = async () => {
   // Generate OpenAPI spec
-  generateOpenAPISpec();
+  if(Config.NODE_ENV == 'dev'){
+      generateOpenAPISpec();
+  }
 
   // Initialize Socket.IO
   setupSocketServer(server, "/chat/ws");
